@@ -9,26 +9,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableCell from '@mui/material/TableCell';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog'
-import QrCodeIcon from '@mui/icons-material/QrCode';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { ProductoService } from "../services/ProductoService";
 import ProductAdminModal from "./ProductAdminModal";
 import ProductAdminQrModal from "./ProductAdminQrModal";
 import ProductAdminModalEliminar from "./ProductAdminModalEliminar";
-
 import Paper from '@mui/material/Paper';
-import TextField from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
-import RefreshIcon from '@mui/icons-material/Refresh';
-
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
 import { createTheme,ThemeProvider } from '@mui/material/styles';
-
-
+import SearchComponent from '../components/SearchComponent'
 
 export default function ProductAdmin(props) {
     const productoService = new ProductoService();
@@ -45,12 +32,10 @@ export default function ProductAdmin(props) {
     const [idProductoQr, setIdProductQr] = useState("");
     const [isCreate, setIsCreate] = useState(true);
     const [titleModal, setTitleModal] = useState("");
-    const [componentSearch, setComponentSearch] = useState("");
     const [componentTableResponsive, setComponentTableResponsive] = useState("");
-    
-    
+    const [textSearch, setTextSearch] = useState('');
+    const [tableData, setTableData] = useState();
 
-  
     const theme = createTheme({
         palette: {
           primary: {
@@ -81,6 +66,7 @@ export default function ProductAdmin(props) {
     var rows = [];
 
     async function reloadAllProducts() {
+        setTextSearch('');
         const productAll =  await productoService.getAllProducts();
         if (productAll.status === 200){
             const rowsDentro = await productAll.data;
@@ -182,20 +168,7 @@ export default function ProductAdmin(props) {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             );*/
-
-            
-            
-            setComponentSearch(
-                <TextField
-                        fullWidth
-                        InputProps={{
-                        disableUnderline: true,
-                        sx: { fontSize: 'default' },
-                        }}
-                        variant="standard"
-                        onChange={searchChange}
-                    />
-            )
+            setTableData(rows)
         }
     }
 
@@ -244,19 +217,18 @@ export default function ProductAdmin(props) {
     useEffect(() => {
         reloadAllProducts()
         resetAlertOk()
-        console.log('isSmUp: '+props.isSmUp)
     }, [alertOk,]);
     
     const searchChange = (event) => {
-
-        rows = rows
+        console.log('textSearch:'+textSearch)
+        const rowInterno = tableData;
         setTableBody(
             <TableBody>
-                    {rows
+                    {rowInterno
                     .map((row) => {
                         var nombre = row.nombre;
                         nombre = nombre.toUpperCase();
-                        const valueTarget = event.target.value 
+                        const valueTarget = textSearch; //event.target.value 
                         if(nombre.includes(valueTarget.toUpperCase())){
                             return (
                                 <TableRow hover role="checkbox" tabIndex={-1} key={row.id_producto}>
@@ -303,14 +275,14 @@ export default function ProductAdmin(props) {
                 </TableBody>
         );
 
-
+        
         
         setComponentTableResponsive(
             <Table>
-                {rows.map((row) => {
+                {rowInterno.map((row) => {
                     var nombre = row.nombre;
                     nombre = nombre.toUpperCase();
-                    const valueTarget = event.target.value 
+                    const valueTarget = textSearch// event.target.value 
                     if(nombre.includes(valueTarget.toUpperCase())){
                         return(
                             <TableRow hover role="checkbox" tabIndex={-1}>
@@ -347,42 +319,20 @@ export default function ProductAdmin(props) {
     };
 
     return(
-        <Paper sx={{maxWidth: 950, margin: 'auto', overflow: 'hidden' }}>
-            <AppBar
-                position="static"
-                color="default"
-                elevation={0}
-                sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }}
-            >
-                <Toolbar>
-                <Grid container spacing={2} alignItems="center">
-                    <Grid item>
-                    <SearchIcon color="inherit" sx={{ display: 'block' }} />
-                    </Grid>
-                    <Grid item xs>
-                        {componentSearch}
-                    </Grid>
-                    <Grid item>
-                    <ThemeProvider theme={theme}>
+        <Grid container>
+            <Grid item xs={3} sm={3} md={3}>
+                <ThemeProvider theme={theme}>
                     <Button variant="contained" sx={{ mr: 1 }} color="addReg" onClick={handleClickOpenCreate}>
                         Registrar
                     </Button>
-                    </ThemeProvider>
-                    
-                    <Tooltip title="Reload">
-                        <IconButton onClick={reloadAllProducts}>
-                            <RefreshIcon color="inherit" sx={{ display: 'block' }}  />
-                        </IconButton>
-                    </Tooltip>
-                    </Grid>
-                </Grid>
-                </Toolbar>
-            </AppBar>
-                
+                </ThemeProvider>
+            </Grid>
+            <Paper sx={{maxWidth: 950, margin: 'auto', overflow: 'hidden' }}>
+                <SearchComponent reloadAllProducts={reloadAllProducts} searchChange={searchChange} setTextSearch={setTextSearch} textSearch={textSearch}/>
                 {(props.isSmUp) ? (
                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                         <Grid item xs={12} sm={12} md={12}>
-                            <TableContainer sx={{ maxHeight: 440 }}>
+                            <TableContainer sx={{ maxHeight: 400 }}>
                                 <Table stickyHeader aria-label="sticky table">
                                     <TableHead>
                                         <TableRow>
@@ -410,8 +360,7 @@ export default function ProductAdmin(props) {
                     
                 )
                 }
-            
-            <Dialog open={openCreate} onClose={() => setOpenCreate(false)}>
+                <Dialog open={openCreate} onClose={() => setOpenCreate(false)}>
                     <ProductAdminModal title={titleModal} setOpenCreate={setOpenCreate} setAlertOk={setAlertOk} isCreate={isCreate} idProducto={idProductoQr}/>
                 </Dialog>
                 <Dialog open={openQr} onClose={() => setOpenQr(false)}>
@@ -421,6 +370,7 @@ export default function ProductAdmin(props) {
                     <ProductAdminModalEliminar setOpenDelete={setOpenDelete} idProducto={idProductoQr} setAlertOk={setAlertOk}/>
                 </Dialog>
                 {alertOk}
-        </Paper>
+            </Paper>
+        </Grid>
     );
 }
