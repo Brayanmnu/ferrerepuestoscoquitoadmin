@@ -190,7 +190,7 @@ export default function Dashboard(){
           </Box>
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
             <Header onDrawerToggle={handleDrawerToggle} />
-            <Box component="main" sx={{ flex: 1, py: 6, px: 4, bgcolor: '#eaeff1' }}>
+            <Box component="main" sx={{ flex: 1, py: 2, px: 3, bgcolor: '#eaeff1' }}>
                 <Routes>
                     <Route path={'/'} exact element={<Home/>} />
                     <Route path={'/products-dashboard'} exact element={<ProductAdmin  isSmUp={isSmUp}/>}/>

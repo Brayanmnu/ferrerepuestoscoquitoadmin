@@ -319,7 +319,7 @@ export default function ProductAdmin(props) {
     };
 
     return(
-        <Grid container>
+        <Grid container rowSpacing={2}>
             <Grid item xs={3} sm={3} md={3}>
                 <ThemeProvider theme={theme}>
                     <Button variant="contained" sx={{ mr: 1 }} color="addReg" onClick={handleClickOpenCreate}>
@@ -327,50 +327,52 @@ export default function ProductAdmin(props) {
                     </Button>
                 </ThemeProvider>
             </Grid>
-            <Paper sx={{maxWidth: 950, margin: 'auto', overflow: 'hidden' }}>
-                <SearchComponent reloadAllProducts={reloadAllProducts} searchChange={searchChange} setTextSearch={setTextSearch} textSearch={textSearch}/>
-                {(props.isSmUp) ? (
-                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                        <Grid item xs={12} sm={12} md={12}>
-                            <TableContainer sx={{ maxHeight: 400 }}>
-                                <Table stickyHeader aria-label="sticky table">
-                                    <TableHead>
-                                        <TableRow>
-                                            {columns.map((column) => (
-                                                <TableCell
-                                                key={column.id}
-                                                align={column.align}
-                                                style={{ minWidth: column.minWidth }}
-                                                >
-                                                {column.label}
-                                                </TableCell>
-                                            ))}
-                                        </TableRow>
-                                    </TableHead>
-                                    {tableBody}
-                                </Table>
-                            </TableContainer>
-                            {tableFooter}
+            <Grid item xs={12} xm={12} md={12}>
+                <Paper sx={{maxWidth: 970, margin: 'auto', overflow: 'hidden' }}>
+                    <SearchComponent reloadAllProducts={reloadAllProducts} searchChange={searchChange} setTextSearch={setTextSearch} textSearch={textSearch}/>
+                    {(props.isSmUp) ? (
+                        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                            <Grid item xs={12} sm={12} md={12}>
+                                <TableContainer sx={{ maxHeight: 450 }}>
+                                    <Table stickyHeader aria-label="sticky table">
+                                        <TableHead>
+                                            <TableRow>
+                                                {columns.map((column) => (
+                                                    <TableCell
+                                                    key={column.id}
+                                                    align={column.align}
+                                                    style={{ minWidth: column.minWidth }}
+                                                    >
+                                                    {column.label}
+                                                    </TableCell>
+                                                ))}
+                                            </TableRow>
+                                        </TableHead>
+                                        {tableBody}
+                                    </Table>
+                                </TableContainer>
+                                {tableFooter}
+                            </Grid>
                         </Grid>
-                    </Grid>
-                ) : (
-                    <TableContainer>
-                        {componentTableResponsive}
-                    </TableContainer>
-                    
-                )
-                }
-                <Dialog open={openCreate} onClose={() => setOpenCreate(false)}>
-                    <ProductAdminModal title={titleModal} setOpenCreate={setOpenCreate} setAlertOk={setAlertOk} isCreate={isCreate} idProducto={idProductoQr}/>
-                </Dialog>
-                <Dialog open={openQr} onClose={() => setOpenQr(false)}>
-                    <ProductAdminQrModal setOpenCreate={setOpenQr} idProductoQr={idProductoQr}/>
-                </Dialog>
-                <Dialog open={openDelete} onClose={() => setOpenDelete(false)}>
-                    <ProductAdminModalEliminar setOpenDelete={setOpenDelete} idProducto={idProductoQr} setAlertOk={setAlertOk}/>
-                </Dialog>
-                {alertOk}
-            </Paper>
+                    ) : (
+                        <TableContainer>
+                            {componentTableResponsive}
+                        </TableContainer>
+                        
+                    )
+                    }
+                    <Dialog open={openCreate} onClose={() => setOpenCreate(false)}>
+                        <ProductAdminModal title={titleModal} setOpenCreate={setOpenCreate} setAlertOk={setAlertOk} isCreate={isCreate} idProducto={idProductoQr}/>
+                    </Dialog>
+                    <Dialog open={openQr} onClose={() => setOpenQr(false)}>
+                        <ProductAdminQrModal setOpenCreate={setOpenQr} idProductoQr={idProductoQr}/>
+                    </Dialog>
+                    <Dialog open={openDelete} onClose={() => setOpenDelete(false)}>
+                        <ProductAdminModalEliminar setOpenDelete={setOpenDelete} idProducto={idProductoQr} setAlertOk={setAlertOk}/>
+                    </Dialog>
+                    {alertOk}
+                </Paper>
+            </Grid>
         </Grid>
     );
 }
