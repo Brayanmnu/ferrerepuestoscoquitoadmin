@@ -167,7 +167,6 @@ export default function ProductAdminModal(props) {
                         </Grid>
                         <Grid item xs={12} sm={12} md={12}>
                             <TextField
-                                autoFocus
                                 margin="dense"
                                 id="descripcion"
                                 label="Descripcion"
