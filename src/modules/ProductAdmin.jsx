@@ -86,7 +86,7 @@ export default function ProductAdmin(props) {
                                     {row.nombre}
                                 </TableCell>
                                 <TableCell key="stock">
-                                    {row.stock}
+                                    {row.stock} {row.uni_medida}
                                 </TableCell>
                                 <TableCell key="precio_venta_menor">
                                     {row.precio_venta_menor}
@@ -131,7 +131,7 @@ export default function ProductAdmin(props) {
                                 <TableCell>
                                     <div>Categoria: {row.categoria}</div>
                                     <div>Nombre: {row.nombre}</div>
-                                    <div>Stock: {row.stock}</div>
+                                    <div>Stock: {row.stock} {row.uni_medida}</div>
                                     <div>Precio venta X menor: {row.precio_venta_menor}</div>
                                     <div>Descripcion: {row.descripcion}</div>
                                     <div>Precio compra: {row.precio_compra}</div>
@@ -239,7 +239,7 @@ export default function ProductAdmin(props) {
                                         {row.nombre}
                                     </TableCell>
                                     <TableCell key="stock">
-                                        {row.stock}
+                                        {row.stock} {row.uni_medida}
                                     </TableCell>
                                     <TableCell key="precio_venta_menor">
                                         {row.precio_venta_menor}
@@ -290,7 +290,7 @@ export default function ProductAdmin(props) {
                             
                                     <div>Categoria: {row.categoria}</div>
                                     <div>Nombre: {row.nombre}</div>
-                                    <div>Stock: {row.stock}</div>
+                                    <div>Stock: {row.stock} {row.uni_medida}</div>
                                     <div>Precio venta X menor: {row.precio_venta_menor}</div>
                                     <div>Descripcion: {row.descripcion}</div>
                                     <div>Precio compra: {row.precio_compra}</div>
