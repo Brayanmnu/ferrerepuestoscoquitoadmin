@@ -180,7 +180,6 @@ export default function ProductAdminModal(props) {
                         </Grid>
                         <Grid item xs={12} sm={6} md={4}>
                             <TextField
-                                autoFocus
                                 margin="dense"
                                 id="precioCompra"
                                 label="Precio compra"
@@ -193,7 +192,6 @@ export default function ProductAdminModal(props) {
                         </Grid>
                         <Grid item xs={12} sm={6} md={4}>
                             <TextField
-                                autoFocus
                                 margin="dense"
                                 id="precioVentaMenor"
                                 label="Precio Venta X menor"
@@ -206,7 +204,6 @@ export default function ProductAdminModal(props) {
                         </Grid>
                         <Grid item xs={12} sm={6} md={4}>
                             <TextField
-                                autoFocus
                                 margin="dense"
                                 id="precioVentaMayor"
                                 label="Precio Venta X mayor"
@@ -219,7 +216,6 @@ export default function ProductAdminModal(props) {
                         </Grid>
                         <Grid item xs={12} sm={6} md={4}>
                             <TextField
-                                autoFocus
                                 margin="dense"
                                 id="stock"
                                 label="stock"
