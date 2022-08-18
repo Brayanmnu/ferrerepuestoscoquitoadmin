@@ -46,8 +46,8 @@ class ProductoService {
     }
 
     deleteProductBack = async (idProduct) => {
-        const url = this.base_url + "/products/"+idProduct
-        const res = await axios.delete(url).catch(function (error) {
+        const url = this.base_url + "/products/delete/"+idProduct
+        const res = await axios.post(url).catch(function (error) {
             if (error.response) {
                 return error.response;
             }

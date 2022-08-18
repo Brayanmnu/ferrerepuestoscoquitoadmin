@@ -17,7 +17,7 @@ export default function ProductAdminModalEliminar(props) {
         const productoResponse =  await productoService.deleteProductBack(props.idProducto);
         if (productoResponse.status === 200){
             const productoResponseData = await productoResponse.data; 
-            if(productoResponseData.status==="eliminado"){
+            if(productoResponseData.status==="eliminacion logica"){
                 props.setAlertOk(<Alert severity="success">Eliminado correctamente</Alert>);
                 handleClose()
             }else{

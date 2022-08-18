@@ -77,47 +77,51 @@ export default function ProductAdmin(props) {
                         {rows
                         //.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) 
                         .map((row) => {
-                            return (
-                            <TableRow hover role="checkbox" tabIndex={-1} key={row.id_producto}>
-                                <TableCell key="categoria">
-                                    {row.categoria}
-                                </TableCell>
-                                <TableCell key="nombre">
-                                    {row.nombre}
-                                </TableCell>
-                                <TableCell key="stock">
-                                    {row.stock} {row.uni_medida}
-                                </TableCell>
-                                <TableCell key="precio_venta_menor">
-                                    {row.precio_venta_menor}
-                                </TableCell>
-                                <TableCell key="descripcion">
-                                    {row.descripcion}
-                                </TableCell>
-                                <TableCell key="precio_compra">
-                                    {row.precio_compra}
-                                </TableCell>
-                                <TableCell key="precio_venta_mayor">
-                                    {row.precio_venta_mayor}
-                                </TableCell>
-                                <TableCell key="options">
-                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
-                                        <ThemeProvider theme={theme}>
-                                            <Grid item xs={4} sm={4} md={4}>
-                                                <Button color="primary"  variant="contained" value={row.id_producto} onClick={handleClickOpenQr} size="small">QR</Button>                                
+                            console.log('estado: '+row.estado)
+                            if(row.estado=="1"){
+                                console.log('activo')
+                                return (
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id_producto}>
+                                        <TableCell key="categoria">
+                                            {row.categoria}
+                                        </TableCell>
+                                        <TableCell key="nombre">
+                                            {row.nombre}
+                                        </TableCell>
+                                        <TableCell key="stock">
+                                            {row.stock} {row.uni_medida}
+                                        </TableCell>
+                                        <TableCell key="precio_venta_menor">
+                                            {row.precio_venta_menor}
+                                        </TableCell>
+                                        <TableCell key="descripcion">
+                                            {row.descripcion}
+                                        </TableCell>
+                                        <TableCell key="precio_compra">
+                                            {row.precio_compra}
+                                        </TableCell>
+                                        <TableCell key="precio_venta_mayor">
+                                            {row.precio_venta_mayor}
+                                        </TableCell>
+                                        <TableCell key="options">
+                                            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
+                                                <ThemeProvider theme={theme}>
+                                                    <Grid item xs={4} sm={4} md={4}>
+                                                        <Button color="primary"  variant="contained" value={row.id_producto} onClick={handleClickOpenQr} size="small">QR</Button>                                
+                                                    </Grid>
+                                                    <Grid item xs={4} sm={4} md={4}>
+                                                        <Button color="warning" variant="contained" value={row.id_producto} onClick={handleClickOpenUpdate} size="small">Editar</Button>
+                                                    </Grid>
+                                                    <Grid item xs={4} sm={4} md={4}>
+                                                        <Button color="error"  variant="contained" value={row.id_producto} onClick={handleClickOpenDelete} size="small">Eliminar</Button>
+                                                    </Grid>
+                                                </ThemeProvider>
+                                                
                                             </Grid>
-                                            <Grid item xs={4} sm={4} md={4}>
-                                                <Button color="warning" variant="contained" value={row.id_producto} onClick={handleClickOpenUpdate} size="small">Editar</Button>
-                                            </Grid>
-                                            <Grid item xs={4} sm={4} md={4}>
-                                                <Button color="error"  variant="contained" value={row.id_producto} onClick={handleClickOpenDelete} size="small">Eliminar</Button>
-                                            </Grid>
-                                        </ThemeProvider>
-                                        
-                                    </Grid>
-                                </TableCell>
-                            </TableRow>
-                            );
+                                        </TableCell>
+                                    </TableRow>
+                                    );
+                            }
                         })}
                     </TableBody>
             );
@@ -126,33 +130,36 @@ export default function ProductAdmin(props) {
             setComponentTableResponsive(
                 <Table>
                     {rows.map((row) => {
-                        return(
-                            <TableRow hover role="checkbox" tabIndex={-1}>
-                                <TableCell>
-                                    <div>Categoria: {row.categoria}</div>
-                                    <div>Nombre: {row.nombre}</div>
-                                    <div>Stock: {row.stock} {row.uni_medida}</div>
-                                    <div>Precio venta X menor: {row.precio_venta_menor}</div>
-                                    <div>Descripcion: {row.descripcion}</div>
-                                    <div>Precio compra: {row.precio_compra}</div>
-                                    <div>Precio venta X mayor: {row.precio_venta_mayor}</div>
-                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
-                                        <ThemeProvider theme={theme}>
-                                            <Grid item xs={4} sm={4} md={4}>
-                                                <Button color="primary"  variant="contained" value={row.id_producto} onClick={handleClickOpenQr} size="small">QR</Button>                                
-                                            </Grid>
-                                            <Grid item xs={4} sm={4} md={4}>
-                                                <Button color="warning" variant="contained" value={row.id_producto} onClick={handleClickOpenUpdate} size="small">Editar</Button>
-                                            </Grid>
-                                            <Grid item xs={4} sm={4} md={4}>
-                                                <Button color="error"  variant="contained" value={row.id_producto} onClick={handleClickOpenDelete} size="small">Eliminar</Button>
-                                            </Grid>
-                                        </ThemeProvider>
-                                    </Grid>
-                                </TableCell>
-                                
-                            </TableRow>
-                        )
+                        if(row.estado=="1"){
+                            return(
+                                <TableRow hover role="checkbox" tabIndex={-1}>
+                                    <TableCell>
+                                        <div>Categoria: {row.categoria}</div>
+                                        <div>Nombre: {row.nombre}</div>
+                                        <div>Stock: {row.stock} {row.uni_medida}</div>
+                                        <div>Precio venta X menor: {row.precio_venta_menor}</div>
+                                        <div>Descripcion: {row.descripcion}</div>
+                                        <div>Precio compra: {row.precio_compra}</div>
+                                        <div>Precio venta X mayor: {row.precio_venta_mayor}</div>
+                                        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
+                                            <ThemeProvider theme={theme}>
+                                                <Grid item xs={4} sm={4} md={4}>
+                                                    <Button color="primary"  variant="contained" value={row.id_producto} onClick={handleClickOpenQr} size="small">QR</Button>                                
+                                                </Grid>
+                                                <Grid item xs={4} sm={4} md={4}>
+                                                    <Button color="warning" variant="contained" value={row.id_producto} onClick={handleClickOpenUpdate} size="small">Editar</Button>
+                                                </Grid>
+                                                <Grid item xs={4} sm={4} md={4}>
+                                                    <Button color="error"  variant="contained" value={row.id_producto} onClick={handleClickOpenDelete} size="small">Eliminar</Button>
+                                                </Grid>
+                                            </ThemeProvider>
+                                        </Grid>
+                                    </TableCell>
+                                    
+                                </TableRow>
+                            )
+                        }
+                        
                     })}
                 </Table>
             )
@@ -220,7 +227,6 @@ export default function ProductAdmin(props) {
     }, [alertOk,]);
     
     const searchChange = (event) => {
-        console.log('textSearch:'+textSearch)
         const rowInterno = tableData;
         setTableBody(
             <TableBody>
@@ -229,7 +235,7 @@ export default function ProductAdmin(props) {
                         var nombre = row.nombre;
                         nombre = nombre.toUpperCase();
                         const valueTarget = textSearch; //event.target.value 
-                        if(nombre.includes(valueTarget.toUpperCase())){
+                        if(nombre.includes(valueTarget.toUpperCase()) && row.estado=="1"){
                             return (
                                 <TableRow hover role="checkbox" tabIndex={-1} key={row.id_producto}>
                                     <TableCell key="categoria">
@@ -283,7 +289,7 @@ export default function ProductAdmin(props) {
                     var nombre = row.nombre;
                     nombre = nombre.toUpperCase();
                     const valueTarget = textSearch// event.target.value 
-                    if(nombre.includes(valueTarget.toUpperCase())){
+                    if(nombre.includes(valueTarget.toUpperCase()) && row.estado=="1"){
                         return(
                             <TableRow hover role="checkbox" tabIndex={-1}>
                                 <TableCell>
