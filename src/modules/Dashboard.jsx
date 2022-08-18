@@ -156,13 +156,17 @@ let theme = createTheme({
   const drawerWidth = 256;
 
   
-export default function Dashboard(){
+export default function Dashboard(props){
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const isSmUp = useMediaQuery(theme.breakpoints.up('sm'));
 
     const handleDrawerToggle = () => {
       setMobileOpen(!mobileOpen);
     };
+
+    const handleIsLogin = () => {
+      props.setIsLogin(false)
+    }
   
     return (
       <ThemeProvider theme={theme}>
@@ -189,7 +193,7 @@ export default function Dashboard(){
               />
           </Box>
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-            <Header onDrawerToggle={handleDrawerToggle} />
+            <Header onDrawerToggle={handleDrawerToggle} handleIsLogin={handleIsLogin}/>
             <Box component="main" sx={{ flex: 1, py: 2, px: 3, bgcolor: '#eaeff1' }}>
                 <Routes>
                     <Route path={'/'} exact element={<Home/>} />
