@@ -77,9 +77,7 @@ export default function ProductAdmin(props) {
                         {rows
                         //.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) 
                         .map((row) => {
-                            console.log('estado: '+row.estado)
                             if(row.estado=="1"){
-                                console.log('activo')
                                 return (
                                     <TableRow hover role="checkbox" tabIndex={-1} key={row.id_producto}>
                                         <TableCell key="categoria">
