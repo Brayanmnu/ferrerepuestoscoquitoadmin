@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
+//Imports material-ui
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -7,12 +8,15 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import Alert from '@mui/material/Alert';
+//import Alert from '@mui/material/Alert';
 
-import { ProductoService } from "../services/ProductoService";
-import { UnidadMedidaService } from "../services/UnidadMedidaService";
-import { TipoProductoService } from "../services/TipoProductoService";
+//Servicios
+import { ProductoService } from "../../services/ProductoService";
+import { UnidadMedidaService } from "../../services/UnidadMedidaService";
+import { TipoProductoService } from "../../services/TipoProductoService";
 
+//componente
+import Alert from '../../components/Alert'
 export default function ProductAdminModal(props) {
 
     const productoService = new ProductoService();
@@ -30,7 +34,10 @@ export default function ProductAdminModal(props) {
 
     const [menuItemProducto, setMenuItemProducto] = useState('');
     const [menuItemUnidadMedida, setMenuItemUnidadMedida] = useState('');
-    const [alertError,setAlertError] = useState('');
+
+    const [openAlertError, setOpenAlertError] = useState(false);
+    const [msjError, setMsjError] = useState('');
+
     
     var arrayTipoProducto = []
     var arrayUnidadMedida = []
@@ -101,29 +108,39 @@ export default function ProductAdminModal(props) {
 
         if(props.isCreate){
             const productoResponse =  await productoService.createProductBack(dataFormProduct);
+            setMsjError('Error al insertar')
             if (productoResponse.status === 200){
                 const productoResponseData = await productoResponse.data;
                 if(productoResponseData.status==="ok"){
-                    props.setAlertOk(<Alert severity="success">Insertado correctamente</Alert>);
+                    setOpenAlertError(false)
+                    props.setMsjAlertExitoso("Insertado correctamente")
+                    props.setSeverityAlert('success')
+                    props.setOpenAlertOk(true);
+                    props.reloadAllProducts()
                     handleClose()
                 }else{
-                    setAlertError(<Alert severity="error">Error al insertar</Alert>)
+                    setOpenAlertError(true);
                 }
             }else{
-                setAlertError(<Alert severity="error">Error al insertar</Alert>)
+                setOpenAlertError(true);
             }
         }else{
             const productoResponse =  await productoService.updateProductBack(dataFormProduct,props.idProducto);
+            setMsjError('Error al actualizar')
             if (productoResponse.status === 200){
                 const productoResponseData = await productoResponse.data;
                 if(productoResponseData.status==="actualizado"){
-                    props.setAlertOk(<Alert severity="success">Actualizado correctamente</Alert>);
+                    setOpenAlertError(false)
+                    props.setMsjAlertExitoso("Actualizado correctamente")
+                    props.setSeverityAlert('success')
+                    props.setOpenAlertOk(true);
+                    props.reloadAllProducts()
                     handleClose()
                 }else{
-                    setAlertError(<Alert severity="error">Error al actualizar</Alert>)
+                    setOpenAlertError(true);
                 }
             }else{
-                setAlertError(<Alert severity="error">Error al actualizar</Alert>)
+                setOpenAlertError(true);
             }
         }
         
@@ -245,7 +262,7 @@ export default function ProductAdminModal(props) {
                 <Button onClick={handleClose} variant="outlined" color="error">Cancelar</Button>
                 <Button onClick={createProduct} variant="contained" >Guardar</Button>
             </DialogActions>
-            {alertError}
+            <Alert openAlert={openAlertError} setOpenAlert={setOpenAlertError} mensaje={msjError} severity="error"/>
         </Fragment>
     );
 }

@@ -4,12 +4,12 @@ import MuiAlert from '@mui/material/Alert';
 
 export default function Alert(props) {
 
-    const handleCloseError = (event) => {
-        props.setOpenError(false);
+    const handleCloseAlert = (event) => {
+        props.setOpenAlert(false);
     };
     return(
-        <Snackbar open={props.openError} autoHideDuration={2000} onClose={handleCloseError}>
-            <MuiAlert onClose={handleCloseError} severity="error" sx={{ width: '100%' }}>
+        <Snackbar open={props.openAlert} autoHideDuration={2000} onClose={handleCloseAlert}>
+            <MuiAlert onClose={handleCloseAlert} severity={props.severity} sx={{ width: '100%' }}>
                 {props.mensaje}
             </MuiAlert>
         </Snackbar>

@@ -1,9 +1,6 @@
 import React, { useState, useEffect, Fragment, Image} from "react";
-import DialogContent from '@mui/material/DialogContent';
-import Grid from '@mui/material/Grid';
 
-import { ProductoService } from "../services/ProductoService";
-import { Container } from "@mui/system";
+import { ProductoService } from "../../services/ProductoService";
 
 export default function ProductAdminQrModal(props) {
 

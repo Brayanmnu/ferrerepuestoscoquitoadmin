@@ -17,7 +17,7 @@ export default function ThemeLogin(props) {
 
     
     const theme = createTheme();
-    const [openError, setOpenError] = React.useState(false);
+    const [openAlert, setOpenAlert] = React.useState(false);
 
     const userService = new UserService();
     async function handleSubmit (event) {
@@ -36,10 +36,10 @@ export default function ThemeLogin(props) {
                     'loggedCoquito' , JSON.stringify(loginResponseData)
                 )
             }else{
-                setOpenError(true);
+                setOpenAlert(true);
             }
         }else{
-            setOpenError(true);
+            setOpenAlert(true);
         }
     };
 
@@ -110,7 +110,7 @@ export default function ThemeLogin(props) {
                 </Box>
             </Box>
             </Grid>
-            <Alert openError={openError} setOpenError={setOpenError} mensaje="Credenciales incorrectas" severity="error"/>
+            <Alert openAlert={openAlert} setOpenAlert={setOpenAlert} mensaje="Credenciales incorrectas" severity="error"/>
       </Grid>
     </ThemeProvider>
   );

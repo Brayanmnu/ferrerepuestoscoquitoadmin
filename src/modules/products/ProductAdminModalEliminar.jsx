@@ -1,30 +1,38 @@
 import React, { useState, Fragment} from "react";
+//Imports material-ui
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import Alert from '@mui/material/Alert';
 
-import { ProductoService } from "../services/ProductoService";
+//Servicios
+import { ProductoService } from "../../services/ProductoService";
+
+//Componente
+import Alert from '../../components/Alert'
 
 export default function ProductAdminModalEliminar(props) {
 
     const productoService = new ProductoService();
 
-    const [alertError,setAlertError] = useState('');
+    const [openAlertError, setOpenAlertError] = useState(false);
 
     async function eliminarProducto() {
         const productoResponse =  await productoService.deleteProductBack(props.idProducto);
         if (productoResponse.status === 200){
             const productoResponseData = await productoResponse.data; 
             if(productoResponseData.status==="eliminacion logica"){
-                props.setAlertOk(<Alert severity="success">Eliminado correctamente</Alert>);
+                setOpenAlertError(false)
+                props.setOpenAlertOk(true);
+                props.setMsjAlertExitoso("Eliminado correctamente")
+                props.setSeverityAlert('warning')
+                props.reloadAllProducts()
                 handleClose()
             }else{
-                setAlertError(<Alert severity="error">Error al eliminar</Alert>)
+                setOpenAlertError(true)
             }
         }else{
-            setAlertError(<Alert severity="error">Error al eliminar</Alert>)
+            setOpenAlertError(true)
         }
     }
 
@@ -44,7 +52,7 @@ export default function ProductAdminModalEliminar(props) {
                 <Button onClick={handleClose} variant="outlined" color="error">Cancelar</Button>
                 <Button onClick={eliminarProducto} variant="contained" >Aceptar</Button>
             </DialogActions>
-            {alertError}
+            <Alert openAlert={false} setOpenAlert={setOpenAlertError} mensaje="Error al eliminar" severity="error"/>
         </Fragment>
     );
 }

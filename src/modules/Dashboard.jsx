@@ -1,11 +1,11 @@
-import * as React from 'react';
+import React, { useState } from "react";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import SideBar from './SideBar.jsx'
 import { BrowserRouter as Router, Route , Routes} from 'react-router-dom'
-import ProductAdmin from './ProductAdmin'
+import ProductAdmin from './products/ProductAdmin'
 import Home from './Home'
 import Header from './Header';
 
@@ -157,7 +157,7 @@ let theme = createTheme({
 
   
 export default function Dashboard(props){
-    const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [mobileOpen, setMobileOpen] = useState(false);
     const isSmUp = useMediaQuery(theme.breakpoints.up('sm'));
 
     const handleDrawerToggle = () => {

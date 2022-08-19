@@ -47,7 +47,7 @@ export default function SideBar(props) {
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
         <ListItem sx={{ ...item, ...itemCategory, fontSize: 22, color: '#fff' }}>
-          Ferrerepuestos Coquito
+          Ferrerepuestos & Accesorios Coquito
         </ListItem>
         <Link key="home" to="/"  style={{ textDecoration: 'none' }}>
             <ListItem sx={{ ...item, ...itemCategory }}>

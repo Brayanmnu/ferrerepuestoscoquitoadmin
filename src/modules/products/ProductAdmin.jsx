@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
+//Imports material-ui
 import Grid from '@mui/material/Grid';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,13 +10,20 @@ import TableContainer from '@mui/material/TableContainer';
 import TableCell from '@mui/material/TableCell';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog'
-import { ProductoService } from "../services/ProductoService";
+import Paper from '@mui/material/Paper';
+import { createTheme,ThemeProvider } from '@mui/material/styles';
+
+//Servicios
+import { ProductoService } from "../../services/ProductoService";
+
+//Vistas
 import ProductAdminModal from "./ProductAdminModal";
 import ProductAdminQrModal from "./ProductAdminQrModal";
 import ProductAdminModalEliminar from "./ProductAdminModalEliminar";
-import Paper from '@mui/material/Paper';
-import { createTheme,ThemeProvider } from '@mui/material/styles';
-import SearchComponent from '../components/SearchComponent'
+
+//componentes
+import SearchComponent from '../../components/SearchComponent'
+import Alert from '../../components/Alert'
 
 export default function ProductAdmin(props) {
     const productoService = new ProductoService();
@@ -26,7 +34,6 @@ export default function ProductAdmin(props) {
     const [openCreate, setOpenCreate] = useState(false);
     const [openQr, setOpenQr] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
-    const [alertOk,setAlertOk] = useState('');
     const [tableFooter, setTableFooter] = useState('');
     const [searched, setSearched] = useState("");
     const [idProductoQr, setIdProductQr] = useState("");
@@ -35,6 +42,10 @@ export default function ProductAdmin(props) {
     const [componentTableResponsive, setComponentTableResponsive] = useState("");
     const [textSearch, setTextSearch] = useState('');
     const [tableData, setTableData] = useState();
+    const [openAlertOk, setOpenAlertOk] = useState(false);
+    const [msjAlertExitoso, setMsjAlertExitoso] = useState('');
+    const [severityAlert, setSeverityAlert] = useState('');
+    
 
     const theme = createTheme({
         palette: {
@@ -66,6 +77,7 @@ export default function ProductAdmin(props) {
     var rows = [];
 
     async function reloadAllProducts() {
+        console.log('se carga tabla')
         setTextSearch('');
         const productAll =  await productoService.getAllProducts();
         if (productAll.status === 200){
@@ -211,18 +223,9 @@ export default function ProductAdmin(props) {
         setIdProductQr(event.target.value);
     };
 
-    const sleep = (milliseconds) => {
-        return new Promise(resolve => setTimeout(resolve, milliseconds))
-    }
-    async function resetAlertOk() {
-        await sleep(3000)
-        setAlertOk("");
-    }
-
     useEffect(() => {
         reloadAllProducts()
-        resetAlertOk()
-    }, [alertOk,]);
+    }, []);
     
     const searchChange = (event) => {
         const rowInterno = tableData;
@@ -366,15 +369,31 @@ export default function ProductAdmin(props) {
                     )
                     }
                     <Dialog open={openCreate} onClose={() => setOpenCreate(false)}>
-                        <ProductAdminModal title={titleModal} setOpenCreate={setOpenCreate} setAlertOk={setAlertOk} isCreate={isCreate} idProducto={idProductoQr}/>
+                        <ProductAdminModal
+                            title={titleModal} 
+                            setOpenCreate={setOpenCreate} 
+                            setOpenAlertOk={setOpenAlertOk} 
+                            setMsjAlertExitoso={setMsjAlertExitoso} 
+                            setSeverityAlert={setSeverityAlert} 
+                            isCreate={isCreate} 
+                            idProducto={idProductoQr}
+                            reloadAllProducts={reloadAllProducts} />
                     </Dialog>
                     <Dialog open={openQr} onClose={() => setOpenQr(false)}>
-                        <ProductAdminQrModal setOpenCreate={setOpenQr} idProductoQr={idProductoQr}/>
+                        <ProductAdminQrModal 
+                        setOpenCreate={setOpenQr} 
+                        idProductoQr={idProductoQr}/>
                     </Dialog>
                     <Dialog open={openDelete} onClose={() => setOpenDelete(false)}>
-                        <ProductAdminModalEliminar setOpenDelete={setOpenDelete} idProducto={idProductoQr} setAlertOk={setAlertOk}/>
+                        <ProductAdminModalEliminar 
+                            setOpenDelete={setOpenDelete} 
+                            idProducto={idProductoQr} 
+                            setOpenAlertOk={setOpenAlertOk} 
+                            setMsjAlertExitoso={setMsjAlertExitoso} 
+                            setSeverityAlert={setSeverityAlert}
+                            reloadAllProducts={reloadAllProducts}/>
                     </Dialog>
-                    {alertOk}
+                    <Alert openAlert={openAlertOk} setOpenAlert={setOpenAlertOk} mensaje={msjAlertExitoso} severity={severityAlert}/>
                 </Paper>
             </Grid>
         </Grid>
