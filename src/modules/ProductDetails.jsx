@@ -4,6 +4,9 @@ import {useParams } from 'react-router-dom'
 import { ProductoService } from "../services/ProductoService";
 import { UnidadMedidaService } from "../services/UnidadMedidaService";
 import { TipoProductoService } from "../services/TipoProductoService";
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import Box from '@mui/material/Box';
 
 export default function ProductDetails(props) {
     const productoService = new ProductoService();
@@ -59,29 +62,35 @@ export default function ProductDetails(props) {
     
     return (
     <Fragment>
-        <Grid container>
-            <Grid item xs={12} sm={6} md={4}>
-                <label>Categoria: {tipoProducto}</label>
+        <Box>
+            <Typography variant="caption" display="block" >
+                {tipoProducto}
+            </Typography>
+            <Typography variant="h2" gutterBottom>
+                {nombre}
+            </Typography>
+            <Divider />
+            <Grid container>
+                <Grid item xs={12} sm={6} md={4}>
+                    <Typography variant="h6" gutterBottom>
+                        Venta X MENOR: S/ {precioVentaMenor}
+                    </Typography>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                    <Typography variant="h6" gutterBottom>
+                        Venta X MAYOR: S/ {precioVentaMayor}
+                    </Typography>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                    <Typography variant="h6" gutterBottom>
+                        Compra: S/ {precioCompra}
+                    </Typography>
+                </Grid>
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-                <label>Nombre: {nombre}</label>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-                <label>Descripcion: {descripcion}</label>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-                <label>stock: {stock} {unidadMedida}</label>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-                <label>Precio venta X MENOR: {precioVentaMenor}</label>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-                <label>Precio venta X MAYOR: {precioVentaMayor}</label>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-                <label>Precio compra: {precioCompra}</label>
-            </Grid>
-        </Grid>
-
+            <Divider />
+            <Typography variant="body2" gutterBottom>
+                    {descripcion}
+            </Typography>
+        </Box>
     </Fragment>)
 }

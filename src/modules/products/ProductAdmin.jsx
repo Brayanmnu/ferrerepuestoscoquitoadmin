@@ -63,8 +63,8 @@ export default function ProductAdmin(props) {
     });
     
     const columns= [
-        { id: 'categoria',align: 'center', label: 'Categoria', minWidth: 170, format: 'string' },
         { id: 'nombre',align: 'center', label: 'Nombre', minWidth: 170 , format: 'string'},
+        { id: 'categoria',align: 'center', label: 'Categoria', minWidth: 170, format: 'string' },
         { id: 'stock',align: 'center', label: 'Stock', minWidth: 170, format: 'string' },
         { id: 'precio_venta_menor',align: 'center', label: 'Precio venta X menor', minWidth: 170, format: (value) => value.toFixed(2) },
         { id: 'descripcion',align: 'center', label: 'Descripcion', minWidth: 170, format: 'string' },
@@ -77,7 +77,6 @@ export default function ProductAdmin(props) {
     var rows = [];
 
     async function reloadAllProducts() {
-        console.log('se carga tabla')
         setTextSearch('');
         const productAll =  await productoService.getAllProducts();
         if (productAll.status === 200){
@@ -92,26 +91,26 @@ export default function ProductAdmin(props) {
                             if(row.estado=="1"){
                                 return (
                                     <TableRow hover role="checkbox" tabIndex={-1} key={row.id_producto}>
-                                        <TableCell key="categoria">
-                                            {row.categoria}
-                                        </TableCell>
                                         <TableCell key="nombre">
                                             {row.nombre}
+                                        </TableCell>
+                                        <TableCell key="categoria">
+                                            {row.categoria}
                                         </TableCell>
                                         <TableCell key="stock">
                                             {row.stock} {row.uni_medida}
                                         </TableCell>
                                         <TableCell key="precio_venta_menor">
-                                            {row.precio_venta_menor}
+                                            S/ {row.precio_venta_menor}
                                         </TableCell>
                                         <TableCell key="descripcion">
                                             {row.descripcion}
                                         </TableCell>
                                         <TableCell key="precio_compra">
-                                            {row.precio_compra}
+                                            S/ {row.precio_compra}
                                         </TableCell>
                                         <TableCell key="precio_venta_mayor">
-                                            {row.precio_venta_mayor}
+                                            S/ {row.precio_venta_mayor}
                                         </TableCell>
                                         <TableCell key="options">
                                             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
@@ -144,13 +143,13 @@ export default function ProductAdmin(props) {
                             return(
                                 <TableRow hover role="checkbox" tabIndex={-1}>
                                     <TableCell>
-                                        <div>Categoria: {row.categoria}</div>
                                         <div>Nombre: {row.nombre}</div>
+                                        <div>Categoria: {row.categoria}</div>
                                         <div>Stock: {row.stock} {row.uni_medida}</div>
-                                        <div>Precio venta X menor: {row.precio_venta_menor}</div>
+                                        <div>Precio venta X menor: S/ {row.precio_venta_menor}</div>
                                         <div>Descripcion: {row.descripcion}</div>
-                                        <div>Precio compra: {row.precio_compra}</div>
-                                        <div>Precio venta X mayor: {row.precio_venta_mayor}</div>
+                                        <div>Precio compra: S/ {row.precio_compra}</div>
+                                        <div>Precio venta X mayor: S/ {row.precio_venta_mayor}</div>
                                         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
                                             <ThemeProvider theme={theme}>
                                                 <Grid item xs={4} sm={4} md={4}>
@@ -239,26 +238,26 @@ export default function ProductAdmin(props) {
                         if(nombre.includes(valueTarget.toUpperCase()) && row.estado=="1"){
                             return (
                                 <TableRow hover role="checkbox" tabIndex={-1} key={row.id_producto}>
-                                    <TableCell key="categoria">
-                                        {row.categoria}
-                                    </TableCell>
                                     <TableCell key="nombre">
                                         {row.nombre}
+                                    </TableCell>
+                                    <TableCell key="categoria">
+                                        {row.categoria}
                                     </TableCell>
                                     <TableCell key="stock">
                                         {row.stock} {row.uni_medida}
                                     </TableCell>
                                     <TableCell key="precio_venta_menor">
-                                        {row.precio_venta_menor}
+                                        S/ {row.precio_venta_menor}
                                     </TableCell>
                                     <TableCell key="descripcion">
                                         {row.descripcion}
                                     </TableCell>
                                     <TableCell key="precio_compra">
-                                        {row.precio_compra}
+                                       S/ {row.precio_compra}
                                     </TableCell>
                                     <TableCell key="precio_venta_mayor">
-                                        {row.precio_venta_mayor}
+                                        S/ {row.precio_venta_mayor}
                                     </TableCell>
                                     <TableCell key="options">
                                         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
@@ -294,14 +293,13 @@ export default function ProductAdmin(props) {
                         return(
                             <TableRow hover role="checkbox" tabIndex={-1}>
                                 <TableCell>
-                            
-                                    <div>Categoria: {row.categoria}</div>
                                     <div>Nombre: {row.nombre}</div>
+                                    <div>Categoria: {row.categoria}</div>
                                     <div>Stock: {row.stock} {row.uni_medida}</div>
-                                    <div>Precio venta X menor: {row.precio_venta_menor}</div>
+                                    <div>Precio venta X menor: S/ {row.precio_venta_menor}</div>
                                     <div>Descripcion: {row.descripcion}</div>
-                                    <div>Precio compra: {row.precio_compra}</div>
-                                    <div>Precio venta X mayor: {row.precio_venta_mayor}</div>
+                                    <div>Precio compra: S/ {row.precio_compra}</div>
+                                    <div>Precio venta X mayor: S/ {row.precio_venta_mayor}</div>
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
                                         <ThemeProvider theme={theme}>
                                             <Grid item xs={4} sm={4} md={4}>
