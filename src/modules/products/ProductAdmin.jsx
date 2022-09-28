@@ -13,6 +13,13 @@ import Dialog from '@mui/material/Dialog'
 import Paper from '@mui/material/Paper';
 import { createTheme,ThemeProvider } from '@mui/material/styles';
 import {useParams } from 'react-router-dom'
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
+import ClearIcon from '@mui/icons-material/Clear';
+import Pagination from "@mui/material/Pagination";
 
 //Servicios
 import { ProductoService } from "../../services/ProductoService";
@@ -23,7 +30,6 @@ import ProductAdminQrModal from "./ProductAdminQrModal";
 import ProductAdminModalEliminar from "./ProductAdminModalEliminar";
 
 //componentes
-import SearchComponent from '../../components/SearchComponent'
 import Alert from '../../components/Alert'
 
 export default function ProductAdmin(props) {
@@ -31,7 +37,6 @@ export default function ProductAdmin(props) {
 
     const productoService = new ProductoService();
 
-    const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [tableBody, setTableBody] = useState();
     const [openCreate, setOpenCreate] = useState(false);
@@ -43,12 +48,16 @@ export default function ProductAdmin(props) {
     const [isCreate, setIsCreate] = useState(true);
     const [titleModal, setTitleModal] = useState("");
     const [componentTableResponsive, setComponentTableResponsive] = useState("");
-    const [textSearch, setTextSearch] = useState('');
-    const [tableData, setTableData] = useState();
     const [openAlertOk, setOpenAlertOk] = useState(false);
     const [msjAlertExitoso, setMsjAlertExitoso] = useState('');
     const [severityAlert, setSeverityAlert] = useState('');
-    
+
+    const [subTipoProduct, setSubTipoProduct] = useState('');
+    const [deProduct, setDeProduct] = useState('');
+    const [aProduct, setAProduct] = useState('');
+
+    const [cantPaginas,setCantPaginas] = useState(0)
+    const [page, setPage] = useState(1);
 
     const theme = createTheme({
         palette: {
@@ -66,139 +75,105 @@ export default function ProductAdmin(props) {
     });
     
     const columns= [
-        { id: 'nombre',align: 'center', label: 'Nombre', minWidth: 170 , format: 'string'},
-        { id: 'categoria',align: 'center', label: 'Categoria', minWidth: 170, format: 'string' },
         { id: 'stock',align: 'center', label: 'Stock', minWidth: 170, format: 'string' },
-        { id: 'precio_venta_menor',align: 'center', label: 'Precio venta X menor', minWidth: 170, format: (value) => value.toFixed(2) },
-        { id: 'descripcion',align: 'center', label: 'Descripcion', minWidth: 170, format: 'string' },
+        { id: 'nombre',align: 'center', label: 'Nombre', minWidth: 170 , format: 'string'},
+        { id: 'precio_venta',align: 'center', label: 'Rando precio venta', minWidth: 170, format: (value) => value.toFixed(2) },
         { id: 'precio_compra',align: 'center', label: 'Precio compra', minWidth: 170, format: (value) => value.toFixed(2)},
-        { id: 'precio_venta_mayor',align: 'center', label: 'Precio venta X mayor', minWidth: 170 , format: (value) => value.toFixed(2)},
         { id: 'acciones',align: 'center', label: 'Acciones', minWidth: 240 , format: "string"}
     ];
 
     
     var rows = [];
 
-    async function reloadAllProducts() {
-        setTextSearch('');
-        const productAll =  await productoService.getAllProducts();
+    async function reloadAllProducts(nroPag,idSubProductType,deRequest,aRequest) {
+        const productAll =  await productoService.getAllProducts(nroPag,productType,idSubProductType,deRequest,aRequest);
         if (productAll.status === 200){
             const rowsDentro = await productAll.data;
             rows = rowsDentro;
             
             setTableBody(
                 <TableBody>
-                        {rows
-                        //.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) 
-                        .map((row) => {
-                            if(row.estado=="1"){
-                                return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id_producto}>
-                                        <TableCell key="nombre">
-                                            {row.nombre}
-                                        </TableCell>
-                                        <TableCell key="categoria">
-                                            {row.categoria}
-                                        </TableCell>
-                                        <TableCell key="stock">
-                                            {row.stock} {row.uni_medida}
-                                        </TableCell>
-                                        <TableCell key="precio_venta_menor">
-                                            S/ {row.precio_venta_menor}
-                                        </TableCell>
-                                        <TableCell key="descripcion">
-                                            {row.descripcion}
-                                        </TableCell>
-                                        <TableCell key="precio_compra">
-                                            S/ {row.precio_compra}
-                                        </TableCell>
-                                        <TableCell key="precio_venta_mayor">
-                                            S/ {row.precio_venta_mayor}
-                                        </TableCell>
-                                        <TableCell key="options">
-                                            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
-                                                <ThemeProvider theme={theme}>
-                                                    <Grid item xs={4} sm={4} md={4}>
-                                                        <Button color="primary"  variant="contained" value={row.id_producto} onClick={handleClickOpenQr} size="small">QR</Button>                                
-                                                    </Grid>
-                                                    <Grid item xs={4} sm={4} md={4}>
-                                                        <Button color="warning" variant="contained" value={row.id_producto} onClick={handleClickOpenUpdate} size="small">Editar</Button>
-                                                    </Grid>
-                                                    <Grid item xs={4} sm={4} md={4}>
-                                                        <Button color="error"  variant="contained" value={row.id_producto} onClick={handleClickOpenDelete} size="small">Eliminar</Button>
-                                                    </Grid>
-                                                </ThemeProvider>
-                                                
+                    {rows.map((row) => {
+                        return (
+                            <TableRow hover role="checkbox" tabIndex={-1} key={row.id_producto}>
+                                <TableCell key="stock">
+                                    {row.stock} {row.uni_medida}
+                                </TableCell>
+                                <TableCell key="nombre">
+                                    {row.nombre}
+                                </TableCell>
+                                <TableCell key="precio_venta">
+                                    S/ {row.precio_venta_menor} - S/ {row.precio_venta_mayor}
+                                </TableCell>
+                                <TableCell key="precio_compra">
+                                    S/ {row.precio_compra}
+                                </TableCell>
+                                <TableCell key="options">
+                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
+                                        <ThemeProvider theme={theme}>
+                                            <Grid item xs={4} sm={4} md={4}>
+                                                <Button color="primary"  variant="contained" value={row.id_producto} onClick={handleClickOpenQr} size="small">QR</Button>                                
                                             </Grid>
-                                        </TableCell>
-                                    </TableRow>
-                                    );
-                            }
-                        })}
-                    </TableBody>
+                                            <Grid item xs={4} sm={4} md={4}>
+                                                <Button color="warning" variant="contained" value={row.id_producto} onClick={handleClickOpenUpdate} size="small">Editar</Button>
+                                            </Grid>
+                                            <Grid item xs={4} sm={4} md={4}>
+                                                <Button color="error"  variant="contained" value={row.id_producto} onClick={handleClickOpenDelete} size="small">Eliminar</Button>
+                                            </Grid>
+                                        </ThemeProvider>
+                                        
+                                    </Grid>
+                                </TableCell>
+                            </TableRow>
+                        );
+                    })}
+                </TableBody>
             );
 
             
             setComponentTableResponsive(
                 <Table>
                     {rows.map((row) => {
-                        if(row.estado=="1"){
-                            return(
-                                <TableRow hover role="checkbox" tabIndex={-1}>
-                                    <TableCell>
-                                        <div>Nombre: {row.nombre}</div>
-                                        <div>Categoria: {row.categoria}</div>
-                                        <div>Stock: {row.stock} {row.uni_medida}</div>
-                                        <div>Precio venta X menor: S/ {row.precio_venta_menor}</div>
-                                        <div>Descripcion: {row.descripcion}</div>
-                                        <div>Precio compra: S/ {row.precio_compra}</div>
-                                        <div>Precio venta X mayor: S/ {row.precio_venta_mayor}</div>
-                                        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
-                                            <ThemeProvider theme={theme}>
-                                                <Grid item xs={4} sm={4} md={4}>
-                                                    <Button color="primary"  variant="contained" value={row.id_producto} onClick={handleClickOpenQr} size="small">QR</Button>                                
-                                                </Grid>
-                                                <Grid item xs={4} sm={4} md={4}>
-                                                    <Button color="warning" variant="contained" value={row.id_producto} onClick={handleClickOpenUpdate} size="small">Editar</Button>
-                                                </Grid>
-                                                <Grid item xs={4} sm={4} md={4}>
-                                                    <Button color="error"  variant="contained" value={row.id_producto} onClick={handleClickOpenDelete} size="small">Eliminar</Button>
-                                                </Grid>
-                                            </ThemeProvider>
-                                        </Grid>
-                                    </TableCell>
-                                    
-                                </TableRow>
-                            )
-                        }
-                        
+                        return(
+                            <TableRow hover role="checkbox" tabIndex={-1}>
+                                <TableCell>
+                                    <div>Stock: {row.stock} {row.uni_medida}</div>
+                                    <div>Nombre: {row.nombre}</div>
+                                    <div>Rango Precio venta: S/ {row.precio_venta_menor} - S/ {row.precio_venta_mayor}</div>
+                                    <div>Precio compra: S/ {row.precio_compra}</div>
+                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
+                                        <ThemeProvider theme={theme}>
+                                            <Grid item xs={4} sm={4} md={4}>
+                                                <Button color="primary"  variant="contained" value={row.id_producto} onClick={handleClickOpenQr} size="small">QR</Button>                                
+                                            </Grid>
+                                            <Grid item xs={4} sm={4} md={4}>
+                                                <Button color="warning" variant="contained" value={row.id_producto} onClick={handleClickOpenUpdate} size="small">Editar</Button>
+                                            </Grid>
+                                            <Grid item xs={4} sm={4} md={4}>
+                                                <Button color="error"  variant="contained" value={row.id_producto} onClick={handleClickOpenDelete} size="small">Eliminar</Button>
+                                            </Grid>
+                                        </ThemeProvider>
+                                    </Grid>
+                                </TableCell>
+                                
+                            </TableRow>
+                        )
                     })}
                 </Table>
             )
-
-            /*setTableFooter(
-                <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-            );*/
-            setTableData(rows)
         }
     }
 
     
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
+    const handleChangeSubTipo = (event) => {
+        setSubTipoProduct(event.target.value);
     };
 
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
+    const handleChangeDe = (event) => {
+        setDeProduct(event.target.value);
+    };
+    const handleChangeA = (event) => {
+        setAProduct(event.target.value);
     };
 
     const handleClickOpenCreate = () => {
@@ -226,109 +201,98 @@ export default function ProductAdmin(props) {
     };
 
     useEffect(() => {
-        reloadAllProducts()
+        reloadAllProducts(0,"","","") 
         console.log('productType: '+productType)
     }, [productType,]);
-    
-    const searchChange = (event) => {
-        const rowInterno = tableData;
-        setTableBody(
-            <TableBody>
-                    {rowInterno
-                    .map((row) => {
-                        var nombre = row.nombre;
-                        nombre = nombre.toUpperCase();
-                        const valueTarget = textSearch; //event.target.value 
-                        if(nombre.includes(valueTarget.toUpperCase()) && row.estado=="1"){
-                            return (
-                                <TableRow hover role="checkbox" tabIndex={-1} key={row.id_producto}>
-                                    <TableCell key="nombre">
-                                        {row.nombre}
-                                    </TableCell>
-                                    <TableCell key="categoria">
-                                        {row.categoria}
-                                    </TableCell>
-                                    <TableCell key="stock">
-                                        {row.stock} {row.uni_medida}
-                                    </TableCell>
-                                    <TableCell key="precio_venta_menor">
-                                        S/ {row.precio_venta_menor}
-                                    </TableCell>
-                                    <TableCell key="descripcion">
-                                        {row.descripcion}
-                                    </TableCell>
-                                    <TableCell key="precio_compra">
-                                       S/ {row.precio_compra}
-                                    </TableCell>
-                                    <TableCell key="precio_venta_mayor">
-                                        S/ {row.precio_venta_mayor}
-                                    </TableCell>
-                                    <TableCell key="options">
-                                        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
-                                            <ThemeProvider theme={theme}>
-                                                <Grid item xs={4} sm={4} md={4}>
-                                                    <Button color="primary"  variant="contained" value={row.id_producto} onClick={handleClickOpenQr} size="small">QR</Button>                                
-                                                </Grid>
-                                                <Grid item xs={4} sm={4} md={4}>
-                                                    <Button color="warning" variant="contained" value={row.id_producto} onClick={handleClickOpenUpdate} size="small">Editar</Button>
-                                                </Grid>
-                                                <Grid item xs={4} sm={4} md={4}>
-                                                    <Button color="error"  variant="contained" value={row.id_producto} onClick={handleClickOpenDelete} size="small">Eliminar</Button>
-                                                </Grid>
-                                            </ThemeProvider>
-                                        </Grid>
-                                    </TableCell>
-                                </TableRow>
-                                );
-                        }
-                    })}
-                </TableBody>
-        );
 
-        
-        
-        setComponentTableResponsive(
-            <Table>
-                {rowInterno.map((row) => {
-                    var nombre = row.nombre;
-                    nombre = nombre.toUpperCase();
-                    const valueTarget = textSearch// event.target.value 
-                    if(nombre.includes(valueTarget.toUpperCase()) && row.estado=="1"){
-                        return(
-                            <TableRow hover role="checkbox" tabIndex={-1}>
-                                <TableCell>
-                                    <div>Nombre: {row.nombre}</div>
-                                    <div>Categoria: {row.categoria}</div>
-                                    <div>Stock: {row.stock} {row.uni_medida}</div>
-                                    <div>Precio venta X menor: S/ {row.precio_venta_menor}</div>
-                                    <div>Descripcion: {row.descripcion}</div>
-                                    <div>Precio compra: S/ {row.precio_compra}</div>
-                                    <div>Precio venta X mayor: S/ {row.precio_venta_mayor}</div>
-                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
-                                        <ThemeProvider theme={theme}>
-                                            <Grid item xs={4} sm={4} md={4}>
-                                                <Button color="primary"  variant="contained" value={row.id_producto} onClick={handleClickOpenQr} size="small">QR</Button>                                
-                                            </Grid>
-                                            <Grid item xs={4} sm={4} md={4}>
-                                                <Button color="warning" variant="contained" value={row.id_producto} onClick={handleClickOpenUpdate} size="small">Editar</Button>
-                                            </Grid>
-                                            <Grid item xs={4} sm={4} md={4}>
-                                                <Button color="error"  variant="contained" value={row.id_producto} onClick={handleClickOpenDelete} size="small">Eliminar</Button>
-                                            </Grid>
-                                        </ThemeProvider>
-                                    </Grid>
-                                </TableCell>
-                                
-                            </TableRow>
-                        )
-                    }
-                })}
-            </Table>
-        )
+    
+    async function aplicarFiltro() {
+        reloadAllProducts(0,subTipoProduct,deProduct,aProduct)
+        setPage(1);
+    }
+
+    async function clearFiltro() {
+        setSubTipoProduct('')
+        setDeProduct('')
+        setAProduct('')
+        reloadAllProducts(0,"","","") 
+        setPage(1);
+    }
+
+    
+    const handleChangePagina = (event, value) => {
+        reloadAllProducts((value-1)*10,subTipoProduct,deProduct,aProduct) 
+        setPage(value);
     };
+
 
     return(
         <Grid container rowSpacing={2}>
+            <Grid item xs={12} xm={12} md={12}>
+            <Paper sx={{maxWidth: 970, margin: 'auto', overflow: 'hidden' }}>
+                    <Grid container rowSpacing={1} columnSpacing={{ xs: 2, sm: 2, md: 2 }} style={{padding: "6px"}}>
+                        <Grid item xs={12} sm={12} md={12}>
+                            Filtros
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={6}>
+                            <FormControl fullWidth>
+                                <InputLabel>Subtipo</InputLabel>
+                                <Select
+                                    labelId="subtipo-label"
+                                    id="subtipo-label"
+                                    value={subTipoProduct}
+                                    label="Subtipo"
+                                    onChange={handleChangeSubTipo}
+                                    fullWidth
+                                >
+                                    <MenuItem value="1">TEE</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={6} sm={2} md={2}>
+                            <FormControl fullWidth>
+                                <InputLabel>De</InputLabel>
+                                <Select
+                                    labelId="de-label"
+                                    id="de-label"
+                                    value={deProduct}
+                                    label="de"
+                                    onChange={handleChangeDe}
+                                    fullWidth
+                                >
+                                    <MenuItem value="1">16MM</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={6} sm={2} md={2}>
+                            <FormControl fullWidth>
+                                <InputLabel>A</InputLabel>
+                                <Select
+                                    labelId="a-label"
+                                    id="a-label"
+                                    value={aProduct}
+                                    label="A"
+                                    onChange={handleChangeA}
+                                    fullWidth
+                                >
+                                    <MenuItem value="1">16MM</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={6} sm={2} md={2} >
+                            <Grid container columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
+                                <Grid item>
+                                <Button onClick={aplicarFiltro} variant="contained"><ManageSearchIcon/></Button>
+                                </Grid>
+                                <Grid item>
+                                    <Button onClick={clearFiltro} variant="contained"><ClearIcon/></Button>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        
+                    </Grid>
+            </Paper>
+            </Grid>
             <Grid item xs={3} sm={3} md={3}>
                 <ThemeProvider theme={theme}>
                     <Button variant="contained" sx={{ mr: 1 }} color="addReg" onClick={handleClickOpenCreate}>
@@ -338,7 +302,6 @@ export default function ProductAdmin(props) {
             </Grid>
             <Grid item xs={12} xm={12} md={12}>
                 <Paper sx={{maxWidth: 970, margin: 'auto', overflow: 'hidden' }}>
-                    <SearchComponent reloadAllProducts={reloadAllProducts} searchChange={searchChange} setTextSearch={setTextSearch} textSearch={textSearch}/>
                     {(props.isSmUp) ? (
                         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                             <Grid item xs={12} sm={12} md={12}>
@@ -367,9 +330,19 @@ export default function ProductAdmin(props) {
                         <TableContainer>
                             {componentTableResponsive}
                         </TableContainer>
-                        
                     )
                     }
+                    <Grid container>
+                        <Grid item xs={8} sm={8} md={8}>
+                            <Pagination
+                                count={cantPaginas}
+                                page={page}
+                                variant="outlined"
+                                color="primary"
+                                onChange={handleChangePagina}
+                            />
+                        </Grid>
+                    </Grid>
                     <Dialog open={openCreate} onClose={() => setOpenCreate(false)}>
                         <ProductAdminModal
                             title={titleModal} 

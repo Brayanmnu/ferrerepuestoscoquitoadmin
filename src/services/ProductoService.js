@@ -13,8 +13,20 @@ class ProductoService {
         return res;
     };
 
-    getAllProducts = async () => {
-        const url = this.base_url + "/products"
+    getAllProducts = async (nroPag,productType,idSubProductType,deRequest,aRequest) => {
+        var optional=""
+        if (idSubProductType!=""){
+            optional ="idSubProductType="+idSubProductType+"&"
+        }
+        if(deRequest!=""){
+            optional +="deRequest="+deRequest+"&"
+        }
+
+        if(aRequest!=""){
+            optional +="aRequest="+aRequest
+        }
+
+        const url = this.base_url + "/products/"+nroPag+"/"+productType+"?"+optional
         const res = await axios.get(url).catch(function (error) {
             if (error.response) {
                 return error.response;
