@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog'
 import Paper from '@mui/material/Paper';
 import { createTheme,ThemeProvider } from '@mui/material/styles';
+import {useParams } from 'react-router-dom'
 
 //Servicios
 import { ProductoService } from "../../services/ProductoService";
@@ -26,6 +27,8 @@ import SearchComponent from '../../components/SearchComponent'
 import Alert from '../../components/Alert'
 
 export default function ProductAdmin(props) {
+    const { productType } = useParams()
+
     const productoService = new ProductoService();
 
     const [page, setPage] = useState(0);
@@ -224,7 +227,8 @@ export default function ProductAdmin(props) {
 
     useEffect(() => {
         reloadAllProducts()
-    }, []);
+        console.log('productType: '+productType)
+    }, [productType,]);
     
     const searchChange = (event) => {
         const rowInterno = tableData;

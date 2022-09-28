@@ -153,7 +153,7 @@ let theme = createTheme({
     },
   };
   
-  const drawerWidth = 256;
+  const drawerWidth = 200;
 
   
 export default function Dashboard(props){
@@ -197,7 +197,7 @@ export default function Dashboard(props){
             <Box component="main" sx={{ flex: 1, py: 2, px: 3, bgcolor: '#eaeff1' }}>
                 <Routes>
                     <Route path={'/'} exact element={<Home/>} />
-                    <Route path={'/products-dashboard'} exact element={<ProductAdmin  isSmUp={isSmUp}/>}/>
+                    <Route path={'/products-dashboard/:productType'} exact element={<ProductAdmin  isSmUp={isSmUp}/>}/>
                 </Routes>              
             </Box>
           </Box>

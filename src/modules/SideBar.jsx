@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect, Fragment } from "react";
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -10,11 +10,9 @@ import ListItemText from '@mui/material/ListItemText';
 import HomeIcon from '@mui/icons-material/Home';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import {Link} from "react-router-dom";
-  
-
-const menu =  [
-    { id: 'Productos', icon: <InventoryIcon /> , url: "/products-dashboard"}
-]
+import Collapse from '@mui/material/Collapse';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 
 const item = {
   py: '2px',
@@ -34,12 +32,19 @@ const itemCategory = {
 export default function SideBar(props) {
   const { ...other } = props;
 
+  const [openProduct, setOpenProduct] = useState(false);
+
+  const handleClickDesplegableProduct = () => {
+    setOpenProduct(!openProduct);
+  };
+
+  
   return (
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
-        <ListItem sx={{ ...item, ...itemCategory, fontSize: 22, color: '#fff' }}>
-          Ferrerepuestos & Accesorios Coquito
-        </ListItem>
+          <ListItem sx={{ ...item, ...itemCategory, fontSize: 15, color: '#fff' }} style={{justifyContent: 'center'}}>
+            <img src="/logo-fyac.png" style={{maxWidth: "60px" , marginRight: "5px"}}/> Ferrerepuestos & Accesorios Coquito S.A.C.
+          </ListItem>
         <Link key="home" to="/"  style={{ textDecoration: 'none' }}>
             <ListItem sx={{ ...item, ...itemCategory }}>
             <ListItemIcon>
@@ -49,19 +54,39 @@ export default function SideBar(props) {
             </ListItem>
         </Link>
           <Box sx={{ bgcolor: '#101F33' }}>
-            {menu.map(({ id: childId, icon, active, url }) => {
-                return (
-                    <Link key={childId} to={url}  style={{ textDecoration: 'none' }}>
-                        <ListItem disablePadding key={childId}>
-                        <ListItemButton selected={active} sx={item}>
-                            <ListItemIcon>{icon}</ListItemIcon>
-                            <ListItemText>{childId}</ListItemText>
-                        </ListItemButton>
-                        </ListItem>
-                    </Link>
-                )
-            })}
-            <Divider sx={{ mt: 2 }} />
+              <ListItem disablePadding key="Productos">
+                <ListItemButton  sx={item} onClick={handleClickDesplegableProduct}>
+                    <ListItemIcon><InventoryIcon /></ListItemIcon>
+                    <ListItemText>Productos</ListItemText>
+                    {openProduct ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+              </ListItem>
+              <Collapse in={openProduct} timeout="auto" unmountOnExit>
+                <Link key="Productos" to="/products-dashboard/riego"  style={{ textDecoration: 'none', color:'white' }}>
+                  <ListItem component="div" disablePadding>
+                    <ListItemButton sx={{ pl: 4 }}>
+                      <ListItemText>Riego Tecnificado</ListItemText>
+                    </ListItemButton>
+                  </ListItem>
+                </Link>
+                <Divider />
+                <Link key="Productos" to="/products-dashboard/ferreteria"  style={{ textDecoration: 'none', color:'white' }}>
+                  <ListItem component="div" disablePadding>
+                    <ListItemButton sx={{ pl: 4 }}>
+                      <ListItemText>Ferretería</ListItemText>
+                    </ListItemButton>
+                  </ListItem>
+                </Link>
+                <Divider />
+                <Link key="Productos" to="/products-dashboard/automotriz"  style={{ textDecoration: 'none', color:'white' }}>
+                  <ListItem component="div" disablePadding>
+                    <ListItemButton sx={{ pl: 4 }}>
+                      <ListItemText>Automotriz</ListItemText>
+                    </ListItemButton>
+                  </ListItem>
+                </Link>
+              </Collapse>
+            <Divider sx={{mt:2}} />
           </Box>
       </List>
     </Drawer>
