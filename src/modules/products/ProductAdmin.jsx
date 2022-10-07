@@ -116,6 +116,9 @@ export default function ProductAdmin(props) {
                     )
                 })
             )
+        }else{
+            setDisabledDe(true)
+            setDeProduct('')
         }
     }
 
@@ -132,6 +135,9 @@ export default function ProductAdmin(props) {
                     )
                 })
             )
+        }else{
+            setDisabledA(true)
+            setAProduct('')
         }
     }
 
