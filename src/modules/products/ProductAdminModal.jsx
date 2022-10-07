@@ -9,8 +9,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
-
-
+import IconButton from '@mui/material/IconButton';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import FormControl from '@mui/material/FormControl';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 //Servicios
 import { Server } from "../../services/server";
 
@@ -21,6 +23,12 @@ export default function ProductAdminModal(props) {
     const server = new Server();
 
     const [tipoProducto, setTipoProducto] = useState('');
+    const [subTipoProducto, setSubTipoProducto] = useState('');
+    const [deId, setDeId] = useState('');
+    const [aId, setAId] = useState('');
+    const [deValue, setDeValue] = useState('');
+    const [aValue, setAValue] = useState('');
+    const [descSubTipoProducto, setDescSubTipoProducto] = useState('');
     const [nombre, setNombre] = useState('');
     const [descripcion, setDescripcion] = useState('');
     const [precioCompra, setPrecioCompra] = useState('');
@@ -34,6 +42,9 @@ export default function ProductAdminModal(props) {
 
     const [openAlertError, setOpenAlertError] = useState(false);
     const [msjError, setMsjError] = useState('');
+    const [isDisbledSubTipo, setIsDisbledSubTipo] = useState(false);
+    const [isDisabledDe, setIsDisabledDe] = useState(false);
+    const [isDisabledA, setIsDisabledA] = useState(false);
 
     
     var arrayTipoProducto = []
@@ -43,9 +54,28 @@ export default function ProductAdminModal(props) {
         props.setOpenCreate(false);
     };
     
-    const handleChangeTipoProducto = (event) => {
-        setTipoProducto(event.target.value);
+    const handleChangeSubTipoProducto = (event) => {
+        setSubTipoProducto(event.target.value);
     };
+
+    const handleChangeDeId = (event) => {
+        setDeId(event.target.value);
+    };
+
+    
+    const handleChangeAId = (event) => {
+        setAId(event.target.value);
+    };
+
+    const handleChangeDescSubTipoProducto = (event) => {
+        var valorDesc = event.target.value
+        const reg = /\d/;
+        if(!reg.test(valorDesc)){
+            setDescSubTipoProducto(valorDesc.toUpperCase());
+        }
+        
+    };
+
     const handleChangeUnidadMedida = (event) => {
         setUnidadMedida(event.target.value);
     };
@@ -54,7 +84,7 @@ export default function ProductAdminModal(props) {
         const productoResponse =  await server.getProductoById(idProduct);
         if (productoResponse.status === 200){
             const productoResponseData = await productoResponse.data;
-            setTipoProducto(productoResponseData.id_tipo_producto);
+            setSubTipoProducto(productoResponseData.id_tipo_producto);
             setNombre(productoResponseData.nombre)
             setDescripcion(productoResponseData.descripcion)
             setPrecioCompra(productoResponseData.precio_compra)
@@ -89,11 +119,41 @@ export default function ProductAdminModal(props) {
             await reloadDataById(props.idProducto)
         }
     }
+    
+    const onClickAddSubProduct = (event) => {
+        setIsDisbledSubTipo(true)
+        //console.log('se agrega: '+event.currentTarget.value)
+    };
+
+    
+    const onClickAddDe = (event) => {
+        setIsDisabledDe(true)
+        //console.log('se agrega: '+event.currentTarget.value)
+    };
+
+    
+    const onClickAddA = (event) => {
+        setIsDisabledA(true)
+        //console.log('se agrega: '+event.currentTarget.value)
+    };
+    
+    const onClickQuitSubProduct = (event) => {
+        setIsDisbledSubTipo(false)
+    };
+
+    const onClickQuitDe = (event) => {
+        setIsDisabledDe(false)
+    };
+    
+    const onClickQuitA = (event) => {
+        setIsDisabledA(false)
+    };
+
     async function createProduct() {
         
 
         var dataFormProduct = {
-            id_tipo_producto: tipoProducto,
+            id_tipo_producto: subTipoProducto,
             nombre: nombre,
             descripcion: descripcion,
             precio_compra: precioCompra,
@@ -151,109 +211,216 @@ export default function ProductAdminModal(props) {
     return(
         <Fragment>
             <DialogTitle>{props.title}</DialogTitle>
-                <DialogContent>
-                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                        <Grid item xs={12} sm={4} md={4}>
+            <DialogContent style={{paddingTop:'1vh'}}>
+                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                    {!isDisbledSubTipo?
+                    <Grid item xs={10} sm={10} md={10}>
+                        <FormControl fullWidth>
+                            <InputLabel>Subtipo</InputLabel>
                             <Select
-                                labelId="tipo-producto-select-label"
-                                id="tipo-producto-select"
-                                value={tipoProducto}
-                                label="Tipo de producto"
-                                onChange={handleChangeTipoProducto}
+                                labelId="sub-tipo-producto-select-label"
+                                id="sub-tipo-producto-select"
+                                value={subTipoProducto}
+                                label="Subtipo"
+                                onChange={handleChangeSubTipoProducto}
                                 fullWidth
                             >
                                 {menuItemProducto}
                             </Select>
-                                
-                        </Grid>
-                        <Grid item xs={12} sm={8} md={8}>
+                        </FormControl>
+                    </Grid>:null}
+                    { !isDisbledSubTipo?
+                    <Grid item xs={2} sm={2} md={2}>
+                        <IconButton aria-label="agregar" color="primary" onClick={onClickAddSubProduct} ><AddCircleIcon fontSize="large"/></IconButton>
+                    </Grid>:null}
+                    {
+                        isDisbledSubTipo?
+                        <Grid item xs={10} sm={10} md={10}>
                             <TextField
                                 autoFocus
                                 margin="dense"
-                                id="nombre"
-                                label="Nombre"
+                                id="new-sub-type"
+                                label="Nuevo Subtipo"
                                 type="text"
                                 variant="standard"
                                 fullWidth
-                                value = {nombre}
-                                onChange={(e) => setNombre(e.target.value)}
+                                value = {descSubTipoProducto}
+                                onChange={handleChangeDescSubTipoProducto}
                             />
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={12}>
+                        </Grid>: null
+                    }
+                    {
+                        isDisbledSubTipo?
+                    <Grid item xs={2} sm={2} md={2}>
+                        <IconButton aria-label="quitar" color="primary" onClick={onClickQuitSubProduct}><RemoveCircleIcon fontSize="large"/></IconButton>
+                    </Grid>:null
+                    }
+
+                    {!isDisabledDe?
+                        <Grid item xs={10} sm={10} md={10}>
+                            <FormControl fullWidth>
+                                <InputLabel>De</InputLabel>
+                                <Select
+                                    labelId="de-select-label"
+                                    id="de-select"
+                                    value={deId}
+                                    label="De"
+                                    onChange={handleChangeAId}
+                                    fullWidth
+                                >
+                                    {menuItemProducto}
+                                </Select>
+                            </FormControl>
+                        </Grid>:null}
+                    
+                    { !isDisabledDe?
+                    <Grid item xs={2} sm={2} md={2}>
+                        <IconButton aria-label="agregar" color="primary" onClick={onClickAddDe} ><AddCircleIcon fontSize="large"/></IconButton>
+                    </Grid>:null}
+
+                    {
+                        isDisabledDe?
+                        <Grid item xs={10} sm={10} md={10}>
                             <TextField
+                                autoFocus
                                 margin="dense"
-                                id="descripcion"
-                                label="Descripcion"
+                                id="new-de"
+                                label="Nueva medida De"
                                 type="text"
                                 variant="standard"
                                 fullWidth
-                                value={descripcion}
-                                onChange={(e) => setDescripcion(e.target.value)}
+                                value = {deValue}
+                                onChange={(e) => setDeValue(e.target.value.toUpperCase)}
                             />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={4}>
+                        </Grid>: null
+                    }
+
+                    {isDisabledDe?
+                    <Grid item xs={2} sm={2} md={2}>
+                        <IconButton aria-label="quitar" color="primary" onClick={onClickQuitDe}><RemoveCircleIcon fontSize="large"/></IconButton>
+                    </Grid>:null
+                    }
+
+                    {!isDisabledA?
+                        <Grid item xs={10} sm={10} md={10}>
+                            <FormControl fullWidth>
+                                <InputLabel>A</InputLabel>
+                                <Select
+                                    labelId="a-select-label"
+                                    id="a-select"
+                                    value={aId}
+                                    label="A"
+                                    onChange={handleChangeDeId}
+                                    fullWidth
+                                >
+                                    {menuItemProducto}
+                                </Select>
+                            </FormControl>
+                        </Grid>:null}
+                    
+                    { !isDisabledA?
+                    <Grid item xs={2} sm={2} md={2}>
+                        <IconButton aria-label="agregar" color="primary" onClick={onClickAddA} ><AddCircleIcon fontSize="large"/></IconButton>
+                    </Grid>:null}
+
+                    {
+                        isDisabledA?
+                        <Grid item xs={10} sm={10} md={10}>
                             <TextField
+                                autoFocus
                                 margin="dense"
-                                id="precioCompra"
-                                label="Precio compra"
-                                type="number"
+                                id="new-a"
+                                label="Nueva medida A"
+                                type="text"
                                 variant="standard"
                                 fullWidth
-                                value={precioCompra}
-                                onChange={(e) => setPrecioCompra(e.target.value)}
+                                value = {aValue}
+                                onChange={(e) => setAValue(e.target.value.toUpperCase)}
                             />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={4}>
-                            <TextField
-                                margin="dense"
-                                id="precioVentaMenor"
-                                label="Precio Venta X menor"
-                                type="number"
-                                variant="standard"
-                                fullWidth
-                                value={precioVentaMenor}
-                                onChange={(e) => setPrecioVentaMenor(e.target.value)}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={4}>
-                            <TextField
-                                margin="dense"
-                                id="precioVentaMayor"
-                                label="Precio Venta X mayor"
-                                type="number"
-                                variant="standard"
-                                fullWidth
-                                value={precioVentaMayor}
-                                onChange={(e) => setPrecioVentaMayor(e.target.value)}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={4}>
-                            <TextField
-                                margin="dense"
-                                id="stock"
-                                label="stock"
-                                type="number"
-                                variant="standard"
-                                fullWidth
-                                value={stock}
-                                onChange={(e) => setStock(e.target.value)}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={4}>
-                            <Select
-                                labelId="unidad-medida-select-label"
-                                id="unidad-medida-select"
-                                value={unidadMedida}
-                                label="Unidad de medida"
-                                onChange={handleChangeUnidadMedida}
-                                fullWidth
-                            >
-                                {menuItemUnidadMedida}
-                            </Select>
-                            
-                        </Grid>
+                        </Grid>: null
+                    }
+
+                    {isDisabledA?
+                    <Grid item xs={2} sm={2} md={2}>
+                        <IconButton aria-label="quitar" color="primary" onClick={onClickQuitA}><RemoveCircleIcon fontSize="large"/></IconButton>
+                    </Grid>:null
+                    }
+                    
+                    <Grid item xs={12} sm={12} md={12}>
+                        <TextField
+                            margin="dense"
+                            id="descripcion"
+                            label="Descripcion"
+                            type="text"
+                            variant="standard"
+                            fullWidth
+                            value={descripcion}
+                            onChange={(e) => setDescripcion(e.target.value)}
+                        />
                     </Grid>
-                </DialogContent>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <TextField
+                            margin="dense"
+                            id="precioCompra"
+                            label="Precio compra"
+                            type="number"
+                            variant="standard"
+                            fullWidth
+                            value={precioCompra}
+                            onChange={(e) => setPrecioCompra(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <TextField
+                            margin="dense"
+                            id="precioVentaMenor"
+                            label="Precio Venta X menor"
+                            type="number"
+                            variant="standard"
+                            fullWidth
+                            value={precioVentaMenor}
+                            onChange={(e) => setPrecioVentaMenor(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <TextField
+                            margin="dense"
+                            id="precioVentaMayor"
+                            label="Precio Venta X mayor"
+                            type="number"
+                            variant="standard"
+                            fullWidth
+                            value={precioVentaMayor}
+                            onChange={(e) => setPrecioVentaMayor(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <TextField
+                            margin="dense"
+                            id="stock"
+                            label="stock"
+                            type="number"
+                            variant="standard"
+                            fullWidth
+                            value={stock}
+                            onChange={(e) => setStock(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <Select
+                            labelId="unidad-medida-select-label"
+                            id="unidad-medida-select"
+                            value={unidadMedida}
+                            label="Unidad de medida"
+                            onChange={handleChangeUnidadMedida}
+                            fullWidth
+                        >
+                            {menuItemUnidadMedida}
+                        </Select>
+                        
+                    </Grid>
+                </Grid>
+            </DialogContent>
                 
             <DialogActions>
                 <Button onClick={handleClose} variant="outlined" color="error">Cancelar</Button>

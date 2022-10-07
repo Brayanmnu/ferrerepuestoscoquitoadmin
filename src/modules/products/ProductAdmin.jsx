@@ -4,7 +4,6 @@ import Grid from '@mui/material/Grid';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableContainer from '@mui/material/TableContainer';
 import TableCell from '@mui/material/TableCell';
@@ -20,7 +19,10 @@ import MenuItem from '@mui/material/MenuItem';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import ClearIcon from '@mui/icons-material/Clear';
 import Pagination from "@mui/material/Pagination";
-
+import IconButton from '@mui/material/IconButton';
+import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 //Servicios
 import { Server } from "../../services/server";
 
@@ -36,14 +38,10 @@ export default function ProductAdmin(props) {
     const { productType } = useParams()
 
     const server = new Server();
-
-    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [tableBody, setTableBody] = useState();
     const [openCreate, setOpenCreate] = useState(false);
     const [openQr, setOpenQr] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
-    const [tableFooter, setTableFooter] = useState('');
-    const [searched, setSearched] = useState("");
     const [idProductoQr, setIdProductQr] = useState("");
     const [isCreate, setIsCreate] = useState(true);
     const [titleModal, setTitleModal] = useState("");
@@ -67,7 +65,7 @@ export default function ProductAdmin(props) {
     const theme = createTheme({
         palette: {
           primary: {
-            main: '#6abf69',
+            main: '#2FC6B1',
           },
           warning :{
             main: '#fbc02d'
@@ -84,7 +82,7 @@ export default function ProductAdmin(props) {
         { id: 'nombre',align: 'center', label: 'Nombre', minWidth: 170 , format: 'string'},
         { id: 'precio_venta',align: 'center', label: 'Rango precio venta', minWidth: 170, format: (value) => value.toFixed(2) },
         { id: 'precio_compra',align: 'center', label: 'Precio compra', minWidth: 170, format: (value) => value.toFixed(2)},
-        { id: 'acciones',align: 'center', label: 'Acciones', minWidth: 240 , format: "string"}
+        { id: 'acciones',align: 'center', label: 'Acciones', minWidth: 40 , format: "string"}
     ];
 
     
@@ -178,19 +176,20 @@ export default function ProductAdmin(props) {
                                     S/ {row.precio_compra}
                                 </TableCell>
                                 <TableCell key="options">
-                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
-                                        <ThemeProvider theme={theme}>
-                                            <Grid item xs={4} sm={4} md={4}>
-                                                <Button color="primary"  variant="contained" value={row.id_producto} onClick={handleClickOpenQr} size="small">QR</Button>                                
+                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }} >
+                                    <ThemeProvider theme={theme}>
+                                    <div style={{justifyContent:"center",display:"flex"}}>
+                                            <Grid item xs={4} sm={2} md={4}>
+                                                <IconButton aria-label="qr" color="primary" value={row.id_producto} variant="contained" onClick={handleClickOpenQr}><QrCodeScannerIcon fontSize="medium"/></IconButton>
                                             </Grid>
-                                            <Grid item xs={4} sm={4} md={4}>
-                                                <Button color="warning" variant="contained" value={row.id_producto} onClick={handleClickOpenUpdate} size="small">Editar</Button>
+                                            <Grid item xs={4} sm={2} md={4}>
+                                                <IconButton aria-label="edit" color="warning" value={row.id_producto} onClick={handleClickOpenUpdate}><EditIcon fontSize="medium"/></IconButton>
                                             </Grid>
-                                            <Grid item xs={4} sm={4} md={4}>
-                                                <Button color="error"  variant="contained" value={row.id_producto} onClick={handleClickOpenDelete} size="small">Eliminar</Button>
+                                            <Grid item xs={4} sm={2} md={4}>
+                                                <IconButton aria-label="delete" color="error" value={row.id_producto} onClick={handleClickOpenDelete}><DeleteIcon fontSize="medium"/></IconButton>
                                             </Grid>
-                                        </ThemeProvider>
-                                        
+                                            </div>
+                                        </ThemeProvider>                    
                                     </Grid>
                                 </TableCell>
                             </TableRow>
@@ -215,16 +214,22 @@ export default function ProductAdmin(props) {
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
                                         <ThemeProvider theme={theme}>
                                             <Grid item xs={4} sm={4} md={4}>
-                                                <Button color="primary"  variant="contained" value={row.id_producto} onClick={handleClickOpenQr} size="small">QR</Button>                                
+                                            <div style={{justifyContent:"center",display:"flex"}}>
+                                                <IconButton aria-label="qr" color="primary" value={row.id_producto} onClick={handleClickOpenQr}><QrCodeScannerIcon fontSize="medium"/></IconButton>
+                                            </div>
                                             </Grid>
                                             <Grid item xs={4} sm={4} md={4}>
-                                                <Button color="warning" variant="contained" value={row.id_producto} onClick={handleClickOpenUpdate} size="small">Editar</Button>
+                                            <div style={{justifyContent:"center",display:"flex"}}>
+                                                <IconButton aria-label="edit" color="warning" value={row.id_producto} onClick={handleClickOpenUpdate}><EditIcon fontSize="medium"/></IconButton>
+                                            </div>
                                             </Grid>
                                             <Grid item xs={4} sm={4} md={4}>
-                                                <Button color="error"  variant="contained" value={row.id_producto} onClick={handleClickOpenDelete} size="small">Eliminar</Button>
+                                            <div style={{justifyContent:"center",display:"flex"}}>
+                                                <IconButton aria-label="delete" color="error" value={row.id_producto} onClick={handleClickOpenDelete}><DeleteIcon fontSize="medium"/></IconButton>
+                                            </div>
                                             </Grid>
                                         </ThemeProvider>
-                                    </Grid>
+                                    </Grid>                                    
                                 </TableCell>
                                 
                             </TableRow>
@@ -259,18 +264,18 @@ export default function ProductAdmin(props) {
         setTitleModal("Actualizar producto")
         setOpenCreate(true);
         setIsCreate(false);
-        setIdProductQr(event.target.value);
+        setIdProductQr(event.currentTarget.value);
     };
 
     const handleClickOpenDelete = (event) => {
         setOpenDelete(true);
-        setIdProductQr(event.target.value);
+        setIdProductQr(event.currentTarget.value);
     };
 
 
     const handleClickOpenQr = (event) => {
         setOpenQr(true);
-        setIdProductQr(event.target.value);
+        setIdProductQr(event.currentTarget.value);
     };
 
     useEffect(() => {
@@ -366,10 +371,10 @@ export default function ProductAdmin(props) {
                         <Grid item xs={12} sm={2} md={2} >
                             <Grid container columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
                                 <Grid item>
-                                <Button onClick={aplicarFiltro} variant="contained"><ManageSearchIcon/></Button>
+                                <IconButton aria-label="aplicar" color="primary" onClick={aplicarFiltro} ><ManageSearchIcon/></IconButton>
                                 </Grid>
                                 <Grid item>
-                                    <Button onClick={clearFiltro} variant="contained"><ClearIcon/></Button>
+                                <IconButton aria-label="aplicar" color="primary" onClick={clearFiltro} ><ClearIcon/></IconButton>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -377,11 +382,14 @@ export default function ProductAdmin(props) {
                     </Grid>
             </Paper>
             </Grid>
-            <Grid item xs={3} sm={3} md={3}>
+            <Grid item xs={12} sm={3} md={3}>
                 <ThemeProvider theme={theme}>
+                <div style={{justifyContent:(props.isSmUp) ? "left":"center",display:"flex"}}>
                     <Button variant="contained" sx={{ mr: 1 }} color="addReg" onClick={handleClickOpenCreate}>
                         Registrar
                     </Button>
+                </div>
+                    
                 </ThemeProvider>
             </Grid>
             <Grid item xs={12} xm={12} md={12}>
@@ -407,7 +415,6 @@ export default function ProductAdmin(props) {
                                         {tableBody}
                                     </Table>
                                 </TableContainer>
-                                {tableFooter}
                             </Grid>
                         </Grid>
                     ) : (
