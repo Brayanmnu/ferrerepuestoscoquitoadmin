@@ -358,7 +358,7 @@ export default function ProductAdmin(props) {
                             </FormControl>
                         </Grid>:null}
                         <Grid item xs={12} sm={2} md={2} >
-                            <Grid container columnSpacing={{ xs: 1, sm: 1, md: 1 }} style={{marginLeft:'20vh'}}>
+                            <Grid container columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
                                 <Grid item>
                                 <Button onClick={aplicarFiltro} variant="contained"><ManageSearchIcon/></Button>
                                 </Grid>
