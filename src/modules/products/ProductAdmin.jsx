@@ -323,6 +323,7 @@ export default function ProductAdmin(props) {
                                 </Select>
                             </FormControl>
                         </Grid>
+                        {!disabledDe?
                         <Grid item xs={6} sm={2} md={2}>
                             <FormControl fullWidth>
                                 <InputLabel>De</InputLabel>
@@ -338,7 +339,8 @@ export default function ProductAdmin(props) {
                                     {menuItemMedidaDe}
                                 </Select>
                             </FormControl>
-                        </Grid>
+                        </Grid>: null}
+                        {!disabledA?
                         <Grid item xs={6} sm={2} md={2}>
                             <FormControl fullWidth>
                                 <InputLabel>A</InputLabel>
@@ -354,9 +356,9 @@ export default function ProductAdmin(props) {
                                     {menuItemMedidaA}
                                 </Select>
                             </FormControl>
-                        </Grid>
-                        <Grid item xs={6} sm={2} md={2} >
-                            <Grid container columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
+                        </Grid>:null}
+                        <Grid item xs={12} sm={2} md={2} >
+                            <Grid container columnSpacing={{ xs: 1, sm: 1, md: 1 }} style={{marginLeft:'20vh'}}>
                                 <Grid item>
                                 <Button onClick={aplicarFiltro} variant="contained"><ManageSearchIcon/></Button>
                                 </Grid>
