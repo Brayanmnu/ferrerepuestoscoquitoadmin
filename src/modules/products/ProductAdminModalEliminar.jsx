@@ -6,19 +6,19 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 
 //Servicios
-import { ProductoService } from "../../services/ProductoService";
+import { Server } from "../../services/server";
 
 //Componente
 import Alert from '../../components/Alert'
 
 export default function ProductAdminModalEliminar(props) {
 
-    const productoService = new ProductoService();
+    const server = new Server();
 
     const [openAlertError, setOpenAlertError] = useState(false);
 
     async function eliminarProducto() {
-        const productoResponse =  await productoService.deleteProductBack(props.idProducto);
+        const productoResponse =  await server.deleteProductBack(props.idProducto);
         if (productoResponse.status === 200){
             const productoResponseData = await productoResponse.data; 
             if(productoResponseData.status==="eliminacion logica"){

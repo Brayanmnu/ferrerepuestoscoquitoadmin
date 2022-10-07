@@ -10,7 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Image from '../img/login.jpg'; // Import using relative path
-import { UserService } from "../services/UserService";
+import { Server } from "../services/server";
 import Alert  from './Alert'
 
 export default function ThemeLogin(props) {
@@ -19,7 +19,7 @@ export default function ThemeLogin(props) {
     const theme = createTheme();
     const [openAlert, setOpenAlert] = React.useState(false);
 
-    const userService = new UserService();
+    const server = new Server();
     async function handleSubmit (event) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -27,7 +27,7 @@ export default function ThemeLogin(props) {
             email: data.get('email'),
             password: data.get('password')
         }
-        const loginResponse =  await userService.login(credentials);
+        const loginResponse =  await server.login(credentials);
         if (loginResponse.status === 200){
             const loginResponseData = await loginResponse.data; 
             if(loginResponseData.status=="1"){

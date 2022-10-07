@@ -1,13 +1,13 @@
 import React, { useState, useEffect, Fragment, Image} from "react";
 
-import { ProductoService } from "../../services/ProductoService";
+import { Server } from "../../services/server";
 
 export default function ProductAdminQrModal(props) {
 
-    const productoService = new ProductoService();
+    const server = new Server();
     const [imgDisplay, setImgDisplay] = useState('');
     async function getBase64ById(idProduct) {
-        const productoBase64 =  await productoService.getQrById(idProduct);
+        const productoBase64 =  await server.getQrById(idProduct);
         if(productoBase64.status=200){
             const productoBase64Json = await productoBase64.data;
             var base64Data = productoBase64Json.result;

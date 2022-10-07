@@ -1,17 +1,13 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Grid from '@mui/material/Grid';
 import {useParams } from 'react-router-dom'
-import { ProductoService } from "../services/ProductoService";
-import { UnidadMedidaService } from "../services/UnidadMedidaService";
-import { TipoProductoService } from "../services/TipoProductoService";
+import { Server } from "../services/server";
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 
 export default function ProductDetails(props) {
-    const productoService = new ProductoService();
-    const unidadMedidaService = new UnidadMedidaService();
-    const tipoProductoService = new TipoProductoService();
+    const server = new Server();
 
     const { idProduct } = useParams()
     const [tipoProducto, setTipoProducto] = useState();
@@ -24,7 +20,7 @@ export default function ProductDetails(props) {
     const [unidadMedida, setUnidadMedida] = useState();
 
     async function reloadUnidadMedida(id) {
-        const dataUnidadMedida =  await unidadMedidaService.getUnidadMedidaById(id);
+        const dataUnidadMedida =  await server.getUnidadMedidaById(id);
         if (dataUnidadMedida.status === 200){
             const contentUnidad = await dataUnidadMedida.data;
             setUnidadMedida(contentUnidad.descripcion)
@@ -33,7 +29,7 @@ export default function ProductDetails(props) {
 
     
     async function reloadTipoProducto(id) {
-        const dataTipoProducto =  await tipoProductoService.getTipoProductoById(id);
+        const dataTipoProducto =  await server.getTipoProductoById(id);
         if (dataTipoProducto.status === 200){
             const contentTipo = await dataTipoProducto.data;
             setTipoProducto(contentTipo.descripcion)
@@ -41,7 +37,7 @@ export default function ProductDetails(props) {
     }
 
     async function reloadProduct() {
-        const dataProduct =  await productoService.getProductoById(idProduct);
+        const dataProduct =  await server.getProductoById(idProduct);
         if (dataProduct.status === 200){
             const contentProduct = await dataProduct.data;
             reloadTipoProducto(contentProduct.id_tipo_producto)

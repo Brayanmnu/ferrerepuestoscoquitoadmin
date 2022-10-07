@@ -12,17 +12,13 @@ import InputLabel from '@mui/material/InputLabel';
 
 
 //Servicios
-import { ProductoService } from "../../services/ProductoService";
-import { UnidadMedidaService } from "../../services/UnidadMedidaService";
-import { TipoProductoService } from "../../services/TipoProductoService";
+import { Server } from "../../services/server";
 
 //componente
 import Alert from '../../components/Alert'
 export default function ProductAdminModal(props) {
 
-    const productoService = new ProductoService();
-    const unidadMedidaService = new UnidadMedidaService();
-    const tipoProductoService = new TipoProductoService();
+    const server = new Server();
 
     const [tipoProducto, setTipoProducto] = useState('');
     const [nombre, setNombre] = useState('');
@@ -55,7 +51,7 @@ export default function ProductAdminModal(props) {
     };
 
     async function reloadDataById(idProduct) {
-        const productoResponse =  await productoService.getProductoById(idProduct);
+        const productoResponse =  await server.getProductoById(idProduct);
         if (productoResponse.status === 200){
             const productoResponseData = await productoResponse.data;
             setTipoProducto(productoResponseData.id_tipo_producto);
@@ -69,7 +65,7 @@ export default function ProductAdminModal(props) {
         }
     }
     async function reloadDataConfig() {
-        const tipoProductoResponse =  await tipoProductoService.getAllTipoProducto();
+        const tipoProductoResponse =  await server.getAllTipoProducto();
         arrayTipoProducto = await tipoProductoResponse.data;
         setMenuItemProducto(
             arrayTipoProducto.map((tp) => {
@@ -79,7 +75,7 @@ export default function ProductAdminModal(props) {
                 
             })
         )
-        const undidadMedidaResponse =  await unidadMedidaService.getAllUnidadMedida();
+        const undidadMedidaResponse =  await server.getAllUnidadMedida();
         arrayUnidadMedida = await undidadMedidaResponse.data;
         setMenuItemUnidadMedida(
             arrayUnidadMedida.map((um) => {
@@ -108,7 +104,7 @@ export default function ProductAdminModal(props) {
         }
 
         if(props.isCreate){
-            const productoResponse =  await productoService.createProductBack(dataFormProduct);
+            const productoResponse =  await server.createProductBack(dataFormProduct);
             setMsjError('Error al insertar')
             if (productoResponse.status === 200){
                 const productoResponseData = await productoResponse.data;
@@ -126,7 +122,7 @@ export default function ProductAdminModal(props) {
                 setOpenAlertError(true);
             }
         }else{
-            const productoResponse =  await productoService.updateProductBack(dataFormProduct,props.idProducto);
+            const productoResponse =  await server.updateProductBack(dataFormProduct,props.idProducto);
             setMsjError('Error al actualizar')
             if (productoResponse.status === 200){
                 const productoResponseData = await productoResponse.data;

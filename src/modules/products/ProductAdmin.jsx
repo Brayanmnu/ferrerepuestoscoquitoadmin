@@ -22,7 +22,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import Pagination from "@mui/material/Pagination";
 
 //Servicios
-import { ProductoService } from "../../services/ProductoService";
+import { Server } from "../../services/server";
 
 //Vistas
 import ProductAdminModal from "./ProductAdminModal";
@@ -35,7 +35,7 @@ import Alert from '../../components/Alert'
 export default function ProductAdmin(props) {
     const { productType } = useParams()
 
-    const productoService = new ProductoService();
+    const server = new Server();
 
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [tableBody, setTableBody] = useState();
@@ -58,6 +58,11 @@ export default function ProductAdmin(props) {
 
     const [cantPaginas,setCantPaginas] = useState(0)
     const [page, setPage] = useState(1);
+    const [menuItemSubProductType, setMenuItemSubProductType] = useState('');
+    const [menuItemMedidaDe, setMenuItemMedidaDe] = useState('');
+    const [menuItemMedidaA, setMenuItemMedidaA] = useState('');
+    const [disabledDe, setDisabledDe] = useState(true);
+    const [disabledA, setDisabledA] = useState(true);
 
     const theme = createTheme({
         palette: {
@@ -77,7 +82,7 @@ export default function ProductAdmin(props) {
     const columns= [
         { id: 'stock',align: 'center', label: 'Stock', minWidth: 170, format: 'string' },
         { id: 'nombre',align: 'center', label: 'Nombre', minWidth: 170 , format: 'string'},
-        { id: 'precio_venta',align: 'center', label: 'Rando precio venta', minWidth: 170, format: (value) => value.toFixed(2) },
+        { id: 'precio_venta',align: 'center', label: 'Rango precio venta', minWidth: 170, format: (value) => value.toFixed(2) },
         { id: 'precio_compra',align: 'center', label: 'Precio compra', minWidth: 170, format: (value) => value.toFixed(2)},
         { id: 'acciones',align: 'center', label: 'Acciones', minWidth: 240 , format: "string"}
     ];
@@ -85,15 +90,73 @@ export default function ProductAdmin(props) {
     
     var rows = [];
 
+    async function reloadSubProductType() {
+
+        const subProductAll =  await server.getAllSubProductType(getIdProductType());
+        const arraySubTipoProducto = await subProductAll.data;
+        setMenuItemSubProductType(
+            arraySubTipoProducto.map((tp) => {
+                return(
+                    <MenuItem value={tp.id}>{tp.descripcion}</MenuItem>
+                )
+                
+            })
+        )
+    }
+
+    async function reloadMedidaDe(id) {
+        const medidaDe =  await server.getMedidaDe(id);
+        const arrayMedidaDe = await medidaDe.data;
+        if(arrayMedidaDe.length >0){
+            setDisabledDe(false)
+            setMenuItemMedidaDe(
+                arrayMedidaDe.map((tp) => {
+                    return(
+                        <MenuItem value={tp.id}>{tp.descripcion}</MenuItem>
+                    )
+                })
+            )
+        }
+    }
+
+    
+    async function reloadMedidaA(id) {
+        const medidaA =  await server.getMedidaA(id);
+        const arrayMedidaA = await medidaA.data;
+        if(arrayMedidaA.length >0){
+            setDisabledA(false)
+            setMenuItemMedidaA(
+                arrayMedidaA.map((tp) => {
+                    return(
+                        <MenuItem value={tp.id}>{tp.descripcion}</MenuItem>
+                    )
+                })
+            )
+        }
+    }
+
+    function getIdProductType(){
+        if(productType=="riego"){
+            return '1'
+        }else if(productType=="ferreteria"){
+            return '2'
+        }else if(productType=="automotriz"){
+            return '3'
+        }
+    }
     async function reloadAllProducts(nroPag,idSubProductType,deRequest,aRequest) {
-        const productAll =  await productoService.getAllProducts(nroPag,productType,idSubProductType,deRequest,aRequest);
+        
+        const productAll =  await server.getAllProducts(nroPag,getIdProductType(),idSubProductType,deRequest,aRequest);
         if (productAll.status === 200){
             const rowsDentro = await productAll.data;
             rows = rowsDentro;
-            
+            var cantPaginas=0;
+
             setTableBody(
                 <TableBody>
                     {rows.map((row) => {
+                        cantPaginas = Math.ceil(row.total_elements / 10 );
+                        setCantPaginas(cantPaginas)
                         return (
                             <TableRow hover role="checkbox" tabIndex={-1} key={row.id_producto}>
                                 <TableCell key="stock">
@@ -134,6 +197,8 @@ export default function ProductAdmin(props) {
             setComponentTableResponsive(
                 <Table>
                     {rows.map((row) => {
+                        cantPaginas = Math.ceil(row.total_elements / 10 );
+                        setCantPaginas(cantPaginas)
                         return(
                             <TableRow hover role="checkbox" tabIndex={-1}>
                                 <TableCell>
@@ -167,6 +232,8 @@ export default function ProductAdmin(props) {
     
     const handleChangeSubTipo = (event) => {
         setSubTipoProduct(event.target.value);
+        reloadMedidaDe(event.target.value);
+        reloadMedidaA(event.target.value);
     };
 
     const handleChangeDe = (event) => {
@@ -201,8 +268,13 @@ export default function ProductAdmin(props) {
     };
 
     useEffect(() => {
+        setSubTipoProduct('')
+        setAProduct('')
+        setDeProduct('')
+        setDisabledA(true)
+        setDisabledDe(true)
+        reloadSubProductType()
         reloadAllProducts(0,"","","") 
-        console.log('productType: '+productType)
     }, [productType,]);
 
     
@@ -217,6 +289,8 @@ export default function ProductAdmin(props) {
         setAProduct('')
         reloadAllProducts(0,"","","") 
         setPage(1);
+        setDisabledDe(true)
+        setDisabledA(true)
     }
 
     
@@ -245,7 +319,7 @@ export default function ProductAdmin(props) {
                                     onChange={handleChangeSubTipo}
                                     fullWidth
                                 >
-                                    <MenuItem value="1">TEE</MenuItem>
+                                    {menuItemSubProductType}
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -259,8 +333,9 @@ export default function ProductAdmin(props) {
                                     label="de"
                                     onChange={handleChangeDe}
                                     fullWidth
+                                    disabled={disabledDe}
                                 >
-                                    <MenuItem value="1">16MM</MenuItem>
+                                    {menuItemMedidaDe}
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -274,8 +349,9 @@ export default function ProductAdmin(props) {
                                     label="A"
                                     onChange={handleChangeA}
                                     fullWidth
+                                    disabled={disabledA}
                                 >
-                                    <MenuItem value="1">16MM</MenuItem>
+                                    {menuItemMedidaA}
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -333,7 +409,7 @@ export default function ProductAdmin(props) {
                     )
                     }
                     <Grid container>
-                        <Grid item xs={8} sm={8} md={8}>
+                        <Grid item xs={12} sm={12} md={12}>
                             <Pagination
                                 count={cantPaginas}
                                 page={page}
