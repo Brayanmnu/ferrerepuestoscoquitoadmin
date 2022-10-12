@@ -22,14 +22,12 @@ export default function ProductAdminModal(props) {
 
     const server = new Server();
 
-    const [tipoProducto, setTipoProducto] = useState('');
     const [subTipoProducto, setSubTipoProducto] = useState('');
     const [deId, setDeId] = useState('');
     const [aId, setAId] = useState('');
     const [deValue, setDeValue] = useState('');
     const [aValue, setAValue] = useState('');
     const [descSubTipoProducto, setDescSubTipoProducto] = useState('');
-    const [nombre, setNombre] = useState('');
     const [descripcion, setDescripcion] = useState('');
     const [precioCompra, setPrecioCompra] = useState('');
     const [precioVentaMenor, setPrecioVentaMenor] = useState('');
@@ -37,19 +35,15 @@ export default function ProductAdminModal(props) {
     const [stock, setStock] = useState('');
     const [unidadMedida, setUnidadMedida] = useState('');
 
-    const [menuItemProducto, setMenuItemProducto] = useState('');
     const [menuItemUnidadMedida, setMenuItemUnidadMedida] = useState('');
+    const [menuItemMedida, setMenuItemMedida] = useState('');
 
     const [openAlertError, setOpenAlertError] = useState(false);
     const [msjError, setMsjError] = useState('');
     const [isDisbledSubTipo, setIsDisbledSubTipo] = useState(false);
     const [isDisabledDe, setIsDisabledDe] = useState(false);
     const [isDisabledA, setIsDisabledA] = useState(false);
-
     
-    var arrayTipoProducto = []
-    var arrayUnidadMedida = []
-
     const handleClose = () => {
         props.setOpenCreate(false);
     };
@@ -84,8 +78,9 @@ export default function ProductAdminModal(props) {
         const productoResponse =  await server.getProductoById(idProduct);
         if (productoResponse.status === 200){
             const productoResponseData = await productoResponse.data;
-            setSubTipoProducto(productoResponseData.id_tipo_producto);
-            setNombre(productoResponseData.nombre)
+            setSubTipoProducto(productoResponseData.id_sub_tipo_producto);
+            setDeId(productoResponseData.id_de)
+            setAId(productoResponseData.id_a)
             setDescripcion(productoResponseData.descripcion)
             setPrecioCompra(productoResponseData.precio_compra)
             setPrecioVentaMenor(productoResponseData.precio_venta_menor)
@@ -94,21 +89,22 @@ export default function ProductAdminModal(props) {
             setUnidadMedida(productoResponseData.id_unidad_medida)
         }
     }
+
     async function reloadDataConfig() {
-        const tipoProductoResponse =  await server.getAllTipoProducto();
-        arrayTipoProducto = await tipoProductoResponse.data;
-        setMenuItemProducto(
-            arrayTipoProducto.map((tp) => {
-                return(
-                    <MenuItem value={tp.id}>{tp.descripcion}</MenuItem>
-                )
-                
-            })
-        )
         const undidadMedidaResponse =  await server.getAllUnidadMedida();
-        arrayUnidadMedida = await undidadMedidaResponse.data;
+        const arrayUnidadMedida = await undidadMedidaResponse.data;
         setMenuItemUnidadMedida(
             arrayUnidadMedida.map((um) => {
+                return(
+                    <MenuItem value={um.id}>{um.descripcion}</MenuItem>
+                )
+            })
+        )
+
+        const medidaResponse =  await server.getMedidaAllByProduct(props.idTipoProduct);
+        const arrayMedida = await medidaResponse.data;
+        setMenuItemMedida(
+            arrayMedida.map((um) => {
                 return(
                     <MenuItem value={um.id}>{um.descripcion}</MenuItem>
                 )
@@ -121,40 +117,44 @@ export default function ProductAdminModal(props) {
     }
     
     const onClickAddSubProduct = (event) => {
+        setSubTipoProducto("");
         setIsDisbledSubTipo(true)
-        //console.log('se agrega: '+event.currentTarget.value)
     };
-
     
     const onClickAddDe = (event) => {
+        setDeId("")
         setIsDisabledDe(true)
-        //console.log('se agrega: '+event.currentTarget.value)
     };
-
     
     const onClickAddA = (event) => {
+        setAId("")
         setIsDisabledA(true)
-        //console.log('se agrega: '+event.currentTarget.value)
     };
     
     const onClickQuitSubProduct = (event) => {
+        setDescSubTipoProducto("")
         setIsDisbledSubTipo(false)
     };
 
     const onClickQuitDe = (event) => {
+        setDeValue("")
         setIsDisabledDe(false)
     };
     
     const onClickQuitA = (event) => {
+        setAValue("")
         setIsDisabledA(false)
     };
 
     async function createProduct() {
-        
-
         var dataFormProduct = {
-            id_tipo_producto: subTipoProducto,
-            nombre: nombre,
+            id_tipo_producto: props.idTipoProduct,
+            id_sub_tipo: subTipoProducto,
+            desc_sub_tipo: descSubTipoProducto,
+            id_de: deId,
+            desc_de: deValue,
+            id_a: aId,
+            desc_a: aValue,
             descripcion: descripcion,
             precio_compra: precioCompra,
             precio_venta_menor: precioVentaMenor,
@@ -173,7 +173,7 @@ export default function ProductAdminModal(props) {
                     props.setMsjAlertExitoso("Insertado correctamente")
                     props.setSeverityAlert('success')
                     props.setOpenAlertOk(true);
-                    props.reloadAllProducts()
+                    props.reloadAllProducts(0,"","","") 
                     handleClose()
                 }else{
                     setOpenAlertError(true);
@@ -191,7 +191,7 @@ export default function ProductAdminModal(props) {
                     props.setMsjAlertExitoso("Actualizado correctamente")
                     props.setSeverityAlert('success')
                     props.setOpenAlertOk(true);
-                    props.reloadAllProducts()
+                    props.reloadAllProducts(0,"","","") 
                     handleClose()
                 }else{
                     setOpenAlertError(true);
@@ -225,7 +225,7 @@ export default function ProductAdminModal(props) {
                                 onChange={handleChangeSubTipoProducto}
                                 fullWidth
                             >
-                                {menuItemProducto}
+                                {props.menuSubProduct}
                             </Select>
                         </FormControl>
                     </Grid>:null}
@@ -265,10 +265,10 @@ export default function ProductAdminModal(props) {
                                     id="de-select"
                                     value={deId}
                                     label="De"
-                                    onChange={handleChangeAId}
+                                    onChange={handleChangeDeId}
                                     fullWidth
                                 >
-                                    {menuItemProducto}
+                                    {menuItemMedida}
                                 </Select>
                             </FormControl>
                         </Grid>:null}
@@ -290,7 +290,7 @@ export default function ProductAdminModal(props) {
                                 variant="standard"
                                 fullWidth
                                 value = {deValue}
-                                onChange={(e) => setDeValue(e.target.value.toUpperCase)}
+                                onChange={(e) => setDeValue(e.target.value.toUpperCase())}
                             />
                         </Grid>: null
                     }
@@ -310,10 +310,10 @@ export default function ProductAdminModal(props) {
                                     id="a-select"
                                     value={aId}
                                     label="A"
-                                    onChange={handleChangeDeId}
+                                    onChange={handleChangeAId}
                                     fullWidth
                                 >
-                                    {menuItemProducto}
+                                    {menuItemMedida}
                                 </Select>
                             </FormControl>
                         </Grid>:null}
@@ -335,7 +335,7 @@ export default function ProductAdminModal(props) {
                                 variant="standard"
                                 fullWidth
                                 value = {aValue}
-                                onChange={(e) => setAValue(e.target.value.toUpperCase)}
+                                onChange={(e) => setAValue(e.target.value.toUpperCase())}
                             />
                         </Grid>: null
                     }
@@ -394,7 +394,7 @@ export default function ProductAdminModal(props) {
                             onChange={(e) => setPrecioVentaMayor(e.target.value)}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={4}>
+                    <Grid item xs={12} sm={6} md={6}>
                         <TextField
                             margin="dense"
                             id="stock"
@@ -406,7 +406,9 @@ export default function ProductAdminModal(props) {
                             onChange={(e) => setStock(e.target.value)}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={4}>
+                    <Grid item xs={12} sm={6} md={6}>
+                    <FormControl fullWidth>
+                        <InputLabel>Unidad de medida</InputLabel>
                         <Select
                             labelId="unidad-medida-select-label"
                             id="unidad-medida-select"
@@ -417,6 +419,8 @@ export default function ProductAdminModal(props) {
                         >
                             {menuItemUnidadMedida}
                         </Select>
+                    </FormControl>
+                        
                         
                     </Grid>
                 </Grid>

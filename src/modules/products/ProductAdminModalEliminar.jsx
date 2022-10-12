@@ -26,7 +26,7 @@ export default function ProductAdminModalEliminar(props) {
                 props.setOpenAlertOk(true);
                 props.setMsjAlertExitoso("Eliminado correctamente")
                 props.setSeverityAlert('warning')
-                props.reloadAllProducts()
+                props.reloadAllProducts(0,"","","") 
                 handleClose()
             }else{
                 setOpenAlertError(true)

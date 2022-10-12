@@ -85,9 +85,6 @@ export default function ProductAdmin(props) {
         { id: 'acciones',align: 'center', label: 'Acciones', minWidth: 40 , format: "string"}
     ];
 
-    
-    var rows = [];
-
     async function reloadSubProductType() {
 
         const subProductAll =  await server.getAllSubProductType(getIdProductType());
@@ -152,13 +149,12 @@ export default function ProductAdmin(props) {
         
         const productAll =  await server.getAllProducts(nroPag,getIdProductType(),idSubProductType,deRequest,aRequest);
         if (productAll.status === 200){
-            const rowsDentro = await productAll.data;
-            rows = rowsDentro;
+            var rowsProduct = await productAll.data;
             var cantPaginas=0;
 
             setTableBody(
                 <TableBody>
-                    {rows.map((row) => {
+                    {rowsProduct.map((row) => {
                         cantPaginas = Math.ceil(row.total_elements / 10 );
                         setCantPaginas(cantPaginas)
                         return (
@@ -201,7 +197,7 @@ export default function ProductAdmin(props) {
             
             setComponentTableResponsive(
                 <Table>
-                    {rows.map((row) => {
+                    {rowsProduct.map((row) => {
                         cantPaginas = Math.ceil(row.total_elements / 10 );
                         setCantPaginas(cantPaginas)
                         return(
@@ -443,7 +439,10 @@ export default function ProductAdmin(props) {
                             setSeverityAlert={setSeverityAlert} 
                             isCreate={isCreate} 
                             idProducto={idProductoQr}
-                            reloadAllProducts={reloadAllProducts} />
+                            reloadAllProducts={reloadAllProducts} 
+                            idTipoProduct = {getIdProductType()}
+                            menuSubProduct={menuItemSubProductType}
+                        />
                     </Dialog>
                     <Dialog open={openQr} onClose={() => setOpenQr(false)}>
                         <ProductAdminQrModal 

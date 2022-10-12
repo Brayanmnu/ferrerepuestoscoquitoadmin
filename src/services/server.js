@@ -88,16 +88,6 @@ class Server {
         return res;
     };
 
-    getAllTipoProducto = async () => {
-        const url = this.base_url + "/tipo-producto"
-        const res = await axios.get(url).catch(function (error) {
-            if (error.response) {
-                return error.response;
-            }
-          });
-        return res;
-    };
-
     getUnidadMedidaById = async (idUnidadMedida) => {
         const url = this.base_url + "/unidad-medida/"+idUnidadMedida
         const res = await axios.get(url).catch(function (error) {
@@ -149,7 +139,6 @@ class Server {
     getMedidaDe = async (subProductType) => {
         const url = this.base_url + "/medida/de/"+subProductType;
         
-        console.log('url:'+url)
         const res = await axios.get(url).catch(function (error) {
             if (error.response) {
                 return error.response;
@@ -162,7 +151,17 @@ class Server {
     getMedidaA = async (subProductType) => {
         const url = this.base_url + "/medida/a/"+subProductType;
         
-        console.log('url:'+url)
+        const res = await axios.get(url).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+          });
+        return res;
+    };
+
+    getMedidaAllByProduct = async (productType) => {
+        const url = this.base_url + "/medida/"+productType;
+        
         const res = await axios.get(url).catch(function (error) {
             if (error.response) {
                 return error.response;
