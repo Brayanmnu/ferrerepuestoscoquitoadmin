@@ -13,6 +13,16 @@ class Server {
         return res;
     };
 
+    getProductoDetailById = async (idProduct) => {
+        const url = this.base_url + "/products/detail/"+idProduct
+        const res = await axios.get(url).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+          });
+        return res;
+    };
+    
     getAllProducts = async (nroPag,productType,idSubProductType,deRequest,aRequest) => {
         var optional=""
         if (idSubProductType!=""){
