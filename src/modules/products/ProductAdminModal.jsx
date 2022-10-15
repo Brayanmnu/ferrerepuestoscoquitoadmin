@@ -163,20 +163,6 @@ export default function ProductAdminModal(props) {
             id_unidad_medida:unidadMedida
         }
 
-        console.log('props.idTipoProduct: '+props.idTipoProduct)
-        console.log('subTipoProducto: '+subTipoProducto)
-        console.log('descSubTipoProducto: '+descSubTipoProducto)
-        console.log('deId: '+deId)
-        console.log('deValue: '+deValue)
-        console.log('aId: '+aId)
-        console.log('aValue: '+aValue)
-        console.log('descripcion: '+descripcion)
-        console.log('precioCompra: '+precioCompra)
-        console.log('precioVentaMenor: '+precioVentaMenor)
-        console.log('precioVentaMayor: '+precioVentaMayor)
-        console.log('stock: '+stock)
-        console.log('unidadMedida: '+unidadMedida)
-
         if(props.isCreate){
             const productoResponse =  await server.createProductBack(dataFormProduct);
             setMsjError('Error al insertar')
@@ -369,7 +355,7 @@ export default function ProductAdminModal(props) {
                             variant="standard"
                             fullWidth
                             value={descripcion}
-                            onChange={(e) => setDescripcion(e.target.value)}
+                            onChange={(e) => setDescripcion(e.target.value.toUpperCase())}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
