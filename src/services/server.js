@@ -1,10 +1,11 @@
 import axios from 'axios';
 
 class Server {
-    base_url = "https://ferrerepuestoscoquitoback.herokuapp.com";
+    base_url_crud_p_one = "https://52yoxhpmve.execute-api.us-east-1.amazonaws.com/dev"
+    base_url_module_p_one ="https://csre5knms6.execute-api.us-east-1.amazonaws.com/dev"
 
     getProductoById = async (idProduct) => {
-        const url = this.base_url + "/products/"+idProduct
+        const url = this.base_url_crud_p_one + "/products/"+idProduct
         const res = await axios.get(url).catch(function (error) {
             if (error.response) {
                 return error.response;
@@ -14,7 +15,7 @@ class Server {
     };
 
     getProductoDetailById = async (idProduct) => {
-        const url = this.base_url + "/products/detail/"+idProduct
+        const url = this.base_url_crud_p_one + "/products/detail/"+idProduct
         const res = await axios.get(url).catch(function (error) {
             if (error.response) {
                 return error.response;
@@ -36,7 +37,7 @@ class Server {
             optional +="aRequest="+aRequest
         }
 
-        const url = this.base_url + "/products/v2/"+nroPag+"/"+productType+"?"+optional
+        const url = this.base_url_crud_p_one + "/products/v2/"+nroPag+"/"+productType+"?"+optional
         const res = await axios.get(url).catch(function (error) {
             if (error.response) {
                 return error.response;
@@ -46,7 +47,7 @@ class Server {
     };
 
     createProductBack = async (dataCreate) => {
-        const url = this.base_url + "/products"
+        const url = this.base_url_crud_p_one + "/products/"
         const res = await axios.post(url,dataCreate).catch(function (error) {
             if (error.response) {
                 return error.response;
@@ -57,7 +58,7 @@ class Server {
     }
 
     updateProductBack = async (dataUpdate, idProduct) => {
-        const url = this.base_url + "/products/"+idProduct
+        const url = this.base_url_crud_p_one + "/products/"+idProduct
         const res = await axios.put(url,dataUpdate).catch(function (error) {
             if (error.response) {
                 return error.response;
@@ -68,7 +69,7 @@ class Server {
     }
 
     deleteProductBack = async (idProduct) => {
-        const url = this.base_url + "/products/delete/"+idProduct
+        const url = this.base_url_crud_p_one + "/products/delete/"+idProduct
         const res = await axios.post(url).catch(function (error) {
             if (error.response) {
                 return error.response;
@@ -79,7 +80,7 @@ class Server {
     }
     
     getQrById = async (idProduct) => {
-        const url = this.base_url + "/products-qr/"+idProduct;
+        const url = this.base_url_module_p_one + "/products-qr/"+idProduct;
         const res = await axios.get(url).catch(function (error) {
             if (error.response) {
                 return error.response;
@@ -89,7 +90,7 @@ class Server {
     }
 
     getTipoProductoById = async (idTipoProducto) => {
-        const url = this.base_url + "/tipo-producto/"+idTipoProducto
+        const url = this.base_url_crud_p_one + "/tipo-producto/"+idTipoProducto
         const res = await axios.get(url).catch(function (error) {
             if (error.response) {
                 return error.response;
@@ -99,7 +100,7 @@ class Server {
     };
 
     getUnidadMedidaById = async (idUnidadMedida) => {
-        const url = this.base_url + "/unidad-medida/"+idUnidadMedida
+        const url = this.base_url_crud_p_one + "/unidad-medida/"+idUnidadMedida
         const res = await axios.get(url).catch(function (error) {
             if (error.response) {
                 return error.response;
@@ -109,7 +110,7 @@ class Server {
     };
 
     getAllUnidadMedida = async () => {
-        const url = this.base_url + "/unidad-medida"
+        const url = this.base_url_crud_p_one + "/unidad-medida/"
         const res = await axios.get(url).catch(function (error) {
             if (error.response) {
                 return error.response;
@@ -120,7 +121,7 @@ class Server {
 
     
     login = async (credentials) => {
-        const url = this.base_url + "/login"
+        const url = this.base_url_module_p_one + "/login/"
         const res = await axios.post(url,credentials).catch(function (error) {
             if (error.response) {
                 return error.response;
@@ -133,7 +134,7 @@ class Server {
     
     getAllSubProductType = async (productType) => {
         
-        var url = this.base_url + "/sub-product-type"
+        var url = this.base_url_crud_p_one + "/sub-product-type/"
         if (productType!=""){
             url +="?productType="+productType
         }
@@ -147,7 +148,7 @@ class Server {
 
      
     getMedidaDe = async (subProductType) => {
-        const url = this.base_url + "/medida/de/"+subProductType;
+        const url = this.base_url_crud_p_one + "/medida/de/"+subProductType;
         
         const res = await axios.get(url).catch(function (error) {
             if (error.response) {
@@ -159,7 +160,7 @@ class Server {
 
      
     getMedidaA = async (subProductType) => {
-        const url = this.base_url + "/medida/a/"+subProductType;
+        const url = this.base_url_crud_p_one + "/medida/a/"+subProductType;
         
         const res = await axios.get(url).catch(function (error) {
             if (error.response) {
@@ -170,7 +171,7 @@ class Server {
     };
 
     getMedidaAllByProduct = async (productType) => {
-        const url = this.base_url + "/medida/"+productType;
+        const url = this.base_url_crud_p_one + "/medida/"+productType;
         
         const res = await axios.get(url).catch(function (error) {
             if (error.response) {
@@ -179,5 +180,106 @@ class Server {
           });
         return res;
     };
+
+    
+    getAllSocioClave = async (nroPag) => {
+        const url = this.base_url_crud_p_one + "/socio-clave/"+nroPag
+        const res = await axios.get(url).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+          });
+        return res;
+    };
+
+       
+    getSocioClaveById = async (id) => {
+        const url = this.base_url_crud_p_one + "/socio-clave/"+id
+        const res = await axios.get(url).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+          });
+        return res;
+    };
+
+        
+    getAllTipoSocio = async () => {
+        const url = this.base_url_crud_p_one + "/tipo-socio/"
+        const res = await axios.get(url).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+          });
+        return res;
+    };
+
+        
+    getAllTipoDocumento = async () => {
+        const url = this.base_url_crud_p_one + "/tipo-documento/"
+        const res = await axios.get(url).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+          });
+        return res;
+    };
+
+    createSocio = async (dataCreate) => {
+        const url = this.base_url_crud_p_one + "/socio-clave/"
+        const res = await axios.post(url,dataCreate).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+          });
+        return res;
+        
+    }
+
+    updateSocio = async (dataUpdate, idSocio) => {
+        const url = this.base_url_crud_p_one + "/socio-clave/"+idSocio
+        const res = await axios.put(url,dataUpdate).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+          });
+        return res;
+        
+    }
+
+    deleteSocio = async (idSocio) => {
+        const url = this.base_url_crud_p_one + "/socio-clave/delete/"+idSocio
+        const res = await axios.post(url).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+          });
+        return res;
+        
+    }
+    
+    
+    getAllVentas = async (nroPag) => {
+        const url = this.base_url_module_p_one + "/ventas/"+nroPag
+        const res = await axios.get(url).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+          });
+        return res;
+    };
+
+    
+    anularRecibo = async (idRecibo) => {
+        const url = this.base_url_module_p_one + "/ventas/"+idRecibo
+        const res = await axios.post(url).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+          });
+        return res;
+        
+    }
+
 }
 export {Server} ;

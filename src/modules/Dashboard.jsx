@@ -6,6 +6,8 @@ import Box from '@mui/material/Box';
 import SideBar from './SideBar.jsx'
 import { BrowserRouter as Router, Route , Routes} from 'react-router-dom'
 import ProductAdmin from './products/ProductAdmin'
+import SocioClaveAdmin from './socio-clave/SocioClaveAdmin'
+import VentasAdmin from './ventas/VentasAdmin'
 import Home from './Home'
 import Header from './Header';
 
@@ -198,6 +200,8 @@ export default function Dashboard(props){
                 <Routes>
                     <Route path={'/'} exact element={<Home/>} />
                     <Route path={'/products-dashboard/:productType'} exact element={<ProductAdmin  isSmUp={isSmUp}/>}/>
+                    <Route path={'/socios-clave'} exact element={<SocioClaveAdmin  isSmUp={isSmUp}/>}/>
+                    <Route path={'/sales'} exact element={<VentasAdmin  isSmUp={isSmUp}/>}/>
                 </Routes>              
             </Box>
           </Box>

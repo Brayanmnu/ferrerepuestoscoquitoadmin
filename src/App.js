@@ -9,8 +9,7 @@ export default function App() {
   const[isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
-    //const loggedCoquitoJSON = window.localStorage.getItem('loggedCoquito')
-    const loggedCoquitoJSON = true
+    const loggedCoquitoJSON = window.localStorage.getItem('loggedCoquito')
     if(loggedCoquitoJSON){
         setIsLogin(true)
     }else{

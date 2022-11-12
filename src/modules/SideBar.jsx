@@ -13,6 +13,10 @@ import {Link} from "react-router-dom";
 import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import HandshakeIcon from '@mui/icons-material/Handshake';
+import GroupsIcon from '@mui/icons-material/Groups';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 
 const item = {
   py: '2px',
@@ -88,6 +92,38 @@ export default function SideBar(props) {
               </Collapse>
             <Divider sx={{mt:2}} />
           </Box>
+          {/* <Link key="socio" to="/socios-clave"  style={{ textDecoration: 'none' }}>
+            <ListItem sx={{ ...item, ...itemCategory }}>
+            <ListItemIcon>
+                <HandshakeIcon />
+            </ListItemIcon>
+            <ListItemText>Socios clave</ListItemText>
+            </ListItem>
+          </Link> */}
+          {/* <Link key="client" to="/clients"  style={{ textDecoration: 'none' }}>
+              <ListItem sx={{ ...item, ...itemCategory }}>
+              <ListItemIcon>
+                  <GroupsIcon />
+              </ListItemIcon>
+              <ListItemText>Clientes</ListItemText>
+              </ListItem>
+          </Link> */}
+          {/* <Link key="sales" to="/sales"  style={{ textDecoration: 'none' }}>
+              <ListItem sx={{ ...item, ...itemCategory }}>
+              <ListItemIcon>
+                  <PointOfSaleIcon />
+              </ListItemIcon>
+              <ListItemText>Ventas</ListItemText>
+              </ListItem>
+          </Link> */}
+          {/* <Link key="buy" to="/buy"  style={{ textDecoration: 'none' }}>
+              <ListItem sx={{ ...item, ...itemCategory }}>
+              <ListItemIcon>
+                  <ShoppingCartIcon />
+              </ListItemIcon>
+              <ListItemText>Compras</ListItemText>
+              </ListItem>
+          </Link> */}
       </List>
     </Drawer>
   );

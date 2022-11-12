@@ -11,22 +11,22 @@ import { Server } from "../../services/server";
 //Componente
 import Alert from '../../components/Alert'
 
-export default function ProductAdminModalEliminar(props) {
+export default function SocioClaveModalEliminar(props) {
 
     const server = new Server();
 
     const [openAlertError, setOpenAlertError] = useState(false);
 
-    async function eliminarProducto() {
-        const productoResponse =  await server.deleteProductBack(props.idProducto);
-        if (productoResponse.status === 200){
-            const productoResponseData = await productoResponse.data; 
-            if(productoResponseData.status==="eliminacion logica"){
+    async function eliminarSocio() {
+        const socioResponse =  await server.deleteSocio(props.idSocio);
+        if (socioResponse.status === 200){
+            const socioResponseData = await socioResponse.data; 
+            if(socioResponseData.status==="eliminacion logica"){
                 setOpenAlertError(false)
                 props.setOpenAlertOk(true);
                 props.setMsjAlertExitoso("Eliminado correctamente")
                 props.setSeverityAlert('warning')
-                props.reloadAllProducts(0,"","","") 
+                props.reloadAllSocioClave(0) 
                 handleClose()
             }else{
                 setOpenAlertError(true)
@@ -44,13 +44,13 @@ export default function ProductAdminModalEliminar(props) {
     
     return(
         <Fragment>
-            <DialogTitle>Eliminar producto</DialogTitle>
+            <DialogTitle>Eliminar socio</DialogTitle>
             <DialogContent>
-                ¿Está seguro que desea eliminar el producto?
+                ¿Está seguro que desea eliminar el socio?
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} variant="outlined" color="error">Cancelar</Button>
-                <Button onClick={eliminarProducto} variant="contained" >Aceptar</Button>
+                <Button onClick={eliminarSocio} variant="contained" >Aceptar</Button>
             </DialogActions>
             <Alert openAlert={openAlertError} setOpenAlert={setOpenAlertError} mensaje="Error al eliminar" severity="error"/>
         </Fragment>

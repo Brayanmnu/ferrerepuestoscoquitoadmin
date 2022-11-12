@@ -11,22 +11,22 @@ import { Server } from "../../services/server";
 //Componente
 import Alert from '../../components/Alert'
 
-export default function ProductAdminModalEliminar(props) {
+export default function VentasModalAnular(props) {
 
     const server = new Server();
 
     const [openAlertError, setOpenAlertError] = useState(false);
 
-    async function eliminarProducto() {
-        const productoResponse =  await server.deleteProductBack(props.idProducto);
-        if (productoResponse.status === 200){
-            const productoResponseData = await productoResponse.data; 
-            if(productoResponseData.status==="eliminacion logica"){
+    async function anularRecibo() {
+        const reciboResponse =  await server.anularRecibo(props.idComprobante);
+        if (reciboResponse.status === 200){
+            const reciboResponseData = await reciboResponse.data; 
+            if(reciboResponseData.status==="anulado"){
                 setOpenAlertError(false)
                 props.setOpenAlertOk(true);
-                props.setMsjAlertExitoso("Eliminado correctamente")
+                props.setMsjAlertExitoso("Anulado correctamente")
                 props.setSeverityAlert('warning')
-                props.reloadAllProducts(0,"","","") 
+                props.reloadAllVentas(0) 
                 handleClose()
             }else{
                 setOpenAlertError(true)
@@ -38,21 +38,21 @@ export default function ProductAdminModalEliminar(props) {
 
     
     const handleClose = () => {
-        props.setOpenDelete(false);
+        props.setOpenAnular(false);
     };
     
     
     return(
         <Fragment>
-            <DialogTitle>Eliminar producto</DialogTitle>
+            <DialogTitle>Anular recibo</DialogTitle>
             <DialogContent>
-                ¿Está seguro que desea eliminar el producto?
+                ¿Está seguro que desea anular el recibo?
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} variant="outlined" color="error">Cancelar</Button>
-                <Button onClick={eliminarProducto} variant="contained" >Aceptar</Button>
+                <Button onClick={anularRecibo} variant="contained" >Aceptar</Button>
             </DialogActions>
-            <Alert openAlert={openAlertError} setOpenAlert={setOpenAlertError} mensaje="Error al eliminar" severity="error"/>
+            <Alert openAlert={openAlertError} setOpenAlert={setOpenAlertError} mensaje="Error al anular" severity="error"/>
         </Fragment>
     );
 }
