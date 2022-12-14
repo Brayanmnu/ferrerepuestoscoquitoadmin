@@ -47,7 +47,7 @@ export default function VentasAdmin(props) {
           warning :{
             main: '#fbc02d'
           },
-          addReg: {
+          principal: {
             main :'#0d47a1',
             contrastText: '#fff',
           }
@@ -195,18 +195,18 @@ export default function VentasAdmin(props) {
         reloadAllVentas(0) 
     }, [,]);
 
-    return(openCreate? <Recibo/>:
+    return(openCreate? <Recibo theme={theme}/>:
         <Grid container rowSpacing={2}>
-            <Grid item xs={12} sm={3} md={3}>
+            {/* <Grid item xs={12} sm={3} md={3}>
                 <ThemeProvider theme={theme}>
                 <div style={{justifyContent:(props.isSmUp) ? "left":"center",display:"flex"}}>
-                    <Button variant="contained" sx={{ mr: 1 }} color="addReg" onClick={handleClickOpenCreate}>
+                    <Button variant="contained" sx={{ mr: 1 }} color="principal" onClick={handleClickOpenCreate}>
                         Registrar
                     </Button>
                 </div>
                     
                 </ThemeProvider>
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} xm={12} md={12}>
                 <Paper sx={{maxWidth: 970, margin: 'auto', overflow: 'hidden' }}>
                     {(props.isSmUp) ? (

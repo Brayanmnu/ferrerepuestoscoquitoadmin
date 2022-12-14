@@ -11,6 +11,18 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import SearchIcon from '@mui/icons-material/Search';
 import  {formatDate} from '../../utils/utils'
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TableContainer from '@mui/material/TableContainer';
+import TableCell from '@mui/material/TableCell'
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { createTheme,ThemeProvider } from '@mui/material/styles';
+import Dialog from '@mui/material/Dialog'
+
+import AddProduct from '../../components/AddProduct'
+
 
 export default function Recibo(props) {
     const [tipoComprobante, setTipoComprobante] = useState('1');
@@ -22,7 +34,18 @@ export default function Recibo(props) {
     const [telefono, setTelefono] = useState('');
     const [direccion, setDireccion] = useState('');
     const [formaPago, setFormaPago] = useState('1');
+    const [tableBody, setTableBody] = useState();
+    const [tableHeader, setTableHeader] = useState();
+    const [openAddProduct, setOpenAddProduct] = useState(false);
 
+    const columns= [
+        { id: 'cantidad',align: 'center', label: 'Cantidad', minWidth: 170, format: 'string' },
+        { id: 'descripcion',align: 'center', label: 'Descripción', minWidth: 170, format: 'string' },
+        { id: 'valor',align: 'center', label: 'V. Unitario.', minWidth: 170, format: 'string' },
+        { id: 'igv',align: 'center', label: 'IGV', minWidth: 170, format: 'string' },
+        { id: 'precio_unitario',align: 'center', label: 'P. Unitario', minWidth: 170, format: 'string' },
+    ];
+    
     async function searchByNroDoc() {
         console.log('se buscará por numero de documento')
     }
@@ -48,6 +71,38 @@ export default function Recibo(props) {
         }
     };
 
+    async function reloadAllProductsAdd() {
+        setTableHeader(
+            <TableHead>
+                <TableRow>
+                    {columns.map((column) => (
+                        <TableCell
+                        key={column.id}
+                        align={column.align}
+                        style={{ minWidth: column.minWidth }}
+                        >
+                        {column.label}
+                        </TableCell>
+                    ))}
+                </TableRow>
+            </TableHead>
+        );
+        setTableBody(
+            <TableBody>
+                <TableRow hover role="checkbox" tabIndex={-1} key={1}>
+                    <TableCell>
+                    
+                    </TableCell>
+                </TableRow>
+            </TableBody>
+        )
+    }
+    
+    const handleClickAddProduct = (event) => {
+        setOpenAddProduct(true)
+        
+    };
+    
 
     return(
         <Grid container rowSpacing={2}>
@@ -105,6 +160,7 @@ export default function Recibo(props) {
                         </Grid>
                         <Grid item xs={10} sm={4} md={4}>
                             <TextField
+                                autoComplete="false"
                                 margin="dense"
                                 id="nroDoc"
                                 label={labelNroDoc}
@@ -169,10 +225,22 @@ export default function Recibo(props) {
             <Grid item xs={12} xm={12} md={12}>
                 <Paper sx={{maxWidth: 1020, margin: 'auto', overflow: 'hidden' }}>
                     <Grid container style={{padding:"10px"}}  rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
-                        
+                        <TableContainer sx={{ maxHeight: 450 }}>
+                            <Table stickyHeader aria-label="sticky table">
+                                {tableHeader}
+                                {tableBody}
+                            </Table>
+                        </TableContainer>
                     </Grid>
                 </Paper>
             </Grid>
+            <Dialog open={openAddProduct} 
+                onClose={() => setOpenAddProduct(false)}>
+                <AddProduct 
+                    setOpenAddProduct={setOpenAddProduct} 
+                    reloadAllProductsAdd={reloadAllProductsAdd}
+                />
+            </Dialog>
         </Grid>
     );
 }

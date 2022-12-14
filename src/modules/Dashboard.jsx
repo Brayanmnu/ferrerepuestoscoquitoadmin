@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,7 +10,10 @@ import SocioClaveAdmin from './socio-clave/SocioClaveAdmin'
 import VentasAdmin from './ventas/VentasAdmin'
 import Home from './Home'
 import Header from './Header';
+import Recibo from './ventas/Recibo'
 
+//Servicios
+import { Server } from "../services/server";
 
 let theme = createTheme({
     palette: {
@@ -160,6 +163,9 @@ let theme = createTheme({
   
 export default function Dashboard(props){
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [cantidadCart,setCantidadCart]=useState(0)
+    const server = new Server();
+
     const isSmUp = useMediaQuery(theme.breakpoints.up('sm'));
 
     const handleDrawerToggle = () => {
@@ -169,6 +175,22 @@ export default function Dashboard(props){
     const handleIsLogin = () => {
       props.setIsLogin(false)
     }
+
+    async function getAllProductsCar() {
+      const tokenCoquito = window.localStorage.getItem('loggedCoquito')
+      if (tokenCoquito && tokenCoquito.length>2){
+        const addCartResponse =  await server.getProductCar(tokenCoquito.substring(2,tokenCoquito.length-1));
+        if (addCartResponse.status === 200){
+          const addCartResponseData = await addCartResponse.data;
+          setCantidadCart(addCartResponseData.length)
+          return addCartResponseData
+        }
+      }
+    }
+
+    useEffect(() => {
+        getAllProductsCar()
+    }, [,]);
   
     return (
       <ThemeProvider theme={theme}>
@@ -195,13 +217,14 @@ export default function Dashboard(props){
               />
           </Box>
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-            <Header onDrawerToggle={handleDrawerToggle} handleIsLogin={handleIsLogin}/>
+            <Header cantidadCart={cantidadCart} setCantidadCart={setCantidadCart} onDrawerToggle={handleDrawerToggle} handleIsLogin={handleIsLogin} getAllProductsCar={getAllProductsCar} isSmUp={isSmUp}/>
             <Box component="main" sx={{ flex: 1, py: 2, px: 3, bgcolor: '#eaeff1' }}>
                 <Routes>
                     <Route path={'/'} exact element={<Home/>} />
-                    <Route path={'/products-dashboard/:productType'} exact element={<ProductAdmin  isSmUp={isSmUp}/>}/>
+                    <Route path={'/products-dashboard/:productType'} exact element={<ProductAdmin setCantidadCart={setCantidadCart} isSmUp={isSmUp}/>}/>
                     <Route path={'/socios-clave'} exact element={<SocioClaveAdmin  isSmUp={isSmUp}/>}/>
                     <Route path={'/sales'} exact element={<VentasAdmin  isSmUp={isSmUp}/>}/>
+                    <Route path={'/recibo'} exact element={<Recibo />} />
                 </Routes>              
             </Box>
           </Box>

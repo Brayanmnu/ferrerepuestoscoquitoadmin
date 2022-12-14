@@ -30,10 +30,10 @@ export default function ThemeLogin(props) {
         const loginResponse =  await server.login(credentials);
         if (loginResponse.status === 200){
             const loginResponseData = await loginResponse.data; 
-            if(loginResponseData.status=="1"){
+            if(loginResponseData.id_token){
                 props.setIsLogin(true)
                 window.localStorage.setItem(
-                    'loggedCoquito' , JSON.stringify(loginResponseData)
+                    'loggedCoquito' , JSON.stringify(loginResponseData.id_token)
                 )
             }else{
                 setOpenAlert(true);

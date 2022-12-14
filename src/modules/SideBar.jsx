@@ -108,14 +108,14 @@ export default function SideBar(props) {
               <ListItemText>Clientes</ListItemText>
               </ListItem>
           </Link> */}
-          {/* <Link key="sales" to="/sales"  style={{ textDecoration: 'none' }}>
+          <Link key="sales" to="/sales"  style={{ textDecoration: 'none' }}>
               <ListItem sx={{ ...item, ...itemCategory }}>
               <ListItemIcon>
                   <PointOfSaleIcon />
               </ListItemIcon>
               <ListItemText>Ventas</ListItemText>
               </ListItem>
-          </Link> */}
+          </Link>
           {/* <Link key="buy" to="/buy"  style={{ textDecoration: 'none' }}>
               <ListItem sx={{ ...item, ...itemCategory }}>
               <ListItemIcon>

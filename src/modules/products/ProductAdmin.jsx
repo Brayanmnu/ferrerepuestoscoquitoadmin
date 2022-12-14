@@ -23,6 +23,7 @@ import IconButton from '@mui/material/IconButton';
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 //Servicios
 import { Server } from "../../services/server";
 
@@ -33,6 +34,7 @@ import ProductAdminModalEliminar from "./ProductAdminModalEliminar";
 
 //componentes
 import Alert from '../../components/Alert'
+import AddProduct from "../../components/AddProduct";
 
 export default function ProductAdmin(props) {
     const { productType } = useParams()
@@ -61,6 +63,10 @@ export default function ProductAdmin(props) {
     const [menuItemMedidaA, setMenuItemMedidaA] = useState('');
     const [disabledDe, setDisabledDe] = useState(true);
     const [disabledA, setDisabledA] = useState(true);
+    const [precioXMayor, setPrecioXMayor] = useState(0);
+    const [precioXMenor, setPrecioXMenor] = useState(0);
+    const [nombreProduct, setNombreProduct] = useState('');
+    const [openAddProduct, setOpenAddProduct] = useState(false);
 
     const theme = createTheme({
         palette: {
@@ -73,6 +79,9 @@ export default function ProductAdmin(props) {
           addReg: {
             main :'#0d47a1',
             contrastText: '#fff',
+          },
+          cart: {
+            main: '#673ab7',
           }
         },
     });
@@ -159,22 +168,25 @@ export default function ProductAdmin(props) {
                         setCantPaginas(cantPaginas)
                         return (
                             <TableRow hover role="checkbox" tabIndex={-1} key={row.id_producto}>
-                                <TableCell key="stock">
+                                <TableCell key="stock" align="center">
                                     {row.stock} {row.uni_medida}
                                 </TableCell>
                                 <TableCell key="nombre">
                                     {row.nombre}
                                 </TableCell>
-                                <TableCell key="precio_venta">
+                                <TableCell key="precio_venta" align="center">
                                     S/ {row.precio_venta_menor} - S/ {row.precio_venta_mayor}
                                 </TableCell>
-                                <TableCell key="precio_compra">
+                                <TableCell key="precio_compra" align="center">
                                     S/ {row.precio_compra}
                                 </TableCell>
                                 <TableCell key="options">
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }} >
                                     <ThemeProvider theme={theme}>
-                                    <div style={{justifyContent:"center",display:"flex"}}>
+                                        <div style={{justifyContent:"center",display:"flex"}}>
+                                            <Grid item xs={4} sm={2} md={4}>
+                                                <IconButton aria-label="addCart" color="cart" value={JSON.stringify(row)} variant="contained" onClick={handleClickOpenAddProduct}><AddShoppingCartIcon fontSize="medium"/></IconButton>
+                                            </Grid>
                                             <Grid item xs={4} sm={2} md={4}>
                                                 <IconButton aria-label="qr" color="primary" value={row.id_producto} variant="contained" onClick={handleClickOpenQr}><QrCodeScannerIcon fontSize="medium"/></IconButton>
                                             </Grid>
@@ -184,8 +196,8 @@ export default function ProductAdmin(props) {
                                             <Grid item xs={4} sm={2} md={4}>
                                                 <IconButton aria-label="delete" color="error" value={row.id_producto} onClick={handleClickOpenDelete}><DeleteIcon fontSize="medium"/></IconButton>
                                             </Grid>
-                                            </div>
-                                        </ThemeProvider>                    
+                                        </div>
+                                    </ThemeProvider>                    
                                     </Grid>
                                 </TableCell>
                             </TableRow>
@@ -209,6 +221,11 @@ export default function ProductAdmin(props) {
                                     <div>Precio compra: S/ {row.precio_compra}</div>
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
                                         <ThemeProvider theme={theme}>
+                                            <Grid item xs={4} sm={2} md={4}>
+                                            <div style={{justifyContent:"center",display:"flex"}}>
+                                                <IconButton aria-label="addCart" color="cart" value={JSON.stringify(row)} variant="contained" onClick={handleClickOpenAddProduct}><AddShoppingCartIcon fontSize="medium"/></IconButton>
+                                            </div>
+                                            </Grid>
                                             <Grid item xs={4} sm={4} md={4}>
                                             <div style={{justifyContent:"center",display:"flex"}}>
                                                 <IconButton aria-label="qr" color="primary" value={row.id_producto} onClick={handleClickOpenQr}><QrCodeScannerIcon fontSize="medium"/></IconButton>
@@ -268,10 +285,18 @@ export default function ProductAdmin(props) {
         setIdProductQr(event.currentTarget.value);
     };
 
-
     const handleClickOpenQr = (event) => {
         setOpenQr(true);
         setIdProductQr(event.currentTarget.value);
+    };
+
+    const handleClickOpenAddProduct = (event) => {
+        const productSelect = JSON.parse(event.currentTarget.value)
+        setOpenAddProduct(true);
+        setIdProductQr(productSelect.id_producto);
+        setPrecioXMayor(productSelect.precio_venta_mayor)
+        setPrecioXMenor(productSelect.precio_venta_menor)
+        setNombreProduct(productSelect.nombre)
     };
 
     useEffect(() => {
@@ -310,7 +335,7 @@ export default function ProductAdmin(props) {
     return(
         <Grid container rowSpacing={2}>
             <Grid item xs={12} xm={12} md={12}>
-            <Paper sx={{maxWidth: 970, margin: 'auto', overflow: 'hidden' }}>
+            <Paper sx={{margin: 'auto', overflow: 'hidden' }}>
                     <Grid container rowSpacing={1} columnSpacing={{ xs: 2, sm: 2, md: 2 }} style={{padding: "6px"}}>
                         <Grid item xs={12} sm={12} md={12}>
                             Filtros
@@ -389,7 +414,7 @@ export default function ProductAdmin(props) {
                 </ThemeProvider>
             </Grid>
             <Grid item xs={12} xm={12} md={12}>
-                <Paper sx={{maxWidth: 970, margin: 'auto', overflow: 'hidden' }}>
+                <Paper sx={{ margin: 'auto', overflow: 'hidden' }}>
                     {(props.isSmUp) ? (
                         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                             <Grid item xs={12} sm={12} md={12}>
@@ -457,6 +482,18 @@ export default function ProductAdmin(props) {
                             setMsjAlertExitoso={setMsjAlertExitoso} 
                             setSeverityAlert={setSeverityAlert}
                             reloadAllProducts={reloadAllProducts}/>
+                    </Dialog>
+                    <Dialog open={openAddProduct} onClose={() => setOpenAddProduct(false)}>
+                        <AddProduct 
+                            setOpenAddProduct={setOpenAddProduct} 
+                            idProducto={idProductoQr} 
+                            precioXMayor={precioXMayor}
+                            precioXMenor={precioXMenor}
+                            nombreProduct = {nombreProduct}
+                            setOpenAlertOk={setOpenAlertOk} 
+                            setMsjAlertExitoso={setMsjAlertExitoso}
+                            setCantidadCart = {props.setCantidadCart} 
+                            setSeverityAlert={setSeverityAlert}/>
                     </Dialog>
                     <Alert openAlert={openAlertOk} setOpenAlert={setOpenAlertOk} mensaje={msjAlertExitoso} severity={severityAlert}/>
                 </Paper>

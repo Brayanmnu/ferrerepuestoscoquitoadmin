@@ -281,5 +281,38 @@ class Server {
         
     }
 
+    
+    addProductToCart = async (dataCreate) => {
+        const url = this.base_url_module_p_one + "/shopping-cart/"
+        const res = await axios.post(url,dataCreate).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+          });
+        return res;
+        
+    }
+ 
+    getProductCar = async (idUser) => {
+        const url = this.base_url_module_p_one + "/shopping-cart/"+idUser
+        const res = await axios.get(url).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+          });
+        return res;
+        
+    }
+    
+    vaciarCarrito = async (idUser) => {
+        const url = this.base_url_module_p_one + "/shopping-cart/"+idUser
+        const res = await axios.delete(url).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+          });
+        return res;
+        
+    }
 }
 export {Server} ;
