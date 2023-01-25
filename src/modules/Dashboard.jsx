@@ -220,11 +220,11 @@ export default function Dashboard(props){
             <Header cantidadCart={cantidadCart} setCantidadCart={setCantidadCart} onDrawerToggle={handleDrawerToggle} handleIsLogin={handleIsLogin} getAllProductsCar={getAllProductsCar} isSmUp={isSmUp}/>
             <Box component="main" sx={{ flex: 1, py: 2, px: 3, bgcolor: '#eaeff1' }}>
                 <Routes>
-                    <Route path={'/'} exact element={<Home/>} />
-                    <Route path={'/products-dashboard/:productType'} exact element={<ProductAdmin setCantidadCart={setCantidadCart} isSmUp={isSmUp}/>}/>
+                    <Route path={'/'} exact element={<Home mobileOpen={mobileOpen} onDrawerToggle={handleDrawerToggle}/>} />
+                    <Route path={'/products-dashboard/:productType'} exact element={<ProductAdmin mobileOpen={mobileOpen} onDrawerToggle={handleDrawerToggle} setCantidadCart={setCantidadCart} isSmUp={isSmUp}/>}/>
                     <Route path={'/socios-clave'} exact element={<SocioClaveAdmin  isSmUp={isSmUp}/>}/>
-                    <Route path={'/sales'} exact element={<VentasAdmin  isSmUp={isSmUp}/>}/>
-                    <Route path={'/recibo'} exact element={<Recibo />} />
+                    <Route path={'/sales'} exact element={<VentasAdmin mobileOpen={mobileOpen} onDrawerToggle={handleDrawerToggle}  isSmUp={isSmUp}/>}/>
+                    <Route path={'/recibo'} exact element={<Recibo/>} />
                     <Route path={'/products-list/:codeQr'} exact element={<ProductAdmin setCantidadCart={setCantidadCart} isSmUp={isSmUp}/>}/>
                 </Routes>              
             </Box>

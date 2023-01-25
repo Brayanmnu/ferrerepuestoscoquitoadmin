@@ -318,7 +318,10 @@ export default function ProductAdmin(props) {
             reloadSubProductType()
         }
         reloadAllProducts(0, "", "", "")
-
+        if (props.mobileOpen==true){
+            props.onDrawerToggle()
+        }
+        
     }, [productType,]);
 
 

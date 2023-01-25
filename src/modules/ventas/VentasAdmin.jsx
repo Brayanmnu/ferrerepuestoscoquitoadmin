@@ -192,6 +192,9 @@ export default function VentasAdmin(props) {
     };
 
     useEffect(() => {
+        if (props.mobileOpen==true){
+            props.onDrawerToggle()
+        }
         reloadAllVentas(0) 
     }, [,]);
 

@@ -168,7 +168,6 @@ export default function ProductAdminModal(props) {
             id_unidad_medida:unidadMedida,
             is_pvc: isPvc
         }
-        console.log('json: '+JSON.stringify(dataFormProduct))
         if(props.isCreate){
             const productoResponse =  await server.createProductBack(dataFormProduct);
             setMsjError('Error al insertar')
