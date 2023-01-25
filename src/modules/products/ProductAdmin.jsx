@@ -227,7 +227,7 @@ export default function ProductAdmin(props) {
                                         <ThemeProvider theme={theme}>
                                             {
                                                 codeQr === undefined ?
-                                                    <div>
+                                                    <Grid container style={{paddingTop:"12px"}}>
                                                         <Grid item xs={4} sm={2} md={4}>
                                                             <div style={{ justifyContent: "center", display: "flex" }}>
                                                                 <IconButton aria-label="addCart" color="cart" value={JSON.stringify(row)} variant="contained" onClick={handleClickOpenAddProduct}><AddShoppingCartIcon fontSize="medium" /></IconButton>
@@ -248,7 +248,7 @@ export default function ProductAdmin(props) {
                                                                 <IconButton aria-label="delete" color="error" value={row.id_producto} onClick={handleClickOpenDelete}><DeleteIcon fontSize="medium" /></IconButton>
                                                             </div>
                                                         </Grid>
-                                                    </div> : null
+                                                    </Grid> : null
                                             }
                                         </ThemeProvider>
                                     </Grid>
