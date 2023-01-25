@@ -225,6 +225,7 @@ export default function Dashboard(props){
                     <Route path={'/socios-clave'} exact element={<SocioClaveAdmin  isSmUp={isSmUp}/>}/>
                     <Route path={'/sales'} exact element={<VentasAdmin  isSmUp={isSmUp}/>}/>
                     <Route path={'/recibo'} exact element={<Recibo />} />
+                    <Route path={'/products-list/:codeQr'} exact element={<ProductAdmin setCantidadCart={setCantidadCart} isSmUp={isSmUp}/>}/>
                 </Routes>              
             </Box>
           </Box>

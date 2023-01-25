@@ -13,6 +13,9 @@ import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import FormControl from '@mui/material/FormControl';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+
 //Servicios
 import { Server } from "../../services/server";
 
@@ -43,7 +46,8 @@ export default function ProductAdminModal(props) {
     const [isDisbledSubTipo, setIsDisbledSubTipo] = useState(false);
     const [isDisabledDe, setIsDisabledDe] = useState(false);
     const [isDisabledA, setIsDisabledA] = useState(false);
-    
+    const [isPvc, setIsPvc] = useState(false);
+
     const handleClose = () => {
         props.setOpenCreate(false);
     };
@@ -87,6 +91,7 @@ export default function ProductAdminModal(props) {
             setPrecioVentaMayor(productoResponseData.precio_venta_mayor)
             setStock(productoResponseData.stock)
             setUnidadMedida(productoResponseData.id_unidad_medida)
+            setIsPvc(productoResponseData.ispvc)
         }
     }
 
@@ -160,10 +165,10 @@ export default function ProductAdminModal(props) {
             precio_venta_menor: precioVentaMenor,
             precio_venta_mayor: precioVentaMayor,
             stock: stock,
-            id_unidad_medida:unidadMedida
+            id_unidad_medida:unidadMedida,
+            is_pvc: isPvc
         }
-
-        
+        console.log('json: '+JSON.stringify(dataFormProduct))
         if(props.isCreate){
             const productoResponse =  await server.createProductBack(dataFormProduct);
             setMsjError('Error al insertar')
@@ -347,6 +352,16 @@ export default function ProductAdminModal(props) {
                     </Grid>:null
                     }
                     
+                    <Grid item xs={12} sm={12} md={12}>
+                        <FormControlLabel 
+                            control={
+                                <Checkbox 
+                                    checked={isPvc} 
+                                    onChange={(e) => setIsPvc(e.target.checked)}
+                                />
+                            }
+                            label="Es artículo de PVC" />
+                    </Grid>
                     <Grid item xs={12} sm={12} md={12}>
                         <TextField
                             margin="dense"

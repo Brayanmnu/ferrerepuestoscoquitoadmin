@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 //Imports material-ui
 import Grid from '@mui/material/Grid';
 import Table from '@mui/material/Table';
@@ -10,8 +10,8 @@ import TableCell from '@mui/material/TableCell';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog'
 import Paper from '@mui/material/Paper';
-import { createTheme,ThemeProvider } from '@mui/material/styles';
-import {useParams } from 'react-router-dom'
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useParams } from 'react-router-dom'
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
@@ -37,7 +37,7 @@ import Alert from '../../components/Alert'
 import AddProduct from "../../components/AddProduct";
 
 export default function ProductAdmin(props) {
-    const { productType } = useParams()
+    const { productType, codeQr } = useParams()
 
     const server = new Server();
     const [tableBody, setTableBody] = useState();
@@ -56,7 +56,7 @@ export default function ProductAdmin(props) {
     const [deProduct, setDeProduct] = useState('');
     const [aProduct, setAProduct] = useState('');
 
-    const [cantPaginas,setCantPaginas] = useState(0)
+    const [cantPaginas, setCantPaginas] = useState(0)
     const [page, setPage] = useState(1);
     const [menuItemSubProductType, setMenuItemSubProductType] = useState('');
     const [menuItemMedidaDe, setMenuItemMedidaDe] = useState('');
@@ -70,101 +70,100 @@ export default function ProductAdmin(props) {
 
     const theme = createTheme({
         palette: {
-          primary: {
-            main: '#2FC6B1',
-          },
-          warning :{
-            main: '#fbc02d'
-          },
-          addReg: {
-            main :'#0d47a1',
-            contrastText: '#fff',
-          },
-          cart: {
-            main: '#673ab7',
-          }
+            primary: {
+                main: '#2FC6B1',
+            },
+            warning: {
+                main: '#fbc02d'
+            },
+            addReg: {
+                main: '#0d47a1',
+                contrastText: '#fff',
+            },
+            cart: {
+                main: '#673ab7',
+            }
         },
     });
-    
-    const columns= [
-        { id: 'stock',align: 'center', label: 'Stock', minWidth: 170, format: 'string' },
-        { id: 'nombre',align: 'center', label: 'Nombre', minWidth: 170 , format: 'string'},
-        { id: 'precio_venta',align: 'center', label: 'Rango precio venta', minWidth: 170, format: (value) => value.toFixed(2) },
-        { id: 'precio_compra',align: 'center', label: 'Precio compra', minWidth: 170, format: (value) => value.toFixed(2)},
-        { id: 'acciones',align: 'center', label: 'Acciones', minWidth: 40 , format: "string"}
+
+    const columns = [
+        { id: 'stock', align: 'center', label: 'Stock', minWidth: 170, format: 'string' },
+        { id: 'nombre', align: 'center', label: 'Nombre', minWidth: 170, format: 'string' },
+        { id: 'precio_venta', align: 'center', label: 'Rango precio venta', minWidth: 170, format: (value) => value.toFixed(2) },
+        { id: 'precio_compra', align: 'center', label: 'Precio compra', minWidth: 170, format: (value) => value.toFixed(2) }
     ];
 
     async function reloadSubProductType() {
 
-        const subProductAll =  await server.getAllSubProductType(getIdProductType());
+        const subProductAll = await server.getAllSubProductType(getIdProductType());
         const arraySubTipoProducto = await subProductAll.data;
         setMenuItemSubProductType(
             arraySubTipoProducto.map((tp) => {
-                return(
+                return (
                     <MenuItem value={tp.id}>{tp.descripcion}</MenuItem>
                 )
-                
+
             })
         )
     }
 
     async function reloadMedidaDe(id) {
-        const medidaDe =  await server.getMedidaDe(id);
+        const medidaDe = await server.getMedidaDe(id);
         const arrayMedidaDe = await medidaDe.data;
-        if(arrayMedidaDe.length >0){
+        if (arrayMedidaDe.length > 0) {
             setDisabledDe(false)
             setMenuItemMedidaDe(
                 arrayMedidaDe.map((tp) => {
-                    return(
+                    return (
                         <MenuItem value={tp.id}>{tp.descripcion}</MenuItem>
                     )
                 })
             )
-        }else{
+        } else {
             setDisabledDe(true)
             setDeProduct('')
         }
     }
 
-    
+
     async function reloadMedidaA(id) {
-        const medidaA =  await server.getMedidaA(id);
+        const medidaA = await server.getMedidaA(id);
         const arrayMedidaA = await medidaA.data;
-        if(arrayMedidaA.length >0){
+        if (arrayMedidaA.length > 0) {
             setDisabledA(false)
             setMenuItemMedidaA(
                 arrayMedidaA.map((tp) => {
-                    return(
+                    return (
                         <MenuItem value={tp.id}>{tp.descripcion}</MenuItem>
                     )
                 })
             )
-        }else{
+        } else {
             setDisabledA(true)
             setAProduct('')
         }
     }
 
-    function getIdProductType(){
-        if(productType=="riego"){
+    function getIdProductType() {
+        if (productType == "riego") {
             return '1'
-        }else if(productType=="ferreteria"){
+        } else if (productType == "ferreteria") {
             return '2'
-        }else if(productType=="automotriz"){
+        } else if (productType == "automotriz") {
             return '3'
         }
     }
-    async function reloadAllProducts(nroPag,idSubProductType,deRequest,aRequest) {
-        
-        const productAll =  await server.getAllProducts(nroPag,getIdProductType(),idSubProductType,deRequest,aRequest);
-        if (productAll.status === 200){
+
+    async function reloadAllProducts(nroPag, idSubProductType, deRequest, aRequest) {
+        const productAll = await server.getAllProducts(nroPag, codeQr, getIdProductType(), idSubProductType, deRequest, aRequest);
+        if (productAll.status === 200) {
             var rowsProduct = await productAll.data;
-            var cantPaginas=0;
+            var cantPaginas = 0;
 
             setTableBody(
                 <TableBody>
                     {rowsProduct.map((row) => {
-                        cantPaginas = Math.ceil(row.total_elements / 10 );
+                        cantPaginas = Math.ceil(row.total_elements / 10);
                         setCantPaginas(cantPaginas)
                         return (
                             <TableRow hover role="checkbox" tabIndex={-1} key={row.id_producto}>
@@ -182,22 +181,27 @@ export default function ProductAdmin(props) {
                                 </TableCell>
                                 <TableCell key="options">
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }} >
-                                    <ThemeProvider theme={theme}>
-                                        <div style={{justifyContent:"center",display:"flex"}}>
-                                            <Grid item xs={4} sm={2} md={4}>
-                                                <IconButton aria-label="addCart" color="cart" value={JSON.stringify(row)} variant="contained" onClick={handleClickOpenAddProduct}><AddShoppingCartIcon fontSize="medium"/></IconButton>
-                                            </Grid>
-                                            <Grid item xs={4} sm={2} md={4}>
-                                                <IconButton aria-label="qr" color="primary" value={row.id_producto} variant="contained" onClick={handleClickOpenQr}><QrCodeScannerIcon fontSize="medium"/></IconButton>
-                                            </Grid>
-                                            <Grid item xs={4} sm={2} md={4}>
-                                                <IconButton aria-label="edit" color="warning" value={row.id_producto} onClick={handleClickOpenUpdate}><EditIcon fontSize="medium"/></IconButton>
-                                            </Grid>
-                                            <Grid item xs={4} sm={2} md={4}>
-                                                <IconButton aria-label="delete" color="error" value={row.id_producto} onClick={handleClickOpenDelete}><DeleteIcon fontSize="medium"/></IconButton>
-                                            </Grid>
-                                        </div>
-                                    </ThemeProvider>                    
+                                        <ThemeProvider theme={theme}>
+                                            {
+                                                codeQr === undefined ?
+                                                    <div style={{ justifyContent: "center", display: "flex" }}>
+                                                        <Grid item xs={4} sm={2} md={4}>
+                                                            <IconButton aria-label="addCart" color="cart" value={JSON.stringify(row)} variant="contained" onClick={handleClickOpenAddProduct}><AddShoppingCartIcon fontSize="medium" /></IconButton>
+                                                        </Grid>
+                                                        <Grid item xs={4} sm={2} md={4}>
+                                                            <IconButton aria-label="qr" color="primary" value={row.id_producto} variant="contained" onClick={handleClickOpenQr}><QrCodeScannerIcon fontSize="medium" /></IconButton>
+                                                        </Grid>
+                                                        <Grid item xs={4} sm={2} md={4}>
+                                                            <IconButton aria-label="edit" color="warning" value={row.id_producto} onClick={handleClickOpenUpdate}><EditIcon fontSize="medium" /></IconButton>
+                                                        </Grid>
+                                                        <Grid item xs={4} sm={2} md={4}>
+                                                            <IconButton aria-label="delete" color="error" value={row.id_producto} onClick={handleClickOpenDelete}><DeleteIcon fontSize="medium" /></IconButton>
+                                                        </Grid>
+                                                    </div> :
+                                                    null
+                                            }
+
+                                        </ThemeProvider>
                                     </Grid>
                                 </TableCell>
                             </TableRow>
@@ -206,13 +210,13 @@ export default function ProductAdmin(props) {
                 </TableBody>
             );
 
-            
+
             setComponentTableResponsive(
                 <Table>
                     {rowsProduct.map((row) => {
-                        cantPaginas = Math.ceil(row.total_elements / 10 );
+                        cantPaginas = Math.ceil(row.total_elements / 10);
                         setCantPaginas(cantPaginas)
-                        return(
+                        return (
                             <TableRow hover role="checkbox" tabIndex={-1}>
                                 <TableCell>
                                     <div>Stock: {row.stock} {row.uni_medida}</div>
@@ -221,30 +225,35 @@ export default function ProductAdmin(props) {
                                     <div>Precio compra: S/ {row.precio_compra}</div>
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
                                         <ThemeProvider theme={theme}>
-                                            <Grid item xs={4} sm={2} md={4}>
-                                            <div style={{justifyContent:"center",display:"flex"}}>
-                                                <IconButton aria-label="addCart" color="cart" value={JSON.stringify(row)} variant="contained" onClick={handleClickOpenAddProduct}><AddShoppingCartIcon fontSize="medium"/></IconButton>
-                                            </div>
-                                            </Grid>
-                                            <Grid item xs={4} sm={4} md={4}>
-                                            <div style={{justifyContent:"center",display:"flex"}}>
-                                                <IconButton aria-label="qr" color="primary" value={row.id_producto} onClick={handleClickOpenQr}><QrCodeScannerIcon fontSize="medium"/></IconButton>
-                                            </div>
-                                            </Grid>
-                                            <Grid item xs={4} sm={4} md={4}>
-                                            <div style={{justifyContent:"center",display:"flex"}}>
-                                                <IconButton aria-label="edit" color="warning" value={row.id_producto} onClick={handleClickOpenUpdate}><EditIcon fontSize="medium"/></IconButton>
-                                            </div>
-                                            </Grid>
-                                            <Grid item xs={4} sm={4} md={4}>
-                                            <div style={{justifyContent:"center",display:"flex"}}>
-                                                <IconButton aria-label="delete" color="error" value={row.id_producto} onClick={handleClickOpenDelete}><DeleteIcon fontSize="medium"/></IconButton>
-                                            </div>
-                                            </Grid>
+                                            {
+                                                codeQr === undefined ?
+                                                    <div>
+                                                        <Grid item xs={4} sm={2} md={4}>
+                                                            <div style={{ justifyContent: "center", display: "flex" }}>
+                                                                <IconButton aria-label="addCart" color="cart" value={JSON.stringify(row)} variant="contained" onClick={handleClickOpenAddProduct}><AddShoppingCartIcon fontSize="medium" /></IconButton>
+                                                            </div>
+                                                        </Grid>
+                                                        <Grid item xs={4} sm={4} md={4}>
+                                                            <div style={{ justifyContent: "center", display: "flex" }}>
+                                                                <IconButton aria-label="qr" color="primary" value={row.id_producto} onClick={handleClickOpenQr}><QrCodeScannerIcon fontSize="medium" /></IconButton>
+                                                            </div>
+                                                        </Grid>
+                                                        <Grid item xs={4} sm={4} md={4}>
+                                                            <div style={{ justifyContent: "center", display: "flex" }}>
+                                                                <IconButton aria-label="edit" color="warning" value={row.id_producto} onClick={handleClickOpenUpdate}><EditIcon fontSize="medium" /></IconButton>
+                                                            </div>
+                                                        </Grid>
+                                                        <Grid item xs={4} sm={4} md={4}>
+                                                            <div style={{ justifyContent: "center", display: "flex" }}>
+                                                                <IconButton aria-label="delete" color="error" value={row.id_producto} onClick={handleClickOpenDelete}><DeleteIcon fontSize="medium" /></IconButton>
+                                                            </div>
+                                                        </Grid>
+                                                    </div> : null
+                                            }
                                         </ThemeProvider>
-                                    </Grid>                                    
+                                    </Grid>
                                 </TableCell>
-                                
+
                             </TableRow>
                         )
                     })}
@@ -253,7 +262,7 @@ export default function ProductAdmin(props) {
         }
     }
 
-    
+
     const handleChangeSubTipo = (event) => {
         setSubTipoProduct(event.target.value);
         reloadMedidaDe(event.target.value);
@@ -305,13 +314,16 @@ export default function ProductAdmin(props) {
         setDeProduct('')
         setDisabledA(true)
         setDisabledDe(true)
-        reloadSubProductType()
-        reloadAllProducts(0,"","","") 
+        if (codeQr === undefined) {
+            reloadSubProductType()
+        }
+        reloadAllProducts(0, "", "", "")
+
     }, [productType,]);
 
-    
+
     async function aplicarFiltro() {
-        reloadAllProducts(0,subTipoProduct,deProduct,aProduct)
+        reloadAllProducts(0, subTipoProduct, deProduct, aProduct)
         setPage(1);
     }
 
@@ -319,100 +331,107 @@ export default function ProductAdmin(props) {
         setSubTipoProduct('')
         setDeProduct('')
         setAProduct('')
-        reloadAllProducts(0,"","","") 
+        reloadAllProducts(0, "", "", "")
         setPage(1);
         setDisabledDe(true)
         setDisabledA(true)
     }
 
-    
+
     const handleChangePagina = (event, value) => {
-        reloadAllProducts((value-1)*10,subTipoProduct,deProduct,aProduct) 
+        reloadAllProducts((value - 1) * 10, subTipoProduct, deProduct, aProduct)
         setPage(value);
     };
 
 
-    return(
+    return (
         <Grid container rowSpacing={2}>
-            <Grid item xs={12} xm={12} md={12}>
-            <Paper sx={{margin: 'auto', overflow: 'hidden' }}>
-                    <Grid container rowSpacing={1} columnSpacing={{ xs: 2, sm: 2, md: 2 }} style={{padding: "6px"}}>
-                        <Grid item xs={12} sm={12} md={12}>
-                            Filtros
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6}>
-                            <FormControl fullWidth>
-                                <InputLabel>Subtipo</InputLabel>
-                                <Select
-                                    labelId="subtipo-label"
-                                    id="subtipo-label"
-                                    value={subTipoProduct}
-                                    label="Subtipo"
-                                    onChange={handleChangeSubTipo}
-                                    fullWidth
-                                >
-                                    {menuItemSubProductType}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        {!disabledDe?
-                        <Grid item xs={6} sm={2} md={2}>
-                            <FormControl fullWidth>
-                                <InputLabel>De</InputLabel>
-                                <Select
-                                    labelId="de-label"
-                                    id="de-label"
-                                    value={deProduct}
-                                    label="de"
-                                    onChange={handleChangeDe}
-                                    fullWidth
-                                    disabled={disabledDe}
-                                >
-                                    {menuItemMedidaDe}
-                                </Select>
-                            </FormControl>
-                        </Grid>: null}
-                        {!disabledA?
-                        <Grid item xs={6} sm={2} md={2}>
-                            <FormControl fullWidth>
-                                <InputLabel>A</InputLabel>
-                                <Select
-                                    labelId="a-label"
-                                    id="a-label"
-                                    value={aProduct}
-                                    label="A"
-                                    onChange={handleChangeA}
-                                    fullWidth
-                                    disabled={disabledA}
-                                >
-                                    {menuItemMedidaA}
-                                </Select>
-                            </FormControl>
-                        </Grid>:null}
-                        <Grid item xs={12} sm={2} md={2} >
-                            <Grid container columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
-                                <Grid item>
-                                <IconButton aria-label="aplicar" color="primary" onClick={aplicarFiltro} ><ManageSearchIcon/></IconButton>
+            {
+                codeQr === undefined ?
+                    <Grid item xs={12} xm={12} md={12}>
+                        <Paper sx={{ margin: 'auto', overflow: 'hidden' }}>
+                            <Grid container rowSpacing={1} columnSpacing={{ xs: 2, sm: 2, md: 2 }} style={{ padding: "6px" }}>
+                                <Grid item xs={12} sm={12} md={12}>
+                                    Filtros
                                 </Grid>
-                                <Grid item>
-                                <IconButton aria-label="aplicar" color="primary" onClick={clearFiltro} ><ClearIcon/></IconButton>
+                                <Grid item xs={12} sm={6} md={6}>
+                                    <FormControl fullWidth>
+                                        <InputLabel>Subtipo</InputLabel>
+                                        <Select
+                                            labelId="subtipo-label"
+                                            id="subtipo-label"
+                                            value={subTipoProduct}
+                                            label="Subtipo"
+                                            onChange={handleChangeSubTipo}
+                                            fullWidth
+                                        >
+                                            {menuItemSubProductType}
+                                        </Select>
+                                    </FormControl>
                                 </Grid>
+                                {!disabledDe ?
+                                    <Grid item xs={6} sm={2} md={2}>
+                                        <FormControl fullWidth>
+                                            <InputLabel>De</InputLabel>
+                                            <Select
+                                                labelId="de-label"
+                                                id="de-label"
+                                                value={deProduct}
+                                                label="de"
+                                                onChange={handleChangeDe}
+                                                fullWidth
+                                                disabled={disabledDe}
+                                            >
+                                                {menuItemMedidaDe}
+                                            </Select>
+                                        </FormControl>
+                                    </Grid> : null}
+                                {!disabledA ?
+                                    <Grid item xs={6} sm={2} md={2}>
+                                        <FormControl fullWidth>
+                                            <InputLabel>A</InputLabel>
+                                            <Select
+                                                labelId="a-label"
+                                                id="a-label"
+                                                value={aProduct}
+                                                label="A"
+                                                onChange={handleChangeA}
+                                                fullWidth
+                                                disabled={disabledA}
+                                            >
+                                                {menuItemMedidaA}
+                                            </Select>
+                                        </FormControl>
+                                    </Grid> : null}
+                                <Grid item xs={12} sm={2} md={2} >
+                                    <Grid container columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
+                                        <Grid item>
+                                            <IconButton aria-label="aplicar" color="primary" onClick={aplicarFiltro} ><ManageSearchIcon /></IconButton>
+                                        </Grid>
+                                        <Grid item>
+                                            <IconButton aria-label="aplicar" color="primary" onClick={clearFiltro} ><ClearIcon /></IconButton>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+
                             </Grid>
-                        </Grid>
-                        
-                    </Grid>
-            </Paper>
-            </Grid>
-            <Grid item xs={12} sm={3} md={3}>
-                <ThemeProvider theme={theme}>
-                <div style={{justifyContent:(props.isSmUp) ? "left":"center",display:"flex"}}>
-                    <Button variant="contained" sx={{ mr: 1 }} color="addReg" onClick={handleClickOpenCreate}>
-                        Registrar
-                    </Button>
-                </div>
-                    
-                </ThemeProvider>
-            </Grid>
+                        </Paper>
+                    </Grid> : null
+            }
+            {
+                codeQr === undefined ?
+                    <Grid item xs={12} sm={3} md={3}>
+                        <ThemeProvider theme={theme}>
+                            <div style={{ justifyContent: (props.isSmUp) ? "left" : "center", display: "flex" }}>
+                                <Button variant="contained" sx={{ mr: 1 }} color="addReg" onClick={handleClickOpenCreate}>
+                                    Registrar
+                                </Button>
+                            </div>
+
+                        </ThemeProvider>
+                    </Grid> : null
+            }
+
             <Grid item xs={12} xm={12} md={12}>
                 <Paper sx={{ margin: 'auto', overflow: 'hidden' }}>
                     {(props.isSmUp) ? (
@@ -424,13 +443,19 @@ export default function ProductAdmin(props) {
                                             <TableRow>
                                                 {columns.map((column) => (
                                                     <TableCell
-                                                    key={column.id}
-                                                    align={column.align}
-                                                    style={{ minWidth: column.minWidth }}
+                                                        key={column.id}
+                                                        align={column.align}
+                                                        style={{ minWidth: column.minWidth }}
                                                     >
-                                                    {column.label}
+                                                        {column.label}
                                                     </TableCell>
                                                 ))}
+                                                {
+                                                    codeQr == undefined ?
+                                                        <TableCell key="acciones" align="center" style={{ minWidth: "40" }}>
+                                                            Acciones
+                                                        </TableCell> : null
+                                                }
                                             </TableRow>
                                         </TableHead>
                                         {tableBody}
@@ -457,45 +482,45 @@ export default function ProductAdmin(props) {
                     </Grid>
                     <Dialog open={openCreate} onClose={() => setOpenCreate(false)}>
                         <ProductAdminModal
-                            title={titleModal} 
-                            setOpenCreate={setOpenCreate} 
-                            setOpenAlertOk={setOpenAlertOk} 
-                            setMsjAlertExitoso={setMsjAlertExitoso} 
-                            setSeverityAlert={setSeverityAlert} 
-                            isCreate={isCreate} 
+                            title={titleModal}
+                            setOpenCreate={setOpenCreate}
+                            setOpenAlertOk={setOpenAlertOk}
+                            setMsjAlertExitoso={setMsjAlertExitoso}
+                            setSeverityAlert={setSeverityAlert}
+                            isCreate={isCreate}
                             idProducto={idProductoQr}
-                            reloadAllProducts={reloadAllProducts} 
-                            idTipoProduct = {getIdProductType()}
+                            reloadAllProducts={reloadAllProducts}
+                            idTipoProduct={getIdProductType()}
                             menuSubProduct={menuItemSubProductType}
                         />
                     </Dialog>
                     <Dialog open={openQr} onClose={() => setOpenQr(false)}>
-                        <ProductAdminQrModal 
-                        setOpenCreate={setOpenQr} 
-                        idProductoQr={idProductoQr}/>
+                        <ProductAdminQrModal
+                            setOpenCreate={setOpenQr}
+                            idProductoQr={idProductoQr} />
                     </Dialog>
                     <Dialog open={openDelete} onClose={() => setOpenDelete(false)}>
-                        <ProductAdminModalEliminar 
-                            setOpenDelete={setOpenDelete} 
-                            idProducto={idProductoQr} 
-                            setOpenAlertOk={setOpenAlertOk} 
-                            setMsjAlertExitoso={setMsjAlertExitoso} 
+                        <ProductAdminModalEliminar
+                            setOpenDelete={setOpenDelete}
+                            idProducto={idProductoQr}
+                            setOpenAlertOk={setOpenAlertOk}
+                            setMsjAlertExitoso={setMsjAlertExitoso}
                             setSeverityAlert={setSeverityAlert}
-                            reloadAllProducts={reloadAllProducts}/>
+                            reloadAllProducts={reloadAllProducts} />
                     </Dialog>
                     <Dialog open={openAddProduct} onClose={() => setOpenAddProduct(false)}>
-                        <AddProduct 
-                            setOpenAddProduct={setOpenAddProduct} 
-                            idProducto={idProductoQr} 
+                        <AddProduct
+                            setOpenAddProduct={setOpenAddProduct}
+                            idProducto={idProductoQr}
                             precioXMayor={precioXMayor}
                             precioXMenor={precioXMenor}
-                            nombreProduct = {nombreProduct}
-                            setOpenAlertOk={setOpenAlertOk} 
+                            nombreProduct={nombreProduct}
+                            setOpenAlertOk={setOpenAlertOk}
                             setMsjAlertExitoso={setMsjAlertExitoso}
-                            setCantidadCart = {props.setCantidadCart} 
-                            setSeverityAlert={setSeverityAlert}/>
+                            setCantidadCart={props.setCantidadCart}
+                            setSeverityAlert={setSeverityAlert} />
                     </Dialog>
-                    <Alert openAlert={openAlertOk} setOpenAlert={setOpenAlertOk} mensaje={msjAlertExitoso} severity={severityAlert}/>
+                    <Alert openAlert={openAlertOk} setOpenAlert={setOpenAlertOk} mensaje={msjAlertExitoso} severity={severityAlert} />
                 </Paper>
             </Grid>
         </Grid>

@@ -24,20 +24,25 @@ class Server {
         return res;
     };
     
-    getAllProducts = async (nroPag,productType,idSubProductType,deRequest,aRequest) => {
-        var optional=""
-        if (idSubProductType!=""){
-            optional ="idSubProductType="+idSubProductType+"&"
+    getAllProducts = async (nroPag, qrCode,productType,idSubProductType,deRequest,aRequest) => {
+        var url =""
+        if(qrCode!=undefined){
+            url = this.base_url_module_p_one + "/products-list-qr/"+nroPag+"/"+qrCode
+        }else{
+            var optional=""
+            if (idSubProductType!=""){
+                optional ="idSubProductType="+idSubProductType+"&"
+            }
+            if(deRequest!=""){
+                optional +="deRequest="+deRequest+"&"
+            }
+    
+            if(aRequest!=""){
+                optional +="aRequest="+aRequest
+            }
+    
+            url = this.base_url_crud_p_one + "/products/v2/"+nroPag+"/"+productType+"?"+optional
         }
-        if(deRequest!=""){
-            optional +="deRequest="+deRequest+"&"
-        }
-
-        if(aRequest!=""){
-            optional +="aRequest="+aRequest
-        }
-
-        const url = this.base_url_crud_p_one + "/products/v2/"+nroPag+"/"+productType+"?"+optional
         const res = await axios.get(url).catch(function (error) {
             if (error.response) {
                 return error.response;

@@ -51,12 +51,12 @@ export default function ProductDetails(props) {
             </Grid>
             <Divider />
             <Grid container>
-                <Grid item xs={12} sm={6} md={6}>
+                <Grid item xs={12} sm={12} md={12}>
                     <Typography variant="h6" gutterBottom>
                         Rango de Precio Venta: S/ {precioVentaMenor} - S/ {precioVentaMayor}
                     </Typography>
                 </Grid>
-                <Grid item xs={12} sm={6} md={6}>
+                <Grid item xs={12} sm={12} md={12}>
                     <Typography variant="h6" gutterBottom>
                         Compra: S/ {precioCompra}
                     </Typography>
