@@ -24,6 +24,12 @@ import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import SpeedDial from '@mui/material/SpeedDial';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import SpeedDialAction from '@mui/material/SpeedDialAction';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+
 //Servicios
 import { Server } from "../../services/server";
 
@@ -92,6 +98,11 @@ export default function ProductAdmin(props) {
         { id: 'precio_venta', align: 'center', label: 'Rango precio venta', minWidth: 170, format: (value) => value.toFixed(2) },
         { id: 'precio_compra', align: 'center', label: 'Precio compra', minWidth: 170, format: (value) => value.toFixed(2) }
     ];
+    
+    const actions = [
+        { icon: <AddCircleIcon />, name: 'Registrar' , id:'register'},
+        { icon: <FileDownloadIcon />, name: 'Descargar Reporte', id:'report'}
+      ];
 
     async function reloadSubProductType() {
 
@@ -281,6 +292,9 @@ export default function ProductAdmin(props) {
         setOpenCreate(true);
         setIsCreate(true);
     };
+    const handleClickDownloadReport = () => {
+        console.log('Descargar reporte')
+    };
 
     const handleClickOpenUpdate = (event) => {
         setTitleModal("Actualizar producto")
@@ -421,7 +435,7 @@ export default function ProductAdmin(props) {
                         </Paper>
                     </Grid> : null
             }
-            {
+            {/* {
                 codeQr === undefined ?
                     <Grid item xs={12} sm={3} md={3}>
                         <ThemeProvider theme={theme}>
@@ -433,7 +447,7 @@ export default function ProductAdmin(props) {
 
                         </ThemeProvider>
                     </Grid> : null
-            }
+            } */}
 
             <Grid item xs={12} xm={12} md={12}>
                 <Paper sx={{ margin: 'auto', overflow: 'hidden' }}>
@@ -526,6 +540,29 @@ export default function ProductAdmin(props) {
                     <Alert openAlert={openAlertOk} setOpenAlert={setOpenAlertOk} mensaje={msjAlertExitoso} severity={severityAlert} />
                 </Paper>
             </Grid>
+            {
+                codeQr === undefined ?
+                <SpeedDial
+                    ariaLabel="SpeedDial basic example"
+                    sx={{ position: 'fixed', bottom: 16, right: 16 }}
+                    icon={<SpeedDialIcon />}
+                >
+                    {actions.map((action) => (
+                    <SpeedDialAction
+                        key={action.name}
+                        icon={action.icon}
+                        tooltipTitle={action.name}
+                        onClick={()=>{
+                            if(action.id=="register"){
+                                handleClickOpenCreate()
+                            }else if(action.id=="report"){
+                                handleClickDownloadReport()
+                            }
+                        }}
+                    />
+                    ))}
+                </SpeedDial>:null
+            }
         </Grid>
     );
 }

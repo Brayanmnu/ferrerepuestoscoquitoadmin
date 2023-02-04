@@ -37,7 +37,7 @@ export default function ProductAdminModal(props) {
     const [precioVentaMayor, setPrecioVentaMayor] = useState('');
     const [stock, setStock] = useState('');
     const [unidadMedida, setUnidadMedida] = useState('');
-
+    const [cantidadMinima, setCantidadMinima] = useState('');
     const [menuItemUnidadMedida, setMenuItemUnidadMedida] = useState('');
     const [menuItemMedida, setMenuItemMedida] = useState('');
 
@@ -90,6 +90,7 @@ export default function ProductAdminModal(props) {
             setPrecioVentaMenor(productoResponseData.precio_venta_menor)
             setPrecioVentaMayor(productoResponseData.precio_venta_mayor)
             setStock(productoResponseData.stock)
+            setCantidadMinima(productoResponseData.cantidad_minima)
             setUnidadMedida(productoResponseData.id_unidad_medida)
             setIsPvc(productoResponseData.ispvc)
         }
@@ -166,7 +167,8 @@ export default function ProductAdminModal(props) {
             precio_venta_mayor: precioVentaMayor,
             stock: stock,
             id_unidad_medida:unidadMedida,
-            is_pvc: isPvc
+            is_pvc: isPvc,
+            cantidad_minima: cantidadMinima
         }
         if(props.isCreate){
             const productoResponse =  await server.createProductBack(dataFormProduct);
@@ -409,11 +411,24 @@ export default function ProductAdminModal(props) {
                             onChange={(e) => setPrecioVentaMayor(e.target.value)}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={6}>
+                    <Grid item xs={12} sm={4} md={4}>
+                        <TextField
+                            margin="dense"
+                            id="cantidadMinima"
+                            label="Cantidad mínima"
+                            type="number"
+                            variant="standard"
+                            fullWidth
+                            value={cantidadMinima}
+                            onChange={(e) => setCantidadMinima(e.target.value)}
+                        />
+                    </Grid>
+                    
+                    <Grid item xs={12} sm={3} md={3}>
                         <TextField
                             margin="dense"
                             id="stock"
-                            label="stock"
+                            label="Stock actual"
                             type="number"
                             variant="standard"
                             fullWidth
@@ -421,7 +436,7 @@ export default function ProductAdminModal(props) {
                             onChange={(e) => setStock(e.target.value)}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6} md={6}>
+                    <Grid item xs={12} sm={5} md={5}>
                     <FormControl fullWidth>
                         <InputLabel>Unidad de medida</InputLabel>
                         <Select
