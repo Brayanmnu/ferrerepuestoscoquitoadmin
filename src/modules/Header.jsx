@@ -25,6 +25,7 @@ import { Server } from "../services/server";
 function Header(props) {
   const { onDrawerToggle } = props;
   const [productsCart,setProductsCart]=React.useState(<div style={{padding:"12px",justifyContent:"center",display:"flex"}}><CircularProgress /></div>)
+  const [cartMemory,setCartMemory]= React.useState([])
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [anchorCart, setAnchorCart] = React.useState(null)
   const openAvatar = Boolean(anchorEl);
@@ -40,14 +41,18 @@ function Header(props) {
 
   const handleClickCart = async (event) =>{
     setAnchorCart(event.currentTarget);
+    var itemsCart = window.localStorage.getItem('cartMemory')!=null?JSON.parse(window.localStorage.getItem('cartMemory')):[]
+    setCartMemory(itemsCart)
+
     //Se invoca a la api con los productos cargados
-    const itemCart = await props.getAllProductsCar()
-    if(itemCart.length>0){
+    
+    //await props.getAllProductsCar()
+    if(itemsCart.length>0){
       let precioTotal = 0
       let iterator=0
       
       setProductsCart(
-        itemCart.map((item) => {
+        itemsCart.map((item) => {
             iterator +=1;
             let cantidad = item.cantidad
             precioTotal+=item.precio_unit * item.cantidad
@@ -55,7 +60,7 @@ function Header(props) {
               <div style={{padding:"10px"}}>
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                   <Grid item xs={10} sm={10} md={10}>
-                    {cantidad.replace('.0','')} {item.descripcion_producto}
+                    {cantidad} {item.descripcion_producto}
                   </Grid>
                   <Grid item xs={2} sm={2} md={2}>
                     <div style={{justifyContent:"right",display:"flex"}}>
@@ -63,7 +68,7 @@ function Header(props) {
                     </div>
                       
                   </Grid>
-                  {iterator==itemCart.length?
+                  {iterator== itemsCart.length?
                   <Grid item xs={12} sm={12} md={12}>
                     <Divider />
                     <Grid container style={{padding:"10px"}}>
@@ -118,7 +123,14 @@ function Header(props) {
     )
     const tokenCoquito = window.localStorage.getItem('loggedCoquito')
     if (tokenCoquito && tokenCoquito.length>2){
-      const responseCar =  await server.vaciarCarrito(tokenCoquito.substring(2,tokenCoquito.length-1));
+      window.localStorage.removeItem('cartMemory')
+      setProductsCart(
+        <div style={{padding:"12px",justifyContent:"center",display:"flex"}}>
+          No hay productos en el carrito.
+        </div>
+      )
+      
+      /*const responseCar =  await server.vaciarCarrito(tokenCoquito.substring(2,tokenCoquito.length-1));
       if (responseCar.status === 200){
         const responseCarData = await responseCar.data;
         if(responseCarData.status=="ok"){
@@ -129,7 +141,7 @@ function Header(props) {
             </div>
           )
         }
-      }
+      }*/
     }
   }
 
@@ -171,7 +183,7 @@ function Header(props) {
                 aria-haspopup="true"
                 aria-expanded={openCart ? 'true' : undefined}
               >
-                  <Badge badgeContent={props.cantidadCart} color="secondary">
+                  <Badge badgeContent="C" color="secondary">
                     <ShoppingCartIcon/>
                   </Badge>
               </IconButton>
@@ -275,10 +287,9 @@ function Header(props) {
         <Divider />
         <div style={{justifyContent:"center",display:"flex", columnGap:"20px", paddingTop:"10px"}}>
           <div>
-            <Button disabled={props.cantidadCart==""} onClick={handleVaciarCarrito}  variant="outlined" color="error">Vaciar</Button>
-          </div>
+          <Button disabled={cartMemory.length==0} onClick={handleVaciarCarrito}  variant="outlined" color="error">Vaciar</Button>          </div>
           <div>
-            <Button disabled={props.cantidadCart==""} variant="contained" 
+          <Button disabled={cartMemory.length==0} variant="contained"
             onClick={() => navigate("/recibo")}>
               Finalizar</Button>
           </div>

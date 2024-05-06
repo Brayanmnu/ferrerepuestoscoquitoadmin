@@ -126,7 +126,7 @@ class Server {
 
     
     login = async (credentials) => {
-        const url = this.base_url_module_p_one + "/login/"
+        const url = this.base_url_module_p_one + "/loginv2/init" //"/login/"
         const res = await axios.post(url,credentials).catch(function (error) {
             if (error.response) {
                 return error.response;
@@ -319,5 +319,28 @@ class Server {
         return res;
         
     }
+
+    getNombresRazonByNroDoc = async (tipoDoc, nroDoc) => {
+        const url = this.base_url_module_p_one + "/recibo/consulta-ruc/"+tipoDoc+ "/"+nroDoc
+        const res = await axios.get(url).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+          });
+        return res;
+    };
+
+
+    generateRecibo = async (dataRecibo) => {
+        const url = this.base_url_module_p_one + "/recibo/finalizar"
+        const res = await axios.post(url,dataRecibo).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+          });
+        return res;
+        
+    }
+
 }
 export {Server} ;

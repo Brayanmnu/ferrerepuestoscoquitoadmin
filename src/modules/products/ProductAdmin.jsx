@@ -7,7 +7,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableContainer from '@mui/material/TableContainer';
 import TableCell from '@mui/material/TableCell';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog'
 import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -73,6 +72,7 @@ export default function ProductAdmin(props) {
     const [precioXMenor, setPrecioXMenor] = useState(0);
     const [nombreProduct, setNombreProduct] = useState('');
     const [openAddProduct, setOpenAddProduct] = useState(false);
+    const [stokActual, setStokActual] = useState('');
 
     const theme = createTheme({
         palette: {
@@ -98,11 +98,13 @@ export default function ProductAdmin(props) {
         { id: 'precio_venta', align: 'center', label: 'Rango precio venta', minWidth: 170, format: (value) => value.toFixed(2) },
         { id: 'precio_compra', align: 'center', label: 'Precio compra', minWidth: 170, format: (value) => value.toFixed(2) }
     ];
-    
-    const actions = [
-        { icon: <AddCircleIcon />, name: 'Registrar' , id:'register'},
-        { icon: <FileDownloadIcon />, name: 'Descargar Reporte', id:'report'}
-      ];
+
+    const circularActions = [
+        { icon: <AddCircleIcon />, name: 'Registrar', id: 'register' }
+    ];
+    // { icon: <FileDownloadIcon />, name: 'Descargar Reporte', id: 'report' }
+
+    const acciones = window.localStorage.getItem('loggedCoquitoAcciones') != null ? window.localStorage.getItem('loggedCoquitoAcciones') : '';
 
     async function reloadSubProductType() {
 
@@ -196,18 +198,31 @@ export default function ProductAdmin(props) {
                                             {
                                                 codeQr === undefined ?
                                                     <div style={{ justifyContent: "center", display: "flex" }}>
-                                                        <Grid item xs={4} sm={2} md={4}>
-                                                            <IconButton aria-label="addCart" color="cart" value={JSON.stringify(row)} variant="contained" onClick={handleClickOpenAddProduct}><AddShoppingCartIcon fontSize="medium" /></IconButton>
-                                                        </Grid>
-                                                        <Grid item xs={4} sm={2} md={4}>
-                                                            <IconButton aria-label="qr" color="primary" value={row.id_producto} variant="contained" onClick={handleClickOpenQr}><QrCodeScannerIcon fontSize="medium" /></IconButton>
-                                                        </Grid>
-                                                        <Grid item xs={4} sm={2} md={4}>
-                                                            <IconButton aria-label="edit" color="warning" value={row.id_producto} onClick={handleClickOpenUpdate}><EditIcon fontSize="medium" /></IconButton>
-                                                        </Grid>
-                                                        <Grid item xs={4} sm={2} md={4}>
-                                                            <IconButton aria-label="delete" color="error" value={row.id_producto} onClick={handleClickOpenDelete}><DeleteIcon fontSize="medium" /></IconButton>
-                                                        </Grid>
+                                                        {
+                                                            acciones.includes('5') ?
+                                                                <Grid item xs={4} sm={2} md={4}>
+                                                                    <IconButton aria-label="addCart" color="cart" value={JSON.stringify(row)} variant="contained" onClick={handleClickOpenAddProduct}><AddShoppingCartIcon fontSize="medium" /></IconButton>
+                                                                </Grid> : null
+                                                        }
+                                                        {
+                                                            acciones.includes('4') ?
+                                                                <Grid item xs={4} sm={2} md={4}>
+                                                                    <IconButton aria-label="qr" color="primary" value={row.id_producto} variant="contained" onClick={handleClickOpenQr}><QrCodeScannerIcon fontSize="medium" /></IconButton>
+                                                                </Grid> : null
+                                                        }
+                                                        {
+                                                            acciones.includes('1') ?
+                                                                <Grid item xs={4} sm={2} md={4}>
+                                                                    <IconButton aria-label="edit" color="warning" value={row.id_producto} onClick={handleClickOpenUpdate}><EditIcon fontSize="medium" /></IconButton>
+                                                                </Grid> : null
+                                                        }
+                                                        {
+                                                            acciones.includes('2') ?
+                                                                <Grid item xs={4} sm={2} md={4}>
+                                                                    <IconButton aria-label="delete" color="error" value={row.id_producto} onClick={handleClickOpenDelete}><DeleteIcon fontSize="medium" /></IconButton>
+                                                                </Grid> : null
+                                                        }
+
                                                     </div> :
                                                     null
                                             }
@@ -238,27 +253,39 @@ export default function ProductAdmin(props) {
                                         <ThemeProvider theme={theme}>
                                             {
                                                 codeQr === undefined ?
-                                                    <Grid container style={{paddingTop:"12px"}}>
-                                                        <Grid item xs={4} sm={2} md={4}>
-                                                            <div style={{ justifyContent: "center", display: "flex" }}>
-                                                                <IconButton aria-label="addCart" color="cart" value={JSON.stringify(row)} variant="contained" onClick={handleClickOpenAddProduct}><AddShoppingCartIcon fontSize="medium" /></IconButton>
-                                                            </div>
-                                                        </Grid>
-                                                        <Grid item xs={4} sm={4} md={4}>
-                                                            <div style={{ justifyContent: "center", display: "flex" }}>
-                                                                <IconButton aria-label="qr" color="primary" value={row.id_producto} onClick={handleClickOpenQr}><QrCodeScannerIcon fontSize="medium" /></IconButton>
-                                                            </div>
-                                                        </Grid>
-                                                        <Grid item xs={4} sm={4} md={4}>
-                                                            <div style={{ justifyContent: "center", display: "flex" }}>
-                                                                <IconButton aria-label="edit" color="warning" value={row.id_producto} onClick={handleClickOpenUpdate}><EditIcon fontSize="medium" /></IconButton>
-                                                            </div>
-                                                        </Grid>
-                                                        <Grid item xs={4} sm={4} md={4}>
-                                                            <div style={{ justifyContent: "center", display: "flex" }}>
-                                                                <IconButton aria-label="delete" color="error" value={row.id_producto} onClick={handleClickOpenDelete}><DeleteIcon fontSize="medium" /></IconButton>
-                                                            </div>
-                                                        </Grid>
+                                                    <Grid container style={{ paddingTop: "12px" }}>
+                                                        {
+                                                            acciones.includes('5') ?
+                                                                <Grid item xs={4} sm={2} md={4}>
+                                                                    <div style={{ justifyContent: "center", display: "flex" }}>
+                                                                        <IconButton aria-label="addCart" color="cart" value={JSON.stringify(row)} variant="contained" onClick={handleClickOpenAddProduct}><AddShoppingCartIcon fontSize="medium" /></IconButton>
+                                                                    </div>
+                                                                </Grid> : null
+                                                        }
+                                                        {
+                                                            acciones.includes('4') ?
+                                                                <Grid item xs={4} sm={4} md={4}>
+                                                                    <div style={{ justifyContent: "center", display: "flex" }}>
+                                                                        <IconButton aria-label="qr" color="primary" value={row.id_producto} onClick={handleClickOpenQr}><QrCodeScannerIcon fontSize="medium" /></IconButton>
+                                                                    </div>
+                                                                </Grid> : null
+                                                        }
+                                                        {
+                                                            acciones.includes('1') ?
+                                                                <Grid item xs={4} sm={4} md={4}>
+                                                                    <div style={{ justifyContent: "center", display: "flex" }}>
+                                                                        <IconButton aria-label="edit" color="warning" value={row.id_producto} onClick={handleClickOpenUpdate}><EditIcon fontSize="medium" /></IconButton>
+                                                                    </div>
+                                                                </Grid> : null
+                                                        }
+                                                        {
+                                                            acciones.includes('2') ?
+                                                                <Grid item xs={4} sm={4} md={4}>
+                                                                    <div style={{ justifyContent: "center", display: "flex" }}>
+                                                                        <IconButton aria-label="delete" color="error" value={row.id_producto} onClick={handleClickOpenDelete}><DeleteIcon fontSize="medium" /></IconButton>
+                                                                    </div>
+                                                                </Grid> : null
+                                                        }
                                                     </Grid> : null
                                             }
                                         </ThemeProvider>
@@ -320,6 +347,7 @@ export default function ProductAdmin(props) {
         setPrecioXMayor(productSelect.precio_venta_mayor)
         setPrecioXMenor(productSelect.precio_venta_menor)
         setNombreProduct(productSelect.nombre)
+        setStokActual(productSelect.stock + " " + productSelect.uni_medida)
     };
 
     useEffect(() => {
@@ -332,10 +360,10 @@ export default function ProductAdmin(props) {
             reloadSubProductType()
         }
         reloadAllProducts(0, "", "", "")
-        if (props.mobileOpen==true){
+        if (props.mobileOpen == true) {
             props.onDrawerToggle()
         }
-        
+
     }, [productType,]);
 
 
@@ -532,6 +560,7 @@ export default function ProductAdmin(props) {
                             precioXMayor={precioXMayor}
                             precioXMenor={precioXMenor}
                             nombreProduct={nombreProduct}
+                            stokActual={stokActual}
                             setOpenAlertOk={setOpenAlertOk}
                             setMsjAlertExitoso={setMsjAlertExitoso}
                             setCantidadCart={props.setCantidadCart}
@@ -541,27 +570,27 @@ export default function ProductAdmin(props) {
                 </Paper>
             </Grid>
             {
-                codeQr === undefined ?
-                <SpeedDial
-                    ariaLabel="SpeedDial basic example"
-                    sx={{ position: 'fixed', bottom: 16, right: 16 }}
-                    icon={<SpeedDialIcon />}
-                >
-                    {actions.map((action) => (
-                    <SpeedDialAction
-                        key={action.name}
-                        icon={action.icon}
-                        tooltipTitle={action.name}
-                        onClick={()=>{
-                            if(action.id=="register"){
-                                handleClickOpenCreate()
-                            }else if(action.id=="report"){
-                                handleClickDownloadReport()
-                            }
-                        }}
-                    />
-                    ))}
-                </SpeedDial>:null
+                codeQr === undefined && acciones.includes('3') ?
+                    <SpeedDial
+                        ariaLabel="SpeedDial basic example"
+                        sx={{ position: 'fixed', bottom: 16, right: 16 }}
+                        icon={<SpeedDialIcon />}
+                    >
+                        {circularActions.map((action) => (
+                            <SpeedDialAction
+                                key={action.name}
+                                icon={action.icon}
+                                tooltipTitle={action.name}
+                                onClick={() => {
+                                    if (action.id == "register") {
+                                        handleClickOpenCreate()
+                                    } else if (action.id == "report") {
+                                        handleClickDownloadReport()
+                                    }
+                                }}
+                            />
+                        ))}
+                    </SpeedDial> : null
             }
         </Grid>
     );

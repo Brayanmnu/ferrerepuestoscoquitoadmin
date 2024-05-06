@@ -164,6 +164,7 @@ let theme = createTheme({
 export default function Dashboard(props){
     const [mobileOpen, setMobileOpen] = useState(false);
     const [cantidadCart,setCantidadCart]=useState(0)
+
     const server = new Server();
 
     const isSmUp = useMediaQuery(theme.breakpoints.up('sm'));
@@ -176,20 +177,7 @@ export default function Dashboard(props){
       props.setIsLogin(false)
     }
 
-    async function getAllProductsCar() {
-      const tokenCoquito = window.localStorage.getItem('loggedCoquito')
-      if (tokenCoquito && tokenCoquito.length>2){
-        const addCartResponse =  await server.getProductCar(tokenCoquito.substring(2,tokenCoquito.length-1));
-        if (addCartResponse.status === 200){
-          const addCartResponseData = await addCartResponse.data;
-          setCantidadCart(addCartResponseData.length)
-          return addCartResponseData
-        }
-      }
-    }
-
     useEffect(() => {
-        getAllProductsCar()
     }, [,]);
   
     return (
@@ -217,8 +205,8 @@ export default function Dashboard(props){
               />
           </Box>
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-            <Header cantidadCart={cantidadCart} setCantidadCart={setCantidadCart} onDrawerToggle={handleDrawerToggle} handleIsLogin={handleIsLogin} getAllProductsCar={getAllProductsCar} isSmUp={isSmUp}/>
-            <Box component="main" sx={{ flex: 1, py: 2, px: 3, bgcolor: '#eaeff1' }}>
+          <Header onDrawerToggle={handleDrawerToggle} handleIsLogin={handleIsLogin}  isSmUp={isSmUp}/>
+                <Box component="main" sx={{ flex: 1, py: 2, px: 3, bgcolor: '#eaeff1' }}>
                 <Routes>
                     <Route path={'/'} exact element={<Home mobileOpen={mobileOpen} onDrawerToggle={handleDrawerToggle}/>} />
                     <Route path={'/products-dashboard/:productType'} exact element={<ProductAdmin mobileOpen={mobileOpen} onDrawerToggle={handleDrawerToggle} setCantidadCart={setCantidadCart} isSmUp={isSmUp}/>}/>

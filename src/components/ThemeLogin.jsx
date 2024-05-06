@@ -35,6 +35,9 @@ export default function ThemeLogin(props) {
                 window.localStorage.setItem(
                     'loggedCoquito' , JSON.stringify(loginResponseData.id_token)
                 )
+                window.localStorage.setItem(
+                    'loggedCoquitoAcciones' , JSON.stringify(loginResponseData.acciones)
+                )
             }else{
                 setOpenAlert(true);
             }

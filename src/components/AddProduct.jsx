@@ -32,41 +32,37 @@ export default function AddProduct(props) {
 
     async function handleAddproduct() {
         const tokenCoquito = window.localStorage.getItem('loggedCoquito')
+        var cartMemory  =  window.localStorage.getItem('cartMemory')!=null?JSON.parse(window.localStorage.getItem('cartMemory')):[]
         if (tokenCoquito && tokenCoquito.length>2){
             var dataFormAddProduct = {
                 id_user: tokenCoquito.substring(2,tokenCoquito.length-1),
                 id_producto: props.idProducto,
                 descripcion_producto: props.nombreProduct,
                 precio_unit: precioUnit,
-                cantidad: cantidadPedido
+                cantidad: cantidadPedido,
+                rango_precio: "S/."+ props.precioXMenor+ " - S/." + props.precioXMayor,
+                stock: props.stokActual
             }
-            const addCartResponse =  await server.addProductToCart(dataFormAddProduct);
-            setMsjError('Error al agregar')
-            if (addCartResponse.status === 200){
-                const addCartResponseData = await addCartResponse.data;
-                if(addCartResponseData.status==="ok"){
-                    setOpenAlertError(false)
-                    props.setMsjAlertExitoso("Agregado correctamente")
-                    props.setSeverityAlert('success')
-                    props.setOpenAlertOk(true)
-                    props.setCantidadCart(addCartResponseData.cart_cant)
-                    handleClose()
-                }else{
-                    setOpenAlertError(true);
-                }
-            }else{
-                setOpenAlertError(true);
-            }
-    
+            //const addCartResponse =  await server.addProductToCart(dataFormAddProduct);
+            cartMemory = cartMemory.concat(dataFormAddProduct)
+            window.localStorage.setItem(
+                'cartMemory' , JSON.stringify(cartMemory)
+            )
+            setOpenAlertError(false)
+            props.setMsjAlertExitoso("Agregado correctamente")
+            props.setSeverityAlert('success')
+            props.setOpenAlertOk(true)
+            props.setCantidadCart(cartMemory.length)
+            handleClose()
         }
     }
     return(
         <Fragment>
-            <DialogTitle>Agregar producto</DialogTitle>
-            <div style={{justifyContent:"center",display:"flex"}}>
-                {props.nombreProduct}
-            </div>
+            <DialogTitle>Agregar producto a carrito</DialogTitle>
             <DialogContent style={{paddingTop:'1vh'}}>
+                <Grid>
+                {props.nombreProduct}
+                </Grid>
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                     <Grid item xs={11} sm={6} md={6}>
                         <TextField
