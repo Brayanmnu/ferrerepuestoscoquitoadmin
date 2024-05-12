@@ -158,7 +158,7 @@ let theme = createTheme({
     },
   };
   
-  const drawerWidth = 200;
+  const drawerWidth = 0;
 
   
 export default function Dashboard(props){
@@ -191,18 +191,25 @@ export default function Dashboard(props){
             component="nav"
             sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
           >
-            {(isSmUp) ? null : (
+            {/* {(isSmUp) ? null : (
               <SideBar
                 PaperProps={{ style: { width: drawerWidth } }}
                 variant="temporary"
                 open={mobileOpen}
                 onClose={handleDrawerToggle}
               />
-            )}
+            )} */}
             <SideBar
+                PaperProps={{ style: { width: 200 } }}
+                variant="temporary"
+                open={mobileOpen}
+                onClose={handleDrawerToggle}
+                sx={{ display: { sm: 'block', xs: 'block' } }}
+              />
+            {/* <SideBar
               PaperProps={{ style: { width: drawerWidth } }}
               sx={{ display: { sm: 'block', xs: 'none' } }}
-              />
+              /> */}
           </Box>
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <Header onDrawerToggle={handleDrawerToggle} handleIsLogin={handleIsLogin}  isSmUp={isSmUp}/>

@@ -199,7 +199,7 @@ export default function Recibo() {
             <Grid item xs={12} xm={12} md={12}>
                 <Paper sx={{ margin: 'auto', overflow: 'hidden' }}>
                     <Grid container rowSpacing={1} columnSpacing={{ xs: 2, sm: 2, md: 2 }} style={{ padding: "6px" }}>
-                        <Grid item xs={3} sm={3} md={3}>
+                        <Grid item xs={12} sm={3} md={3}>
                             <FormControl fullWidth>
                                 <InputLabel>Tipo de comprobante</InputLabel>
                                 <Select
@@ -216,7 +216,7 @@ export default function Recibo() {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={3} sm={2} md={2}>
+                        <Grid item xs={10} sm={2} md={2}>
                             <TextField
                                 autoComplete="false"
                                 margin="dense"
@@ -236,7 +236,7 @@ export default function Recibo() {
                                 </IconButton>
                             </Grid>
                         </div>
-                        <Grid item xs={10} sm={6} md={6}>
+                        <Grid item xs={12} sm={6} md={6}>
                             <TextField
                                 InputProps={{
                                     readOnly: true,

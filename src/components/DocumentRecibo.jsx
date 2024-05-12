@@ -10,8 +10,8 @@ const styles = StyleSheet.create({
         width: 162, // Ancho en puntos (80 mm = 226.8 puntos aproximadamente)
     },
     section: {
-        margin: 5,
-        padding: 5,
+        margin: 20,
+        padding: 20,
     },
     containerStyles: {
         display: 'flex',
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         textAlign: 'right', // Centrado del texto dentro de los elementos de texto
     },
     textNameStyles: {
-        fontSize: 6
+        fontSize: 24
     },
     table: {
         display: 'table',
@@ -43,15 +43,15 @@ const styles = StyleSheet.create({
 export default function DocumentRecibo(props) {
     return (
         <Document>
-            <Page size={{ width: 80}} style={styles.page}>
+            <Page size={{ width: 300}} style={styles.page}>
             {/* <Page size={{ width: 162, height: 297 }} style={styles.page}> */}
                 <View style={styles.section}>
                     <View style={styles.containerStyles}>
-                        <Text style={{ fontSize: 3.3 }}>FERREREPUESTOS & ACCESORRIOS</Text>
-                        <Text style={{ fontSize: 6 }}>COQUITO S.A.C.</Text>
-                        <Text style={{ fontSize: 2 }}>RUC: 20609883805</Text>
-                        <Text style={{ fontSize: 2 }}>Dirección fiscal: AV. VICTOR RAUL 145 - CHAO - LA LIBERTAD</Text>
-                        <Text style={{ fontSize: 3 }}>
+                        <Text style={{ fontSize: 12 }}>FERREREPUESTOS & ACCESORIOS</Text>
+                        <Text style={{ fontSize: 24 }}>COQUITO S.A.C.</Text>
+                        <Text style={{ fontSize: 10 }}>RUC: 20609883805</Text>
+                        <Text style={{ fontSize: 9 }}>Dirección fiscal: AV. VICTOR RAUL 145 - CHAO - LA LIBERTAD</Text>
+                        <Text style={{ fontSize: 12 }}>
                             {"\n"} RECIBO ELECTRONICO  - 00{props.recibo.nro_recibo} {"\n"}  {"\n"}
                         </Text>
                     </View>
@@ -60,129 +60,129 @@ export default function DocumentRecibo(props) {
                         <View style={styles.table}>
                             <View style={styles.tableRow}>
                                 <View style={{ width: '45%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>FECHA Y HORA DE EMISION</Text>
+                                    <Text style={{ fontSize: 7 }}>FECHA Y HORA DE EMISION</Text>
                                 </View>
                                 <View style={{ width: '5%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>:</Text>
+                                    <Text style={{ fontSize: 7 }}>:</Text>
                                 </View>
                                 <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>{props.recibo.fecha_emision}</Text>
+                                    <Text style={{ fontSize: 7 }}>{props.recibo.fecha_emision}</Text>
                                 </View>
                             </View>
 
                             <View style={styles.tableRow}>
                                 <View style={{ width: '45%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>RUC</Text>
+                                    <Text style={{ fontSize: 7 }}>RUC</Text>
                                 </View>
                                 <View style={{ width: '5%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>:</Text>
+                                    <Text style={{ fontSize: 7 }}>:</Text>
                                 </View>
                                 <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>{props.recibo.nro_doc}</Text>
+                                    <Text style={{ fontSize: 7 }}>{props.recibo.nro_doc}</Text>
                                 </View>
                             </View>
 
                             <View style={styles.tableRow}>
                                 <View style={{ width: '45%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>SEÑOR(ES)</Text>
+                                    <Text style={{ fontSize: 7 }}>SEÑOR(ES)</Text>
                                 </View>
                                 <View style={{ width: '5%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>:</Text>
+                                    <Text style={{ fontSize: 7 }}>:</Text>
                                 </View>
                                 <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>{props.recibo.nombres_razon}</Text>
+                                    <Text style={{ fontSize: 7 }}>{props.recibo.nombres_razon}</Text>
                                 </View>
                             </View>
 
                             <View style={styles.tableRow}>
                                 <View style={{ width: '45%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>DIRECCION</Text>
+                                    <Text style={{ fontSize: 7 }}>DIRECCION</Text>
                                 </View>
                                 <View style={{ width: '5%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>:</Text>
+                                    <Text style={{ fontSize: 7 }}>:</Text>
                                 </View>
                                 <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>{props.recibo.direccion}</Text>
+                                    <Text style={{ fontSize: 7 }}>{props.recibo.direccion}</Text>
                                 </View>
                             </View>
 
                             <View style={styles.tableRow}>
                                 <View style={{ width: '45%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>MEDIO DE PAGO</Text>
+                                    <Text style={{ fontSize: 7 }}>MEDIO DE PAGO</Text>
                                 </View>
                                 <View style={{ width: '5%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>:</Text>
+                                    <Text style={{ fontSize: 7 }}>:</Text>
                                 </View>
                                 <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>{props.recibo.medio_pago}</Text>
+                                    <Text style={{ fontSize: 7 }}>{props.recibo.medio_pago}</Text>
                                 </View>
                             </View>
 
                             <View style={styles.tableRow}>
                                 <View style={{ width: '45%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>A CUENTA</Text>
+                                    <Text style={{ fontSize: 7 }}>A CUENTA</Text>
                                 </View>
                                 <View style={{ width: '5%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>:</Text>
+                                    <Text style={{ fontSize: 7 }}>:</Text>
                                 </View>
                                 <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>S/. {props.recibo.a_cuenta}</Text>
+                                    <Text style={{ fontSize: 7 }}>S/. {props.recibo.a_cuenta}</Text>
                                 </View>
                             </View>
 
                             <View style={styles.tableRow}>
                                 <View style={{ width: '45%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>SALDO</Text>
+                                    <Text style={{ fontSize: 7 }}>SALDO</Text>
                                 </View>
                                 <View style={{ width: '5%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>:</Text>
+                                    <Text style={{ fontSize: 7 }}>:</Text>
                                 </View>
                                 <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>S/. {props.recibo.saldo}</Text>
+                                    <Text style={{ fontSize: 7 }}>S/. {props.recibo.saldo}</Text>
                                 </View>
                             </View>
 
                             <View style={styles.tableRow}>
                                 <View style={{ width: '45%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>OBSERVACIONES</Text>
+                                    <Text style={{ fontSize: 7 }}>OBSERVACIONES</Text>
                                 </View>
                                 <View style={{ width: '5%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>:</Text>
+                                    <Text style={{ fontSize: 7 }}>:</Text>
                                 </View>
                                 <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 1.8 }}>{props.recibo.observaciones}</Text>
+                                    <Text style={{ fontSize: 7 }}>{props.recibo.observaciones}</Text>
                                 </View>
                             </View>
 
                             <View style={{ width: '50%' }}>
-                                <Text style={{ fontSize: 1.8 }}> {"\n"} {"\n"}</Text>
+                                <Text style={{ fontSize: 7 }}> {"\n"} {"\n"}</Text>
                             </View>
 
                             <View style={styles.line} />
 
                             <View style={styles.containerStyles}>
-                                <Text style={{ fontSize: 1.8 }}>DESCRIPCION</Text>
+                                <Text style={{ fontSize: 7 }}>DESCRIPCION</Text>
                             </View>
 
                             <View style={styles.tableRow}>
                                 <View style={{ width: '25%' }}>
                                     <View style={styles.containerStyles}>
-                                        <Text style={{ fontSize: 1.8 }}>CANT.</Text>
+                                        <Text style={{ fontSize: 7 }}>CANT.</Text>
                                     </View>
                                 </View>
                                 <View style={{ width: '25%' }}>
                                     <View style={styles.containerStyles}>
-                                        <Text style={{ fontSize: 1.8 }}>UM.</Text>
+                                        <Text style={{ fontSize: 7 }}>UM.</Text>
                                     </View>
                                 </View>
                                 <View style={{ width: '25%' }}>
                                     <View style={styles.containerStyles}>
-                                        <Text style={{ fontSize: 1.8 }}>P.UNIT</Text>
+                                        <Text style={{ fontSize: 7 }}>P.UNIT</Text>
                                     </View>
                                 </View>
                                 <View style={{ width: '25%' }}>
                                     <View style={styles.containerStyles}>
-                                        <Text style={{ fontSize: 1.8 }}>TOTAL</Text>
+                                        <Text style={{ fontSize: 7 }}>TOTAL</Text>
                                     </View>
                                 </View>
                             </View>
@@ -192,32 +192,32 @@ export default function DocumentRecibo(props) {
                                 return (
                                     <View>
                                         <View>
-                                            <Text style={{ fontSize: 1.8 }}>{item.descripcion_producto}</Text>
+                                            <Text style={{ fontSize: 7 }}>{item.descripcion_producto}</Text>
                                         </View>
                                         <View style={styles.tableRow}>
                                             <View style={{ width: '25%' }}>
                                                 <View style={styles.containerStyles}>
-                                                    <Text style={{ fontSize: 1.8 }}>{item.cantidad}</Text>
+                                                    <Text style={{ fontSize: 7 }}>{item.cantidad}</Text>
                                                 </View>
                                             </View>
                                             <View style={{ width: '25%' }}>
                                                 <View style={styles.containerStyles}>
-                                                    <Text style={{ fontSize: 1.8 }}>UNID.</Text>
+                                                    <Text style={{ fontSize: 7 }}>UNID.</Text>
                                                 </View>
                                             </View>
                                             <View style={{ width: '25%' }}>
                                                 <View style={styles.containerStyles}>
-                                                    <Text style={{ fontSize: 1.8 }}>S/. {item.precio_unit}</Text>
+                                                    <Text style={{ fontSize: 7 }}>S/. {item.precio_unit}</Text>
                                                 </View>
                                             </View>
                                             <View style={{ width: '25%' }}>
                                                 <View style={styles.containerStyles}>
-                                                    <Text style={{ fontSize: 1.8 }}>S/. {(item.cantidad * item.precio_unit)}</Text>
+                                                    <Text style={{ fontSize: 7 }}>S/. {(item.cantidad * item.precio_unit)}</Text>
                                                 </View>
                                             </View>
                                         </View>
                                         <View >
-                                            <Text style={{ fontSize: 1.8 }}> {"\n"}</Text>
+                                            <Text style={{ fontSize: 7 }}> {"\n"}</Text>
                                         </View>
                                     </View>
 
@@ -231,12 +231,12 @@ export default function DocumentRecibo(props) {
                             <View style={styles.tableRow}>
                                 <View style={{ width: '75%' }}>
                                     <View style={styles.totalStyles}>
-                                        <Text style={{ fontSize: 1.8 }}>SUBTOTAL</Text>
+                                        <Text style={{ fontSize: 7 }}>SUBTOTAL</Text>
                                     </View>
                                 </View>
                                 <View style={{ width: '25%' }}>
                                     <View style={styles.containerStyles}>
-                                        <Text style={{ fontSize: 1.8 }}>S/. {props.recibo.sub_total}</Text>
+                                        <Text style={{ fontSize: 7 }}>S/. {props.recibo.sub_total}</Text>
                                     </View>
                                 </View>
                             </View>
@@ -244,12 +244,12 @@ export default function DocumentRecibo(props) {
                             <View style={styles.tableRow}>
                                 <View style={{ width: '75%' }}>
                                     <View style={styles.totalStyles}>
-                                        <Text style={{ fontSize: 1.8 }}>IGV 18%</Text>
+                                        <Text style={{ fontSize: 7 }}>IGV 18%</Text>
                                     </View>
                                 </View>
                                 <View style={{ width: '25%' }}>
                                     <View style={styles.containerStyles}>
-                                        <Text style={{ fontSize: 1.8 }}>S/. {props.recibo.igv} </Text>
+                                        <Text style={{ fontSize: 7 }}>S/. {props.recibo.igv} </Text>
                                     </View>
                                 </View>
                             </View>
@@ -257,18 +257,18 @@ export default function DocumentRecibo(props) {
                             <View style={styles.tableRow}>
                                 <View style={{ width: '75%' }}>
                                     <View style={styles.totalStyles}>
-                                        <Text style={{ fontSize: 1.8 }}>TOTAL</Text>
+                                        <Text style={{ fontSize: 7 }}>TOTAL</Text>
                                     </View>
                                 </View>
                                 <View style={{ width: '25%' }}>
                                     <View style={styles.containerStyles}>
-                                        <Text style={{ fontSize: 1.8 }}>S/. {props.recibo.total} </Text>
+                                        <Text style={{ fontSize: 7 }}>S/. {props.recibo.total} </Text>
                                     </View>
                                 </View>
                             </View>
                             <View style={styles.line} />
                             <View style={styles.containerStyles}>
-                                <Text style={{ fontSize: 1.8 }}>Este documento es una representación impresa de la venta, no tiene valor tributario</Text>
+                                <Text style={{ fontSize: 8 }}>Este documento es una representación impresa de la venta, no tiene valor tributario</Text>
                             </View>
                         </View>
                     </View>
