@@ -81,14 +81,6 @@ export default function SideBar(props) {
                     </ListItemButton>
                   </ListItem>
                 </Link>
-                <Divider />
-                <Link key="Productos" to="/products-dashboard/automotriz"  style={{ textDecoration: 'none', color:'white' }}>
-                  <ListItem component="div" disablePadding>
-                    <ListItemButton sx={{ pl: 4 }}>
-                      <ListItemText>Automotriz</ListItemText>
-                    </ListItemButton>
-                  </ListItem>
-                </Link>
               </Collapse>
             <Divider sx={{mt:2}} />
           </Box>
