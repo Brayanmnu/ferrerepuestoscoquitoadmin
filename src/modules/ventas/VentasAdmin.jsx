@@ -188,34 +188,30 @@ export default function VentasAdmin(props) {
                                     <div>Total: S/. {row.total}</div>
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
                                         <ThemeProvider theme={theme}>
-                                            <Grid item xs={3} sm={3} md={3}>
-                                                <div style={{ justifyContent: "center", display: "flex" }}>
-                                                    <IconButton aria-label="edit" color="info" >
-                                                        <ArticleIcon fontSize="medium" />
-                                                    </IconButton>
-                                                </div>
-                                            </Grid>
-                                            <Grid item xs={3} sm={3} md={3}>
-                                                <div style={{ justifyContent: "center", display: "flex" }}>
-                                                    <IconButton aria-label="edit" color="refresh" value={row} onClick={() => handleClickOpenUpdate(row)} >
-                                                        <UpdateIcon fontSize="medium" />
-                                                    </IconButton>
-                                                </div>
-                                            </Grid>
-                                            <Grid item xs={3} sm={3} md={3}>
-                                                <div style={{ justifyContent: "center", display: "flex" }}>
-                                                    <IconButton aria-label="edit" color="primary" >
-                                                        <AccountBalanceIcon fontSize="medium" />
-                                                    </IconButton>
-                                                </div>
-                                            </Grid>
-                                            <Grid item xs={3} sm={3} md={3}>
-                                                <div style={{ justifyContent: "center", display: "flex" }}>
-                                                    <IconButton aria-label="edit" color="error" >
-                                                        <PlaylistRemoveIcon fontSize="medium" />
-                                                    </IconButton>
-                                                </div>
-                                            </Grid>
+                                            {
+                                                acciones.includes('6') ?
+                                                    <Grid item xs={3} sm={3} md={3}>
+                                                        <IconButton aria-label="edit" color="refresh" onClick={() => handleClickOpenUpdate(row)} >
+                                                            <UpdateIcon fontSize="medium" />
+                                                        </IconButton>
+                                                    </Grid> : null
+                                            }
+                                            {
+                                                acciones.includes('6') ?
+                                                    <Grid item xs={3} sm={3} md={3}>
+                                                        <IconButton aria-label="edit" color="primary" >
+                                                            <AccountBalanceIcon fontSize="medium" />
+                                                        </IconButton>
+                                                    </Grid> : null
+                                            }
+                                            {
+                                                acciones.includes('6') ?
+                                                    <Grid item xs={3} sm={3} md={3}>
+                                                        <IconButton aria-label="edit" color="error" >
+                                                            <PlaylistRemoveIcon fontSize="medium" />
+                                                        </IconButton>
+                                                    </Grid> : null
+                                            }
                                         </ThemeProvider>
                                     </Grid>
                                 </TableCell>
