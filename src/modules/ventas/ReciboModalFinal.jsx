@@ -32,9 +32,9 @@ export default function ReciboModalFinal(props) {
     };
 
     async function handleView() {
-        const blob = await pdf(<DocumentRecibo recibo={responseReciboData} />).toBlob();
-        const url = URL.createObjectURL(blob);
-        window.open(url);
+        // const blob = await pdf(<DocumentRecibo recibo={responseReciboData} />).toBlob();
+        // const url = URL.createObjectURL(blob);
+        // window.open(url);
         finishDownload()
     };
 
@@ -120,7 +120,7 @@ export default function ReciboModalFinal(props) {
                     </DialogActions> :
                     isFinished == 3 ?
                         <DialogActions>
-                            <Button onClick={handleView} variant="outlined" color="info">Visualizar</Button>
+                            <Button onClick={handleView} variant="outlined" color="info">Terminar</Button>
                             <Button onClick={handleDownload} variant="contained" color="success" >Descargar</Button>
                         </DialogActions> : null
             }
