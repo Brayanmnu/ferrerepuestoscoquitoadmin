@@ -188,6 +188,11 @@ export default function VentasAdmin(props) {
                                     <div>Total: S/. {row.total}</div>
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
                                         <ThemeProvider theme={theme}>
+                                            <Grid item xs={3} sm={3} md={3}>
+                                                <IconButton aria-label="edit" color="info" >
+                                                    <ArticleIcon fontSize="medium" onClick={() => handleClickOpenDetail(row)} />
+                                                </IconButton>
+                                            </Grid>
                                             {
                                                 acciones.includes('6') ?
                                                     <Grid item xs={3} sm={3} md={3}>
