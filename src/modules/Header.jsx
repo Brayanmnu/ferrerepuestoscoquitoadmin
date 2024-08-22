@@ -130,18 +130,6 @@ function Header(props) {
         </div>
       )
       
-      /*const responseCar =  await server.vaciarCarrito(tokenCoquito.substring(2,tokenCoquito.length-1));
-      if (responseCar.status === 200){
-        const responseCarData = await responseCar.data;
-        if(responseCarData.status=="ok"){
-          props.setCantidadCart('')
-          setProductsCart(
-            <div style={{padding:"12px",justifyContent:"center",display:"flex"}}>
-              No hay productos en el carrito.
-            </div>
-          )
-        }
-      }*/
     }
   }
 

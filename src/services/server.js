@@ -264,8 +264,51 @@ class Server {
     }
     
     
-    getAllVentas = async (nroPag) => {
-        const url = this.base_url_module_p_one + "/ventas/"+nroPag
+    getAllVentas = async (nroPag,fechaEmision, cliente, tipoComprobante, sunat, pagado) => {
+        var url = this.base_url_crud_p_one + "/ventas?nroPag="+nroPag
+        if (fechaEmision!=""){
+            url +="&fechaEmision="+fechaEmision
+        }
+
+        if (cliente!=""){
+            url +="&cliente="+cliente
+        }
+
+        if (tipoComprobante!=""){
+            url +="&tipoComprobante="+tipoComprobante
+        }
+
+        if (sunat!=""){
+            url +="&sunat="+sunat
+        }
+
+        if (pagado!=""){
+            url +="&pagado="+pagado
+        }
+        const res = await axios.get(url).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+          });
+        return res;
+    };
+
+    
+    updateVenta = async (dataUpdate, idVenta) => {
+        const url =  this.base_url_crud_p_one + "/ventas/"+idVenta
+        const res = await axios.put(url,dataUpdate).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+          });
+        return res;
+        
+    }
+
+    
+       
+    getDetailVenta = async (id) => {
+        const url = this.base_url_crud_p_one + "/ventas/detail/"+id
         const res = await axios.get(url).catch(function (error) {
             if (error.response) {
                 return error.response;
@@ -276,7 +319,7 @@ class Server {
 
     
     anularRecibo = async (idRecibo) => {
-        const url = this.base_url_module_p_one + "/ventas/"+idRecibo
+        const url = this.base_url_crud_p_one + "/ventas/"+idRecibo
         const res = await axios.post(url).catch(function (error) {
             if (error.response) {
                 return error.response;
@@ -285,51 +328,6 @@ class Server {
         return res;
         
     }
-
-    
-    addProductToCart = async (dataCreate) => {
-        const url = this.base_url_module_p_one + "/shopping-cart/"
-        const res = await axios.post(url,dataCreate).catch(function (error) {
-            if (error.response) {
-                return error.response;
-            }
-          });
-        return res;
-        
-    }
- 
-    getProductCar = async (idUser) => {
-        const url = this.base_url_module_p_one + "/shopping-cart/"+idUser
-        const res = await axios.get(url).catch(function (error) {
-            if (error.response) {
-                return error.response;
-            }
-          });
-        return res;
-        
-    }
-    
-    vaciarCarrito = async (idUser) => {
-        const url = this.base_url_module_p_one + "/shopping-cart/"+idUser
-        const res = await axios.delete(url).catch(function (error) {
-            if (error.response) {
-                return error.response;
-            }
-          });
-        return res;
-        
-    }
-
-    getNombresRazonByNroDoc = async (tipoDoc, nroDoc) => {
-        const url = this.base_url_module_p_one + "/recibo/consulta-ruc/"+tipoDoc+ "/"+nroDoc
-        const res = await axios.get(url).catch(function (error) {
-            if (error.response) {
-                return error.response;
-            }
-          });
-        return res;
-    };
-
 
     generateRecibo = async (dataRecibo) => {
         const url = this.base_url_module_p_one + "/recibo/finalizar"
@@ -341,6 +339,16 @@ class Server {
         return res;
         
     }
+    
+    getNombresRazonByNroDoc = async (tipoDoc, nroDoc) => {
+        const url = this.base_url_module_p_one + "/recibo/consulta-ruc/"+tipoDoc+ "/"+nroDoc
+        const res = await axios.get(url).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+          });
+        return res;
+    };
 
 }
 export {Server} ;

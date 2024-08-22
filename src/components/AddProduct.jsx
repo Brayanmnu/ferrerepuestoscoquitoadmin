@@ -43,7 +43,6 @@ export default function AddProduct(props) {
                 rango_precio: "S/."+ props.precioXMenor+ " - S/." + props.precioXMayor,
                 stock: props.stokActual
             }
-            //const addCartResponse =  await server.addProductToCart(dataFormAddProduct);
             cartMemory = cartMemory.concat(dataFormAddProduct)
             window.localStorage.setItem(
                 'cartMemory' , JSON.stringify(cartMemory)
