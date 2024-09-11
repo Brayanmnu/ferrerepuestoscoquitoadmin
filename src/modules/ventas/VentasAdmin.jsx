@@ -130,38 +130,46 @@ export default function VentasAdmin(props) {
                                 <TableCell align='center' key="options">
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }} >
                                         <ThemeProvider theme={theme}>
-                                            <div style={{ justifyContent: "center", display: "flex" }}>
-                                                <Grid item xs={3} sm={3} md={3}>
+
+                                            {
+                                                row.is_anulado ? <Grid item xs={12} sm={12} md={12} style={{color:'red'}}>
                                                     <IconButton aria-label="edit" color="info" >
                                                         <ArticleIcon fontSize="medium" onClick={() => handleClickOpenDetail(row)} />
                                                     </IconButton>
-                                                </Grid>
-                                                {
-                                                    acciones.includes('6') ?
+                                                    ANULADO
+                                                </Grid> :
+                                                    <div style={{ justifyContent: "center", display: "flex" }}>
                                                         <Grid item xs={3} sm={3} md={3}>
-                                                            <IconButton aria-label="edit" color="refresh" onClick={() => handleClickOpenUpdate(row)} >
-                                                                <UpdateIcon fontSize="medium" />
+                                                            <IconButton aria-label="edit" color="info" >
+                                                                <ArticleIcon fontSize="medium" onClick={() => handleClickOpenDetail(row)} />
                                                             </IconButton>
-                                                        </Grid> : null
-                                                }
-                                                {
-                                                    acciones.includes('6') ?
-                                                        <Grid item xs={3} sm={3} md={3}>
-                                                            <IconButton aria-label="edit" color="primary" >
-                                                                <AccountBalanceIcon fontSize="medium" />
-                                                            </IconButton>
-                                                        </Grid> : null
-                                                }
-                                                {
-                                                    acciones.includes('6') ?
-                                                        <Grid item xs={3} sm={3} md={3}>
-                                                            <IconButton aria-label="edit" color="error" >
-                                                                <PlaylistRemoveIcon fontSize="medium" />
-                                                            </IconButton>
-                                                        </Grid> : null
-                                                }
-                                            </div>
-
+                                                        </Grid>
+                                                        {
+                                                            acciones.includes('6') ?
+                                                                <Grid item xs={3} sm={3} md={3}>
+                                                                    <IconButton aria-label="edit" color="refresh" onClick={() => handleClickOpenUpdate(row)} >
+                                                                        <UpdateIcon fontSize="medium" />
+                                                                    </IconButton>
+                                                                </Grid> : null
+                                                        }
+                                                        {
+                                                            acciones.includes('6') ?
+                                                                <Grid item xs={3} sm={3} md={3}>
+                                                                    <IconButton disabled aria-label="edit" color="primary" >
+                                                                        <AccountBalanceIcon fontSize="medium" />
+                                                                    </IconButton>
+                                                                </Grid> : null
+                                                        }
+                                                        {
+                                                            acciones.includes('6') ?
+                                                                <Grid item xs={3} sm={3} md={3}>
+                                                                    <IconButton aria-label="edit" color="error" onClick={() => handleClickOpenAnular(row)}>
+                                                                        <PlaylistRemoveIcon fontSize="medium" />
+                                                                    </IconButton>
+                                                                </Grid> : null
+                                                        }
+                                                    </div>
+                                            }
                                         </ThemeProvider>
                                     </Grid>
                                 </TableCell>
@@ -184,38 +192,49 @@ export default function VentasAdmin(props) {
                                     <div>Comprobante: {row.tipo_comprobante} - {row.numeracion}</div>
                                     <div>SUNAT: {row.sunat ? "GENERADO" : "SIN GENERAR"} </div>
                                     <div>Cliente:  {row.nombres_razon ? row.nombres_razon : "SIN DATOS"}</div>
+                                    <div>Telefono:  {row.telefono ? row.telefono : "--"}</div>
                                     <div>Pagado: {row.is_pagado ? "PAGADO" : "PENDIENTE"}</div>
                                     <div>Total: S/. {row.total}</div>
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
                                         <ThemeProvider theme={theme}>
-                                            <Grid item xs={3} sm={3} md={3}>
-                                                <IconButton aria-label="edit" color="info" >
-                                                    <ArticleIcon fontSize="medium" onClick={() => handleClickOpenDetail(row)} />
-                                                </IconButton>
-                                            </Grid>
                                             {
-                                                acciones.includes('6') ?
-                                                    <Grid item xs={3} sm={3} md={3}>
-                                                        <IconButton aria-label="edit" color="refresh" onClick={() => handleClickOpenUpdate(row)} >
-                                                            <UpdateIcon fontSize="medium" />
-                                                        </IconButton>
-                                                    </Grid> : null
-                                            }
-                                            {
-                                                acciones.includes('6') ?
-                                                    <Grid item xs={3} sm={3} md={3}>
-                                                        <IconButton aria-label="edit" color="primary" >
-                                                            <AccountBalanceIcon fontSize="medium" />
-                                                        </IconButton>
-                                                    </Grid> : null
-                                            }
-                                            {
-                                                acciones.includes('6') ?
-                                                    <Grid item xs={3} sm={3} md={3}>
-                                                        <IconButton aria-label="edit" color="error" >
-                                                            <PlaylistRemoveIcon fontSize="medium" />
-                                                        </IconButton>
-                                                    </Grid> : null
+                                                row.is_anulado ? <Grid item xs={12} sm={12} md={12} style={{color:'red'}}>
+                                                    <IconButton aria-label="edit" color="info" >
+                                                        <ArticleIcon fontSize="medium" onClick={() => handleClickOpenDetail(row)} />
+                                                    </IconButton>
+                                                    ANULADO
+                                                </Grid> :
+                                                    <Grid container>
+                                                        <Grid item xs={3} sm={3} md={3}>
+                                                            <IconButton aria-label="edit" color="info" >
+                                                                <ArticleIcon fontSize="medium" onClick={() => handleClickOpenDetail(row)} />
+                                                            </IconButton>
+                                                        </Grid>
+                                                        {
+                                                            acciones.includes('6') ?
+                                                                <Grid item xs={3} sm={3} md={3}>
+                                                                    <IconButton aria-label="edit" color="refresh" onClick={() => handleClickOpenUpdate(row)} >
+                                                                        <UpdateIcon fontSize="medium" />
+                                                                    </IconButton>
+                                                                </Grid> : null
+                                                        }
+                                                        {
+                                                            acciones.includes('6') ?
+                                                                <Grid item xs={3} sm={3} md={3}>
+                                                                    <IconButton disabled aria-label="edit" color="primary" >
+                                                                        <AccountBalanceIcon fontSize="medium" />
+                                                                    </IconButton>
+                                                                </Grid> : null
+                                                        }
+                                                        {
+                                                            acciones.includes('6') ?
+                                                                <Grid item xs={3} sm={3} md={3}>
+                                                                    <IconButton aria-label="edit" color="error" onClick={() => handleClickOpenAnular(row)} >
+                                                                        <PlaylistRemoveIcon fontSize="medium" />
+                                                                    </IconButton>
+                                                                </Grid> : null
+                                                        }
+                                                    </Grid>
                                             }
                                         </ThemeProvider>
                                     </Grid>
@@ -239,9 +258,9 @@ export default function VentasAdmin(props) {
         setOpenDetail(true)
     };
 
-    const handleClickOpenAnular = (event) => {
+    const handleClickOpenAnular = (venta) => {
         setOpenAnular(true);
-        setVentaSelected(event.currentTarget.value);
+        setVentaSelected(venta);
     };
 
 
@@ -427,15 +446,16 @@ export default function VentasAdmin(props) {
                             />
                         </Grid>
                     </Grid>
-                    {/* <Dialog open={openAnular} onClose={() => setOpenAnular(false)}>
+                    <Dialog open={openAnular} onClose={() => setOpenAnular(false)}>
                         <VentasModalAnular
                             setOpenAnular={setOpenAnular}
-                            idComprobante={ventaSelected}
+                            ventaSelected={ventaSelected}
                             setOpenAlertOk={setOpenAlertOk}
                             setMsjAlertExitoso={setMsjAlertExitoso}
                             setSeverityAlert={setSeverityAlert}
-                            reloadAllVentas={reloadAllVentas} />
-                    </Dialog> */}
+                            setFiltroApply={setFiltroApply}
+                            filtroApply={filtroApply} />
+                    </Dialog>
                     <Dialog open={openUpdate} onClose={() => setOpenUpdate(false)}>
                         <VentasModalUpdate
                             setOpenUpdate={setOpenUpdate}

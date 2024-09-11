@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
 });
 
 // Componente del PDF
-export default function DocumentRecibo(props) {
+export default function DocumentDevolucion(props) {
     return (
         <Document>
             <Page size={{ width: 300}} style={styles.page}>
@@ -52,7 +52,7 @@ export default function DocumentRecibo(props) {
                         <Text style={{ fontSize: 10 }}>RUC: 20609883805</Text>
                         <Text style={{ fontSize: 9 }}>Dirección fiscal: AV. VICTOR RAUL 145 - CHAO - LA LIBERTAD</Text>
                         <Text style={{ fontSize: 12 }}>
-                            {"\n"} RECIBO ELECTRONICO  - 00{props.recibo.nro_recibo} {"\n"}  {"\n"}
+                            {"\n"} DEVOLUCION  - 00{props.devolucion.nro_devolucion} {"\n"}  {"\n"}
                         </Text>
                     </View>
 
@@ -60,13 +60,13 @@ export default function DocumentRecibo(props) {
                         <View style={styles.table}>
                             <View style={styles.tableRow}>
                                 <View style={{ width: '45%' }}>
-                                    <Text style={{ fontSize: 7 }}>FECHA Y HORA DE EMISION</Text>
+                                    <Text style={{ fontSize: 7 }}>FECHA DE REGISTRO</Text>
                                 </View>
                                 <View style={{ width: '5%' }}>
                                     <Text style={{ fontSize: 7 }}>:</Text>
                                 </View>
                                 <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 7 }}>{props.recibo.fecha_emision}</Text>
+                                    <Text style={{ fontSize: 7 }}>{props.devolucion.fecha_registro}</Text>
                                 </View>
                             </View>
 
@@ -78,7 +78,7 @@ export default function DocumentRecibo(props) {
                                     <Text style={{ fontSize: 7 }}>:</Text>
                                 </View>
                                 <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 7 }}>{props.recibo.nro_doc}</Text>
+                                    <Text style={{ fontSize: 7 }}>{props.devolucion.nro_doc}</Text>
                                 </View>
                             </View>
 
@@ -90,67 +90,7 @@ export default function DocumentRecibo(props) {
                                     <Text style={{ fontSize: 7 }}>:</Text>
                                 </View>
                                 <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 7 }}>{props.recibo.nombres_razon}</Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.tableRow}>
-                                <View style={{ width: '45%' }}>
-                                    <Text style={{ fontSize: 7 }}>DIRECCION</Text>
-                                </View>
-                                <View style={{ width: '5%' }}>
-                                    <Text style={{ fontSize: 7 }}>:</Text>
-                                </View>
-                                <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 7 }}>{props.recibo.direccion}</Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.tableRow}>
-                                <View style={{ width: '45%' }}>
-                                    <Text style={{ fontSize: 7 }}>MEDIO DE PAGO</Text>
-                                </View>
-                                <View style={{ width: '5%' }}>
-                                    <Text style={{ fontSize: 7 }}>:</Text>
-                                </View>
-                                <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 7 }}>{props.recibo.medio_pago}</Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.tableRow}>
-                                <View style={{ width: '45%' }}>
-                                    <Text style={{ fontSize: 7 }}>A CUENTA</Text>
-                                </View>
-                                <View style={{ width: '5%' }}>
-                                    <Text style={{ fontSize: 7 }}>:</Text>
-                                </View>
-                                <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 7 }}>S/. {props.recibo.a_cuenta}</Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.tableRow}>
-                                <View style={{ width: '45%' }}>
-                                    <Text style={{ fontSize: 7 }}>SALDO</Text>
-                                </View>
-                                <View style={{ width: '5%' }}>
-                                    <Text style={{ fontSize: 7 }}>:</Text>
-                                </View>
-                                <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 7 }}>S/. {props.recibo.saldo}</Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.tableRow}>
-                                <View style={{ width: '45%' }}>
-                                    <Text style={{ fontSize: 7 }}>OBSERVACIONES</Text>
-                                </View>
-                                <View style={{ width: '5%' }}>
-                                    <Text style={{ fontSize: 7 }}>:</Text>
-                                </View>
-                                <View style={{ width: '50%' }}>
-                                    <Text style={{ fontSize: 7 }}>{props.recibo.observaciones}</Text>
+                                    <Text style={{ fontSize: 7 }}>{props.devolucion.nombres_razon}</Text>
                                 </View>
                             </View>
 
@@ -188,7 +128,7 @@ export default function DocumentRecibo(props) {
                             </View>
 
                             <View style={styles.line} />
-                            {props.recibo.productos.map((item) => {
+                            {props.devolucion.productos.map((item) => {
                                 return (
                                     <View>
                                         <View>
@@ -236,7 +176,7 @@ export default function DocumentRecibo(props) {
                                 </View>
                                 <View style={{ width: '25%' }}>
                                     <View style={styles.containerStyles}>
-                                        <Text style={{ fontSize: 7 }}>S/. {props.recibo.sub_total}</Text>
+                                        <Text style={{ fontSize: 7 }}>S/. {props.devolucion.sub_total}</Text>
                                     </View>
                                 </View>
                             </View>
@@ -249,7 +189,7 @@ export default function DocumentRecibo(props) {
                                 </View>
                                 <View style={{ width: '25%' }}>
                                     <View style={styles.containerStyles}>
-                                        <Text style={{ fontSize: 7 }}>S/. {props.recibo.igv} </Text>
+                                        <Text style={{ fontSize: 7 }}>S/. {props.devolucion.igv} </Text>
                                     </View>
                                 </View>
                             </View>
@@ -262,16 +202,13 @@ export default function DocumentRecibo(props) {
                                 </View>
                                 <View style={{ width: '25%' }}>
                                     <View style={styles.containerStyles}>
-                                        <Text style={{ fontSize: 7 }}>S/. {props.recibo.total} </Text>
+                                        <Text style={{ fontSize: 7 }}>S/. {props.devolucion.total} </Text>
                                     </View>
                                 </View>
                             </View>
                             <View style={styles.line} />
                             <View style={styles.containerStyles}>
-                                <Text style={{ fontSize: 8 }}>Este documento es una representación impresa de la venta, no tiene valor tributario</Text>
-                            </View>
-                            <View style={styles.containerStyles}>
-                                <Text style={{ fontSize: 8 }}>Conservar su recibo para devolución.</Text>
+                                <Text style={{ fontSize: 8 }}>Este documento es una representación impresa de su devolución, no tiene valor tributario</Text>
                             </View>
                         </View>
                     </View>

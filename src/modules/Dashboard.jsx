@@ -218,7 +218,7 @@ export default function Dashboard(props){
                     <Route path={'/'} exact element={<Home mobileOpen={mobileOpen} onDrawerToggle={handleDrawerToggle}/>} />
                     <Route path={'/products-dashboard/:productType'} exact element={<ProductAdmin mobileOpen={mobileOpen} onDrawerToggle={handleDrawerToggle} setCantidadCart={setCantidadCart} isSmUp={isSmUp}/>}/>
                     <Route path={'/socios-clave'} exact element={<SocioClaveAdmin  isSmUp={isSmUp}/>}/>
-                    <Route path={'/sales'} exact element={<VentasAdmin mobileOpen={mobileOpen} onDrawerToggle={handleDrawerToggle}  isSmUp={isSmUp}/>}/>
+                    <Route path={'/caja-dashboard/ventas'} exact element={<VentasAdmin mobileOpen={mobileOpen} onDrawerToggle={handleDrawerToggle}  isSmUp={isSmUp}/>}/>
                     <Route path={'/recibo'} exact element={<Recibo/>} />
                     <Route path={'/products-list/:codeQr'} exact element={<ProductAdmin setCantidadCart={setCantidadCart} isSmUp={isSmUp}/>}/>
                 </Routes>              
