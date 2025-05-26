@@ -16,6 +16,7 @@ import FormControl from '@mui/material/FormControl';
 import VentasModalAnular from "./VentasModalAnular"
 import VentasModalUpdate from "./VentasModalUpdate"
 import VentaModalDetalle from "./VentaModalDetalle"
+import VentaModalSunat from "./VentaModalSunat"
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -45,6 +46,7 @@ export default function VentasAdmin(props) {
     const [tableBody, setTableBody] = useState("");
     const [openAnular, setOpenAnular] = useState(false);
     const [openUpdate, setOpenUpdate] = useState(false);
+    const [openSunat, setOpenSunat] = useState(false);
     const [openAlertOk, setOpenAlertOk] = useState(false);
     const [openDetail, setOpenDetail] = useState(false);
     const [msjAlertExitoso, setMsjAlertExitoso] = useState('');
@@ -155,7 +157,7 @@ export default function VentasAdmin(props) {
                                                         {
                                                             acciones.includes('6') ?
                                                                 <Grid item xs={3} sm={3} md={3}>
-                                                                    <IconButton disabled aria-label="edit" color="primary" >
+                                                                    <IconButton disabled={row.tipo_comprobante == "Recibo"} aria-label="edit" color="primary" onClick={() => handleClickOpenSunat(row)} >
                                                                         <AccountBalanceIcon fontSize="medium" />
                                                                     </IconButton>
                                                                 </Grid> : null
@@ -221,7 +223,7 @@ export default function VentasAdmin(props) {
                                                         {
                                                             acciones.includes('6') ?
                                                                 <Grid item xs={3} sm={3} md={3}>
-                                                                    <IconButton disabled aria-label="edit" color="primary" >
+                                                                    <IconButton  disabled={row.tipo_comprobante == "Recibo"} aria-label="edit" color="primary" onClick={() => handleClickOpenSunat(row)} >
                                                                         <AccountBalanceIcon fontSize="medium" />
                                                                     </IconButton>
                                                                 </Grid> : null
@@ -253,6 +255,12 @@ export default function VentasAdmin(props) {
         setOpenUpdate(true)
     };
 
+    const handleClickOpenSunat = (venta) => {
+        setVentaSelected(venta);
+        setOpenSunat(true)
+    };
+
+    
     const handleClickOpenDetail = (venta) => {
         setVentaSelected(venta);
         setOpenDetail(true)
@@ -470,8 +478,11 @@ export default function VentasAdmin(props) {
                         <VentaModalDetalle
                             ventaSelected={ventaSelected} />
                     </Dialog>
-
-
+                    <Dialog open={openSunat} onClose={() => setOpenSunat(false)}>
+                        <VentaModalSunat
+                            setOpenSunat={setOpenSunat}
+                            ventaSelected={ventaSelected} />
+                    </Dialog>
                     <Alert openAlert={openAlertOk} setOpenAlert={setOpenAlertOk} mensaje={msjAlertExitoso} severity={severityAlert} />
                 </Paper>
             </Grid>

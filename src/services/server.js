@@ -317,6 +317,18 @@ class Server {
         return res;
     };
 
+    
+
+    connectSunat = async (id) => {
+        const url = this.base_url_crud_p_one + "/ventas/sunat/" + id
+        const res = await axios.put(url).catch(function (error) {
+            if (error.response) {
+                return error.response;
+            }
+        });
+        return res;
+    };
+
 
     devolucionRecibo = async (dataDevolucion) => {
         // console.log(dataDevolucion)

@@ -70,6 +70,7 @@ export default function Recibo() {
         }
         const response = await server.getNombresRazonByNroDoc(tipoDoc, nroDoc);
         setNombresRazon(response.data.nombres_razon)
+        setDireccion(response.data.direccion)
     }
 
     useEffect(() => {
